@@ -1,5 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="celeste">#3F93E8</color>
+    <color name="mid_blue">#8097FF</color>
+    <color name="strong_blue">#8FA7BF</color>
+    <color name="dark_blue">#304961</color>
+    <color name="midnight">#1A2633</color>
+    <color name="cyan">#80E8FF</color>
+    <color name="grass">#99FF80</color>
+    <color name="light_yellow">#F2FF80</color>
+    <color name="yellow">#FFCF80</color>
+    <color name="salmon">#FF8880</color>
+    <color name="pink">#E83FC3</color>
+    <color name="violet">#6955E6</color>
+    <color name="purple">#9180FF</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 </resources>
+<!-- 348AE1-->
