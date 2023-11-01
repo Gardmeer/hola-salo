@@ -3,10 +3,12 @@
     <string name="app_logo">Logo</string>
     <string name="new_word">Crea una Palabra</string>
     <string name="see_library">Mira la Biblioteca</string>
+    <string name="recent">Reciente</string>
     <string name="library">Biblioteca</string>
     <string name="word">Palabra</string>
     <string name="create_word">Nueva Palabra</string>
     <string name="picture">Imagen</string>
     <string name="video">Video</string>
+    <string name="save">Guardar</string>
     <string name="back_icon">Regresar</string>
 </resources>
