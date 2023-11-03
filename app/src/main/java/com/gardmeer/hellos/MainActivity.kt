@@ -4,25 +4,32 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 class MainActivity : AppCompatActivity() {
-    
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val listDatos = arrayOf("Video 1", "Video 2", "Video 3", "Video 4")
+        var listDatos = ArrayList<NuevaPalabra>()
         val adapterDatos = AdapterDatos(listDatos)
 
         val rvReciente: RecyclerView = findViewById(R.id.rvReciente)
         rvReciente.adapter = adapterDatos
-
         rvReciente.layoutManager = LinearLayoutManager(this)
-        //Toast.makeText(this,"Crea una nueva palabra",Toast.LENGTH_LONG).show()
 
-    }
+        listDatos.add(NuevaPalabra("Peppa",R.drawable.peppa))
+        listDatos.add(NuevaPalabra("George",R.drawable.george))
+
+        adapterDatos.setOnItemClickListener(object:AdapterDatos.onItemClickListener {
+            override fun onItemClick(position: Int) {
+                Toast.makeText(this@MainActivity,"Soy $position",Toast.LENGTH_LONG).show()
+            }
+        })
+        }
 
     fun crearPalabra(view:View){
         val cWr = Intent(this,CrearActivity::class.java)

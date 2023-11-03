@@ -17,6 +17,7 @@ class CrearActivity : AppCompatActivity() {
 
     var txtNombre: EditText?=null
     var imvImagen: ImageView?=null
+    var imvVideo: ImageView?=null
     var vvwVideo: VideoView?=null
     var uriImagen = ""
     var uriVideo = ""
@@ -29,6 +30,7 @@ class CrearActivity : AppCompatActivity() {
 
         txtNombre=findViewById(R.id.txtNombre)
         imvImagen=findViewById(R.id.imvImagen)
+        imvVideo=findViewById(R.id.imvVideo)
         vvwVideo=findViewById(R.id.vvwVideo)
     }
 
@@ -48,12 +50,12 @@ class CrearActivity : AppCompatActivity() {
 
         if (uriImagen == ""){
             Toast.makeText(this,"Selecciona una Imagen",Toast.LENGTH_LONG).show()
-            if(uriVideo == ""){
+        }
+        else if(uriVideo == ""){
                 Toast.makeText(this,"Selecciona un Video",Toast.LENGTH_LONG).show()
-                if(palabra == "") {
+        }
+        else if(palabra == "") {
                     Toast.makeText(this, "Escribe la Palabra que aprenderás", Toast.LENGTH_LONG).show()
-                }
-            }
         }
         else{
             val pref = getSharedPreferences(palabra, Context.MODE_PRIVATE)
@@ -79,7 +81,7 @@ class CrearActivity : AppCompatActivity() {
         else if (requestCode == videoRC && resultCode == RESULT_OK) {
             val videoUri = data?.data
             vvwVideo?.setVideoURI(videoUri)
-            vvwVideo?.isVisible=true
+            imvVideo?.isVisible=true
             uriVideo = videoUri.toString()
         }
     }

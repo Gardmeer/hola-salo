@@ -18,11 +18,11 @@
 
         <ImageView
             android:id="@+id/imvIcono"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
             android:layout_weight="1"
             android:contentDescription="@string/app_logo"
-            app:srcCompat="@drawable/ic_face" />
+            app:srcCompat="@drawable/saloblanco" />
 
         <Space
             android:layout_width="16dp"
