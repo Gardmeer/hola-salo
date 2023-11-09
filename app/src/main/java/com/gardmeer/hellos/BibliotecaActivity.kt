@@ -27,12 +27,21 @@ class BibliotecaActivity : AppCompatActivity() {
         listDatos.add(NuevaPalabra("Grandpa",R.drawable.grandpa))
 
         adapterDatos.setOnItemClickListener(object:AdapterDatos.onItemClickListener {
-            override fun onItemClick(position: Int) {
-                Toast.makeText(this@BibliotecaActivity,"Soy $position", Toast.LENGTH_LONG).show()
+            override fun onItemClick(view: View) {
+                val palabra = listDatos.get(rvBiblioteca.getChildAdapterPosition(view)).getPalabra()
+                val imagen = listDatos.get(rvBiblioteca.getChildAdapterPosition(view)).getImagen()
+                Toast.makeText(applicationContext,"Soy $palabra",Toast.LENGTH_LONG).show()
+                verVideo(palabra, imagen)
             }
         })
     }
 
+    fun verVideo(palabra:String?, imagen:Int){
+        val sVp = Intent(this,PlayerActivity::class.java)
+        sVp.putExtra("palabra",palabra)
+        sVp.putExtra("imagen",imagen)
+        startActivity(sVp)
+    }
     fun irInicio(view: View){
         val iIn = Intent(this,MainActivity::class.java)
         startActivity(iIn)

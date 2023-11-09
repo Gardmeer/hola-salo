@@ -11,6 +11,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import android.widget.VideoView
+import androidx.core.net.toUri
 import androidx.core.view.isVisible
 
 class CrearActivity : AppCompatActivity() {
@@ -65,10 +66,7 @@ class CrearActivity : AppCompatActivity() {
             editor.apply()
             Toast.makeText(this, "Nueva Palabra Guardada!", Toast.LENGTH_LONG).show()
         }
-
-
     }
-
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)

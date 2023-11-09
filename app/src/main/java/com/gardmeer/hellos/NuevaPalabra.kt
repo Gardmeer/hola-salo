@@ -1,5 +1,7 @@
 package com.gardmeer.hellos
 
+import android.net.Uri
+
 public class NuevaPalabra(_palabra: String?,_imagen: Int){
     private var palabra:String?=_palabra
     private var imagen:Int=_imagen
@@ -8,7 +10,7 @@ public class NuevaPalabra(_palabra: String?,_imagen: Int){
         return palabra
     }
 
-    public fun getImagen(): Int {
+    public fun getImagen(): Int{
         return imagen
     }
 

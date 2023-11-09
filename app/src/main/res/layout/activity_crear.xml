@@ -47,7 +47,6 @@
         android:layout_height="48dp"
         android:layout_below="@+id/linearLayout"
         android:layout_alignParentStart="true"
-
         android:layout_marginStart="24dp"
         android:layout_marginTop="48dp"
         android:background="@drawable/ic_back"
@@ -71,8 +70,7 @@
         android:textColor="@color/white"
         android:textSize="24sp" />
 
-    <LinearLayout
-        android:id="@+id/linearLayout2"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/txtPalabra"
@@ -80,112 +78,119 @@
         android:layout_alignParentEnd="true"
         android:layout_marginStart="16dp"
         android:layout_marginTop="32dp"
-        android:layout_marginEnd="16dp"
-        android:orientation="vertical">
+        android:layout_marginEnd="16dp">
 
-        <VideoView
-            android:id="@+id/vvwVideo"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_gravity="center"
-            android:visibility="gone" />
-
-        <ImageView
-            android:id="@+id/imvVideo"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_gravity="center"
-            android:visibility="gone"
-            app:srcCompat="@android:drawable/presence_video_online"
-            tools:srcCompat="@android:drawable/ic_media_play" />
-
-        <Space
+        <LinearLayout
+            android:id="@+id/linearLayout2"
             android:layout_width="match_parent"
-            android:layout_height="8dp" />
-
-        <Button
-            android:id="@+id/btnVideo"
-            android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:background="@drawable/bg_btn_newword"
-            android:fontFamily="@font/shortstack_regular"
-            android:onClick="buscarVideo"
-            android:text="@string/video"
-            android:textAllCaps="false"
-            android:textColor="@color/celeste"
-            android:textSize="20sp"
-            android:textStyle="bold" />
+            android:orientation="vertical">
 
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="8dp" />
+            <VideoView
+                android:id="@+id/vvwVideo"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center"
+                android:visibility="gone" />
 
-        <ImageView
-            android:id="@+id/imvImagen"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_gravity="center"
-            android:contentDescription="@string/picture"
-            android:visibility="gone"
-            tools:srcCompat="@tools:sample/avatars" />
+            <ImageView
+                android:id="@+id/imvVideo"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center"
+                android:visibility="gone"
+                app:srcCompat="@android:drawable/presence_video_online"
+                tools:srcCompat="@android:drawable/ic_media_play" />
 
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="8dp" />
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="8dp" />
 
-        <Button
-            android:id="@+id/btnImagen"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:background="@drawable/bg_btn_newword"
-            android:fontFamily="@font/shortstack_regular"
-            android:onClick="buscarImagen"
-            android:padding="8dp"
-            android:text="@string/picture"
-            android:textAllCaps="false"
-            android:textColor="@color/celeste"
-            android:textSize="20sp"
-            android:textStyle="bold" />
+            <Button
+                android:id="@+id/btnVideo"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/bg_btn_newword"
+                android:fontFamily="@font/shortstack_regular"
+                android:onClick="buscarVideo"
+                android:text="@string/video"
+                android:textAllCaps="false"
+                android:textColor="@color/celeste"
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="8dp" />
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="8dp" />
 
-        <EditText
-            android:id="@+id/txtNombre"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:ems="10"
-            android:fontFamily="@font/shortstack_regular"
-            android:hint="@string/word"
-            android:inputType="text"
-            android:textAlignment="center"
-            android:textAllCaps="false"
-            android:textColor="@color/white"
-            android:textColorHint="@color/white"
-            android:textSize="24sp"
-            android:textStyle="bold" />
+            <ImageView
+                android:id="@+id/imvImagen"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center"
+                android:contentDescription="@string/picture"
+                android:visibility="gone"
+                tools:srcCompat="@tools:sample/avatars" />
 
-    </LinearLayout>
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="8dp" />
 
-    <Button
-        android:id="@+id/btnGuardar"
-        android:layout_width="120dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/linearLayout2"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="48dp"
-        android:layout_marginEnd="24dp"
-        android:background="@drawable/bg_btn_newword"
-        android:fontFamily="@font/shortstack_regular"
-        android:onClick="guardarPalabra"
-        android:text="@string/save"
-        android:textAllCaps="false"
-        android:textColor="@color/violet"
-        android:textSize="20sp"
-        android:textStyle="bold" />
+            <Button
+                android:id="@+id/btnImagen"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/bg_btn_newword"
+                android:fontFamily="@font/shortstack_regular"
+                android:onClick="buscarImagen"
+                android:padding="8dp"
+                android:text="@string/picture"
+                android:textAllCaps="false"
+                android:textColor="@color/celeste"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="8dp" />
+
+            <EditText
+                android:id="@+id/txtNombre"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:ems="10"
+                android:fontFamily="@font/shortstack_regular"
+                android:hint="@string/word"
+                android:inputType="text"
+                android:textAlignment="center"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/btnGuardar"
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginTop="48dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/bg_btn_newword"
+                android:fontFamily="@font/shortstack_regular"
+                android:onClick="guardarPalabra"
+                android:text="@string/save"
+                android:textAllCaps="false"
+                android:textColor="@color/violet"
+                android:textSize="20sp"
+                android:textStyle="bold"/>
+        </LinearLayout>
+    </ScrollView>
+
+
 
 </RelativeLayout>

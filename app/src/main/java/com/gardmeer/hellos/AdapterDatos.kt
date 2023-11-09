@@ -13,7 +13,7 @@ class AdapterDatos(private val listaDatos: ArrayList<NuevaPalabra>) :
     private lateinit var mListener : onItemClickListener
 
     interface onItemClickListener{
-        fun onItemClick(position : Int)
+        fun onItemClick(view:View)
     }
 
     fun setOnItemClickListener(listener:onItemClickListener){
@@ -29,7 +29,7 @@ class AdapterDatos(private val listaDatos: ArrayList<NuevaPalabra>) :
             datoImagen = view.findViewById(R.id.imvMini)
 
             itemView.setOnClickListener{
-                listener.onItemClick(adapterPosition)
+                listener.onItemClick(view)
             }
         }
     }

@@ -7,8 +7,10 @@
     <string name="library">Biblioteca</string>
     <string name="word">Palabra</string>
     <string name="create_word">Crear</string>
+    <string name="learn">Aprende</string>
     <string name="picture">Imagen</string>
     <string name="video">Video</string>
     <string name="save">Guardar</string>
+    <string name="modify">Modificar</string>
     <string name="back_icon">Regresar</string>
 </resources>
