@@ -80,22 +80,22 @@
         android:layout_marginTop="32dp"
         android:layout_marginEnd="16dp">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="wrap_content">
 
             <VideoView
                 android:id="@+id/vvwAprende"
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
-                android:layout_gravity="center_horizontal"/>
+                android:layout_alignParentTop="true"/>
 
             <TextView
                 android:id="@+id/txtVideo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
+                android:layout_below="@+id/vvwAprende"
+                android:layout_centerHorizontal="true"
                 android:layout_marginTop="16dp"
                 android:fontFamily="@font/shortstack_regular"
                 android:text="@string/word"
@@ -108,7 +108,8 @@
                 android:id="@+id/linearLayoutB"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@+id/txtVideo"
                 android:layout_marginTop="16dp"
                 android:orientation="horizontal">
 
@@ -129,8 +130,8 @@
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:layout_weight="1"
-                    android:onClick="buscarVideo"
-                    android:src="@android:drawable/btn_star"/>
+                    android:onClick="yahoo"
+                    android:src="@android:drawable/btn_star" />
 
             </LinearLayout>
 
@@ -138,29 +139,49 @@
                 android:id="@+id/btnModificar"
                 android:layout_width="120dp"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/linearLayoutB"
+                android:layout_alignParentStart="true"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="48dp"
                 android:layout_marginBottom="16dp"
                 android:background="@drawable/bg_btn_newword"
                 android:fontFamily="@font/shortstack_regular"
+                android:onClick="modificarPalabra"
                 android:text="@string/modify"
                 android:textAllCaps="false"
                 android:textColor="@color/violet"
                 android:textSize="20sp"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
 
-        </LinearLayout>
+            <Button
+                android:id="@+id/btnEliminar"
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/linearLayoutB"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="48dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/bg_btn_newword"
+                android:fontFamily="@font/shortstack_regular"
+                android:onClick="eliminarPalabra"
+                android:text="@string/delete"
+                android:textAllCaps="false"
+                android:textColor="@color/violet"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/imvAprende"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="32dp" />
+
+        </RelativeLayout>
 
     </ScrollView>
 
-    <ImageView
-        android:id="@+id/imvAprende"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_below="@+id/txtAprende"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="48dp"
-        android:layout_marginEnd="48dp"
-        android:src="@drawable/peppa" />
 
 </RelativeLayout>

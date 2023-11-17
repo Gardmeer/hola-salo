@@ -12,5 +12,9 @@
     <string name="video">Video</string>
     <string name="save">Guardar</string>
     <string name="modify">Modificar</string>
+    <string name="delete">Eliminar</string>
+    <string name="delete_cancel">Eliminar la palabra</string>
+    <string name="accept">Aceptar</string>
+    <string name="cancel">Cancelar</string>
     <string name="back_icon">Regresar</string>
 </resources>

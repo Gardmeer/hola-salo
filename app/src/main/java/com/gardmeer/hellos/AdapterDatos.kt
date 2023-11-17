@@ -43,7 +43,7 @@ class AdapterDatos(private val listaDatos: ArrayList<NuevaPalabra>) :
 
     override fun onBindViewHolder(holder: ViewHolderDatos, position: Int) {
         holder.datoPalabra.text = listaDatos[position].getPalabra()
-        holder.datoImagen.setImageResource(listaDatos[position].getImagen())
+        holder.datoImagen.setImageURI(listaDatos[position].getImagen())
     }
 
     override fun getItemCount() = listaDatos.size
