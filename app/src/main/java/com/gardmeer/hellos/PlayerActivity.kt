@@ -12,6 +12,7 @@ import android.widget.MediaController
 import android.widget.TextView
 import android.widget.Toast
 import android.widget.VideoView
+import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AlertDialog
 import androidx.core.net.toUri
 
@@ -25,19 +26,12 @@ class PlayerActivity : AppCompatActivity() {
         setContentView(R.layout.activity_player)
 
         val palabra = intent.getStringExtra("palabra")
-        val pref = getSharedPreferences(palabra, Context.MODE_PRIVATE)
-        val imagen = pref.getString("uriimagen","")!!.toUri()
-        val video = pref.getString("urivideo","")!!.toUri()
 
         vvwAprende=findViewById(R.id.vvwAprende)
         imvAprende=findViewById(R.id.imvAprende)
         txtVideo=findViewById(R.id.txtVideo)
 
-        imvAprende.setImageURI(imagen)
-        txtVideo?.setText(palabra)
-        vvwAprende.setVideoURI(video)
-        val mediaController = MediaController(this)
-        vvwAprende.setMediaController(mediaController)
+        cargarVideo(palabra)
     }
 
     fun reproducirVideo(view:View){
@@ -87,6 +81,18 @@ class PlayerActivity : AppCompatActivity() {
                 })
         builder.create()
         builder.show()
+    }
+
+    fun cargarVideo(cargarPalabra: String?){
+        val pref = getSharedPreferences(cargarPalabra, Context.MODE_PRIVATE)
+        val imagen = pref.getString("uriimagen","")!!.toUri()
+        val video = pref.getString("urivideo","")!!.toUri()
+
+        imvAprende.setImageURI(imagen)
+        txtVideo?.setText(cargarPalabra)
+        vvwAprende.setVideoURI(video)
+        val mediaController = MediaController(this)
+        vvwAprende.setMediaController(mediaController)
     }
 
     fun irInicio(view:View){

@@ -17,7 +17,6 @@ class MainActivity : AppCompatActivity() {
     val listDatos = ArrayList<NuevaPalabra>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        Thread.sleep(2000)
         setTheme(R.style.Theme_HelloS)
 
         super.onCreate(savedInstanceState)

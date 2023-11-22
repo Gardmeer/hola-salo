@@ -34,7 +34,7 @@
                 android:layout_height="match_parent"
                 android:fontFamily="@font/shortstack_regular"
                 android:gravity="center"
-                android:text="@string/video"
+                android:text="@string/word"
                 android:textColor="@color/white"
                 android:textSize="24sp" />
 

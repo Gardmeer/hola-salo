@@ -108,13 +108,13 @@
 
             <Button
                 android:id="@+id/btnVideo"
-                android:layout_width="150dp"
+                android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:background="@drawable/bg_btn_newword"
                 android:fontFamily="@font/shortstack_regular"
-                android:onClick="buscarVideo"
-                android:text="@string/video"
+                android:onClick="cargarVideo"
+                android:text="@string/load_video"
                 android:textAllCaps="false"
                 android:textColor="@color/celeste"
                 android:textSize="20sp"
@@ -129,7 +129,7 @@
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_gravity="center"
-                android:contentDescription="@string/picture"
+                android:contentDescription="@string/load_picture"
                 android:visibility="gone"
                 tools:srcCompat="@tools:sample/avatars" />
 
@@ -139,14 +139,14 @@
 
             <Button
                 android:id="@+id/btnImagen"
-                android:layout_width="150dp"
+                android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:background="@drawable/bg_btn_newword"
                 android:fontFamily="@font/shortstack_regular"
-                android:onClick="buscarImagen"
+                android:onClick="cargarImagen"
                 android:padding="8dp"
-                android:text="@string/picture"
+                android:text="@string/load_picture"
                 android:textAllCaps="false"
                 android:textColor="@color/celeste"
                 android:textSize="20sp"

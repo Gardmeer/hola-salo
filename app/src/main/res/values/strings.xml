@@ -8,8 +8,8 @@
     <string name="word">Palabra</string>
     <string name="create_word">Crear</string>
     <string name="learn">Aprende</string>
-    <string name="picture">Imagen</string>
-    <string name="video">Video</string>
+    <string name="load_picture">Cargar Imagen</string>
+    <string name="load_video">Cargar Video</string>
     <string name="save">Guardar</string>
     <string name="modify">Modificar</string>
     <string name="delete">Eliminar</string>
@@ -17,4 +17,15 @@
     <string name="accept">Aceptar</string>
     <string name="cancel">Cancelar</string>
     <string name="back_icon">Regresar</string>
+    <string-array name="video_option">
+        <item>Grabar video nuevo</item>
+        <item>Buscar en la galeria</item>
+        <item>Cancelar</item>
+    </string-array>
+    <string-array name="picture_option">
+        <item>Tomar foto</item>
+        <item>Descargar</item>
+        <item>Buscar en la galeria</item>
+        <item>Cancelar</item>
+    </string-array>
 </resources>
