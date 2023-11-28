@@ -1,11 +1,18 @@
 package com.gardmeer.hellos
 
+import android.content.ContentValues
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.graphics.BitmapFactory
+import android.media.MediaScannerConnection
+import android.media.MediaScannerConnection.OnScanCompletedListener
 import android.net.Uri
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Environment
 import android.provider.MediaStore
 import android.view.View
 import android.widget.EditText
@@ -14,8 +21,11 @@ import android.widget.TextView
 import android.widget.Toast
 import android.widget.VideoView
 import androidx.appcompat.app.AlertDialog
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.core.view.isVisible
+import java.io.File
 
 class CrearActivity : AppCompatActivity() {
 
@@ -27,10 +37,16 @@ class CrearActivity : AppCompatActivity() {
     var vvwVideo: VideoView?=null
     var uriImagen: String? = ""
     var uriVideo: String? = ""
-    private var imagenRC : Int = 123
-    private var videoRC : Int = 321
-    private var imagenRCapture : Int = 12
-    private var videoRCapture : Int = 32
+    var buscando: Boolean = false
+    val carpetaRaiz = "ArchivosApp/"
+    val rutaAlmacenamiento = carpetaRaiz+"HolaSalo"
+    var imageUri: Uri? = null
+    var videoUri: Uri? = null
+    private var codigoCamara = 10
+    private var imagenRC = 123
+    private var videoRC = 321
+    private var imagenRCapture = 124
+    private var videoRCapture = 324
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,13 +70,24 @@ class CrearActivity : AppCompatActivity() {
         builder.setTitle(resources.getString(R.string.load_picture))
         builder.setItems(lista){ id, posicion ->
             when(posicion){
-                0 -> {/*
-                    val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-                    if (intent.resolveActivity(packageManager) != null){
-                        startActivityForResult(intent,imagenRCapture)
-                    }*/
+                0 -> {
+                    if (ContextCompat.checkSelfPermission(this,
+                            "android.permission.CAMERA") == PackageManager.PERMISSION_DENIED){
+                        ActivityCompat.requestPermissions(this, arrayOf("android.permission.CAMERA") ,codigoCamara)
+                    } else {
+                        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                        val direccionImagen = crearImagen()
+                        intent.putExtra(MediaStore.EXTRA_OUTPUT,direccionImagen)
+                        if (intent.resolveActivity(packageManager) != null){
+                            startActivityForResult(intent,imagenRCapture)
+                        }
+                    }
                 }
-                1 -> {}
+                1 -> {
+                    val buscar = Intent(Intent.ACTION_VIEW,Uri.parse("https://www.google.com/imghp?hl=es&ogbl"))
+                    startActivity(buscar)
+                    buscando=true
+                }
                 2 -> {
                     val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
                     intent.type = "image/*"
@@ -79,11 +106,18 @@ class CrearActivity : AppCompatActivity() {
         builder.setTitle(resources.getString(R.string.load_video))
         builder.setItems(lista){ id, posicion ->
             when(posicion){
-                0 -> {/*
-                    val intent = Intent(MediaStore.ACTION_VIDEO_CAPTURE)
-                    if (intent.resolveActivity(packageManager) != null){
-                        startActivityForResult(intent,videoRCapture)
-                    }*/
+                0 -> {
+                    if (ContextCompat.checkSelfPermission(this,
+                            "android.permission.CAMERA") == PackageManager.PERMISSION_DENIED){
+                        ActivityCompat.requestPermissions(this, arrayOf("android.permission.CAMERA") ,codigoCamara)
+                    } else {
+                        val intent = Intent(MediaStore.ACTION_VIDEO_CAPTURE)
+                        val direccionVideo = crearVideo()
+                        intent.putExtra(MediaStore.EXTRA_OUTPUT,direccionVideo)
+                        if (intent.resolveActivity(packageManager) != null){
+                            startActivityForResult(intent,videoRCapture)
+                        }
+                    }
                 }
                 1 -> {
                     val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
@@ -103,25 +137,28 @@ class CrearActivity : AppCompatActivity() {
 
             when(requestCode){
                 imagenRC -> {
-                    val imagenUri = data?.data
-                    getContentResolver().takePersistableUriPermission(imagenUri!!,Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                    imvImagen?.setImageURI(imagenUri)
+                    imageUri = data?.data
+                    contentResolver.takePersistableUriPermission(imageUri!!,Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                    imvImagen?.setImageURI(imageUri)
                     imvImagen?.isVisible=true
-                    uriImagen = imagenUri.toString()
+                    uriImagen = imageUri.toString()
                 }
                 videoRC -> {
-                    val videoUri = data?.data
-                    getContentResolver().takePersistableUriPermission(videoUri!!,Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                    videoUri = data?.data
+                    contentResolver.takePersistableUriPermission(videoUri!!,Intent.FLAG_GRANT_READ_URI_PERMISSION)
                     vvwVideo?.setVideoURI(videoUri)
                     imvVideo?.isVisible=true
                     uriVideo = videoUri.toString()
                 }
-                imagenRCapture -> {/*
-                    val imagenUri = data?.data
-                    getContentResolver().takePersistableUriPermission(imagenUri!!,Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                    imvImagen?.setImageURI(imagenUri)
+                imagenRCapture -> {
+                    imvImagen?.setImageURI(imageUri)
                     imvImagen?.isVisible=true
-                    uriImagen = imagenUri.toString()*/
+                    uriImagen = imageUri.toString()
+                }
+                videoRCapture -> {
+                    vvwVideo?.setVideoURI(videoUri)
+                    imvVideo?.isVisible=true
+                    uriVideo = videoUri.toString()
                 }
             }
         }
@@ -191,7 +228,7 @@ class CrearActivity : AppCompatActivity() {
 
         imvImagen?.setImageURI(uriImagen!!.toUri())
         vvwVideo?.setVideoURI(uriVideo!!.toUri())
-        txtBloqueado?.setText(cargaPalabra)
+        txtBloqueado?.text = cargaPalabra
         txtNombre?.setText(cargaPalabra)
         txtPalabra?.setText(R.string.modify)
         txtBloqueado?.isVisible = true
@@ -200,8 +237,53 @@ class CrearActivity : AppCompatActivity() {
         imvVideo?.isVisible = true
     }
 
-        fun irInicio(view:View){
+    private fun crearImagen(): Uri? {
+        var uri: Uri? = null
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
+            uri = MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
+        } else {
+            uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+        }
+
+        val nombreImagen = (System.currentTimeMillis()/1000).toString()+".jpg"
+        ContentValues().put(MediaStore.Images.Media.DISPLAY_NAME, nombreImagen)
+        ContentValues().put(MediaStore.Images.Media.RELATIVE_PATH, rutaAlmacenamiento)
+        val uriFinal = contentResolver.insert(uri, ContentValues())
+        imageUri = uriFinal
+        return uriFinal
+    }
+
+    private fun crearVideo(): Uri? {
+        var uri: Uri? = null
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
+            uri = MediaStore.Video.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
+        } else {
+            uri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI
+        }
+
+        val nombreVideo = (System.currentTimeMillis()/1000).toString()+".mp4"
+        ContentValues().put(MediaStore.Video.Media.DISPLAY_NAME, nombreVideo)
+        ContentValues().put(MediaStore.Video.Media.RELATIVE_PATH, rutaAlmacenamiento)
+        val uriFinal = contentResolver.insert(uri, ContentValues())
+        videoUri = uriFinal
+        return uriFinal
+    }
+
+    fun irInicio(view:View){
         val iIn = Intent(this,MainActivity::class.java)
         startActivity(iIn)
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+
+        if (buscando==true){
+            buscando=false
+            val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
+            intent.type = "image/*"
+            startActivityForResult(intent,imagenRC)
+        }
     }
 }

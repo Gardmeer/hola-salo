@@ -14,6 +14,8 @@
     <string name="modify">Modificar</string>
     <string name="delete">Eliminar</string>
     <string name="delete_cancel">Eliminar la palabra</string>
+    <string name="camera_usage">Se requiere permiso para acceder a la camara</string>
+    <string name="permissions">Permiso Necesario</string>
     <string name="accept">Aceptar</string>
     <string name="cancel">Cancelar</string>
     <string name="back_icon">Regresar</string>

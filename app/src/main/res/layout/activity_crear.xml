@@ -49,10 +49,10 @@
         android:layout_alignParentStart="true"
         android:layout_marginStart="24dp"
         android:layout_marginTop="48dp"
-        android:background="@drawable/ic_back"
+        android:background="@drawable/backarrow"
         android:contentDescription="@string/back_icon"
         android:onClick="irInicio"
-        android:src="@drawable/ic_back" />
+        android:src="@drawable/backarrow" />
 
     <TextView
         android:id="@+id/txtPalabra"
@@ -95,11 +95,11 @@
 
             <ImageView
                 android:id="@+id/imvVideo"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:visibility="gone"
-                app:srcCompat="@android:drawable/presence_video_online"
+                app:srcCompat="@drawable/videomini"
                 tools:srcCompat="@android:drawable/ic_media_play" />
 
             <Space
