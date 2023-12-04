@@ -2,16 +2,10 @@ package com.gardmeer.hellos
 
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -34,7 +28,7 @@ class MainActivity : AppCompatActivity() {
 
         adapterDatos.setOnItemClickListener(object:AdapterDatos.onItemClickListener {
             override fun onItemClick(view:View) {
-                val palabra = listDatos.get(rvReciente.getChildAdapterPosition(view)).getPalabra()
+                val palabra = listDatos[rvReciente.getChildAdapterPosition(view)].getPalabra()
                 Toast.makeText(applicationContext,"Aprende la palabra $palabra!!",Toast.LENGTH_LONG).show()
                 verVideo(palabra)
             }

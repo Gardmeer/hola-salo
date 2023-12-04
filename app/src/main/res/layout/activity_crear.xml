@@ -86,6 +86,46 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <EditText
+                android:id="@+id/txtNombre"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:ems="10"
+                android:fontFamily="@font/shortstack_regular"
+                android:hint="@string/word"
+                android:inputType="text"
+                android:textAlignment="center"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="8dp" />
+
+            <TextView
+                android:id="@+id/txtBloqueado"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:ems="10"
+                android:fontFamily="@font/shortstack_regular"
+                android:text="@string/word"
+                android:textAlignment="center"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:visibility="gone" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="8dp" />
+
             <VideoView
                 android:id="@+id/vvwVideo"
                 android:layout_width="100dp"
@@ -152,58 +192,21 @@
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="8dp" />
-
-            <EditText
-                android:id="@+id/txtNombre"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:ems="10"
-                android:fontFamily="@font/shortstack_regular"
-                android:hint="@string/word"
-                android:inputType="text"
-                android:textAlignment="center"
-                android:textAllCaps="false"
-                android:textColor="@color/white"
-                android:textColorHint="@color/white"
-                android:textSize="24sp"
-                android:textStyle="bold" />
-
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="8dp" />
-
-            <TextView
-                android:id="@+id/txtBloqueado"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:ems="10"
-                android:fontFamily="@font/shortstack_regular"
-                android:text="@string/word"
-                android:textAlignment="center"
-                android:textAllCaps="false"
-                android:textColor="@color/white"
-                android:textColorHint="@color/white"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                android:visibility="gone" />
-
             <Button
                 android:id="@+id/btnGuardar"
-                android:layout_width="120dp"
+                android:layout_width="160dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 android:layout_marginTop="48dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="16dp"
                 android:background="@drawable/bg_btn_newword"
+                android:drawableStart="@drawable/save"
                 android:fontFamily="@font/shortstack_regular"
                 android:onClick="guardarPalabra"
                 android:text="@string/save"
+                android:gravity="center"
+                android:paddingHorizontal="10dp"
                 android:textAllCaps="false"
                 android:textColor="@color/violet"
                 android:textSize="20sp"

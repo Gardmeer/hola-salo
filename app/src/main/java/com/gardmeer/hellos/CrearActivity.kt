@@ -2,17 +2,12 @@ package com.gardmeer.hellos
 
 import android.content.ContentValues
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.BitmapFactory
-import android.media.MediaScannerConnection
-import android.media.MediaScannerConnection.OnScanCompletedListener
 import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Environment
 import android.provider.MediaStore
 import android.view.View
 import android.widget.EditText
@@ -25,28 +20,27 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.core.view.isVisible
-import java.io.File
+import java.util.TreeSet
 
 class CrearActivity : AppCompatActivity() {
 
-    var txtNombre: EditText?=null
-    var txtBloqueado : TextView?=null
-    var txtPalabra : TextView?=null
-    var imvImagen: ImageView?=null
-    var imvVideo: ImageView?=null
-    var vvwVideo: VideoView?=null
-    var uriImagen: String? = ""
-    var uriVideo: String? = ""
-    var buscando: Boolean = false
-    val carpetaRaiz = "ArchivosApp/"
-    val rutaAlmacenamiento = carpetaRaiz+"HolaSalo"
-    var imageUri: Uri? = null
-    var videoUri: Uri? = null
-    private var codigoCamara = 10
-    private var imagenRC = 123
-    private var videoRC = 321
-    private var imagenRCapture = 124
-    private var videoRCapture = 324
+    private lateinit var txtNombre: EditText
+    private lateinit var txtBloqueado : TextView
+    private lateinit var txtPalabra : TextView
+    private lateinit var imvImagen: ImageView
+    private lateinit var imvVideo: ImageView
+    private lateinit var vvwVideo: VideoView
+    private var uriImagen: String? = ""
+    private var uriVideo: String? = ""
+    private var permisosOk = false
+    private var buscando = false
+    private val carpetaRaiz = "ArchivosApp/"
+    private val rutaAlmacenamiento = carpetaRaiz+"HolaSalo/"
+    private var imageUri: Uri? = null
+    private var videoUri: Uri? = null
+    private val codigos = arrayOf(10,20,123,321,124,324) // Camara, Escritura, Imagen, Video, CapImagen, CapVideo
+    private val permisos = arrayOf("android.permission.CAMERA","android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.READ_MEDIA_VIDEO","android.permission.READ_MEDIA_IMAGES","android.permission.READ_MEDIA_AUDIO")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,34 +62,33 @@ class CrearActivity : AppCompatActivity() {
         val lista = resources.getStringArray(R.array.picture_option)
         val builder = AlertDialog.Builder(this)
         builder.setTitle(resources.getString(R.string.load_picture))
-        builder.setItems(lista){ id, posicion ->
+        builder.setItems(lista){ _, posicion ->
             when(posicion){
                 0 -> {
-                    if (ContextCompat.checkSelfPermission(this,
-                            "android.permission.CAMERA") == PackageManager.PERMISSION_DENIED){
-                        ActivityCompat.requestPermissions(this, arrayOf("android.permission.CAMERA") ,codigoCamara)
-                    } else {
+                    evaluarPermisos()
+
+                    if(permisosOk){
                         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-                        val direccionImagen = crearImagen()
-                        intent.putExtra(MediaStore.EXTRA_OUTPUT,direccionImagen)
+                        crearImagen()
+                        intent.putExtra(MediaStore.EXTRA_OUTPUT,imageUri)
                         if (intent.resolveActivity(packageManager) != null){
-                            startActivityForResult(intent,imagenRCapture)
+                            startActivityForResult(intent,codigos[4])
                         }
                     }
                 }
-                1 -> {
-                    val buscar = Intent(Intent.ACTION_VIEW,Uri.parse("https://www.google.com/imghp?hl=es&ogbl"))
-                    startActivity(buscar)
-                    buscando=true
+               1 -> {
+                   val palabra =  (txtNombre.text.toString())
+                   val buscar = Intent(Intent.ACTION_VIEW,Uri.parse("https://www.google.com/search?q=$palabra&tbm=isch"))
+                   startActivity(buscar)
+                   buscando=true
                 }
                 2 -> {
                     val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
                     intent.type = "image/*"
-                    startActivityForResult(intent,imagenRC)
+                    startActivityForResult(intent,codigos[2])
                 }
             }
         }
-
         builder.create()
         builder.show()
     }
@@ -104,29 +97,27 @@ class CrearActivity : AppCompatActivity() {
         val lista = resources.getStringArray(R.array.video_option)
         val builder = AlertDialog.Builder(this)
         builder.setTitle(resources.getString(R.string.load_video))
-        builder.setItems(lista){ id, posicion ->
+        builder.setItems(lista){ _, posicion ->
             when(posicion){
                 0 -> {
-                    if (ContextCompat.checkSelfPermission(this,
-                            "android.permission.CAMERA") == PackageManager.PERMISSION_DENIED){
-                        ActivityCompat.requestPermissions(this, arrayOf("android.permission.CAMERA") ,codigoCamara)
-                    } else {
+                    evaluarPermisos()
+
+                    if(permisosOk){
                         val intent = Intent(MediaStore.ACTION_VIDEO_CAPTURE)
-                        val direccionVideo = crearVideo()
-                        intent.putExtra(MediaStore.EXTRA_OUTPUT,direccionVideo)
+                        crearVideo()
+                        intent.putExtra(MediaStore.EXTRA_OUTPUT,videoUri)
                         if (intent.resolveActivity(packageManager) != null){
-                            startActivityForResult(intent,videoRCapture)
+                            startActivityForResult(intent,codigos[5])
                         }
                     }
                 }
                 1 -> {
                     val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
                     intent.type = "video/*"
-                    startActivityForResult(intent,videoRC)
+                    startActivityForResult(intent,codigos[3])
                 }
             }
         }
-
         builder.create()
         builder.show()
     }
@@ -136,28 +127,28 @@ class CrearActivity : AppCompatActivity() {
         if (resultCode == RESULT_OK) {
 
             when(requestCode){
-                imagenRC -> {
+                codigos[2] -> {
                     imageUri = data?.data
                     contentResolver.takePersistableUriPermission(imageUri!!,Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                    imvImagen?.setImageURI(imageUri)
-                    imvImagen?.isVisible=true
+                    imvImagen.setImageURI(imageUri)
+                    imvImagen.isVisible=true
                     uriImagen = imageUri.toString()
                 }
-                videoRC -> {
+                codigos[3] -> {
                     videoUri = data?.data
                     contentResolver.takePersistableUriPermission(videoUri!!,Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                    vvwVideo?.setVideoURI(videoUri)
-                    imvVideo?.isVisible=true
+                    vvwVideo.setVideoURI(videoUri)
+                    imvVideo.isVisible=true
                     uriVideo = videoUri.toString()
                 }
-                imagenRCapture -> {
-                    imvImagen?.setImageURI(imageUri)
-                    imvImagen?.isVisible=true
+                codigos[4] -> {
+                    imvImagen.setImageURI(imageUri)
+                    imvImagen.isVisible=true
                     uriImagen = imageUri.toString()
                 }
-                videoRCapture -> {
-                    vvwVideo?.setVideoURI(videoUri)
-                    imvVideo?.isVisible=true
+                codigos[5] -> {
+                    vvwVideo.setVideoURI(videoUri)
+                    imvVideo.isVisible=true
                     uriVideo = videoUri.toString()
                 }
             }
@@ -165,7 +156,8 @@ class CrearActivity : AppCompatActivity() {
     }
 
     fun guardarPalabra(view:View){
-        val palabra =  (txtNombre?.text.toString().lowercase()).replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }
+        val palabra =  (txtNombre.text.toString().lowercase()).replaceFirstChar {
+            if (it.isLowerCase()) it.titlecase() else it.toString() }
 
         if (uriImagen == ""){
             Toast.makeText(this,"Selecciona una Imagen",Toast.LENGTH_LONG).show()
@@ -196,20 +188,19 @@ class CrearActivity : AppCompatActivity() {
             buLista!!.add(palabra)
             editarL.putStringSet("addlista",buLista)
 
-            var buReciente = sortedSetOf<String?>()
-
-            if (reciente!!.size >0){
-                var buPalabra = ""
-                if(reciente.size == 2){
+            val buReciente: TreeSet<String> = if (reciente!!.size >0){
+                val buPalabra: String = if(reciente.size == 2){
                     if(reciente.elementAt(0) == palabra){
-                        buPalabra = reciente.elementAt(1)
-                    } else {buPalabra = reciente.elementAt(0)}
+                        reciente.elementAt(1)
+                    } else {
+                        reciente.elementAt(0)
+                    }
                 } else {
-                    buPalabra = reciente.elementAt(0)
+                    reciente.elementAt(0)
                 }
-                buReciente = sortedSetOf(palabra,buPalabra)
+                sortedSetOf(palabra,buPalabra)
             } else {
-                buReciente = sortedSetOf(palabra)
+                sortedSetOf(palabra)
             }
 
             editarL.putStringSet("reclista",buReciente)
@@ -221,54 +212,47 @@ class CrearActivity : AppCompatActivity() {
         }
     }
 
-    fun modificarPalabra(cargaPalabra: String){
-        val pref = getSharedPreferences(cargaPalabra, Context.MODE_PRIVATE)
-        uriImagen = pref.getString("uriimagen","")
-        uriVideo = pref.getString("urivideo","")
 
-        imvImagen?.setImageURI(uriImagen!!.toUri())
-        vvwVideo?.setVideoURI(uriVideo!!.toUri())
-        txtBloqueado?.text = cargaPalabra
-        txtNombre?.setText(cargaPalabra)
-        txtPalabra?.setText(R.string.modify)
-        txtBloqueado?.isVisible = true
-        txtNombre?.isVisible = false
-        imvImagen?.isVisible = true
-        imvVideo?.isVisible = true
-    }
-
-    private fun crearImagen(): Uri? {
-        var uri: Uri? = null
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
-            uri = MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
+    private fun crearImagen() {
+        val uri: Uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
+            MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
         } else {
-            uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+            MediaStore.Images.Media.EXTERNAL_CONTENT_URI
         }
 
         val nombreImagen = (System.currentTimeMillis()/1000).toString()+".jpg"
         ContentValues().put(MediaStore.Images.Media.DISPLAY_NAME, nombreImagen)
         ContentValues().put(MediaStore.Images.Media.RELATIVE_PATH, rutaAlmacenamiento)
-        val uriFinal = contentResolver.insert(uri, ContentValues())
-        imageUri = uriFinal
-        return uriFinal
+        imageUri = contentResolver.insert(uri, ContentValues())
     }
 
-    private fun crearVideo(): Uri? {
-        var uri: Uri? = null
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
-            uri = MediaStore.Video.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
+    private fun crearVideo(){
+        val uri: Uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
+            MediaStore.Video.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
         } else {
-            uri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI
+            MediaStore.Video.Media.EXTERNAL_CONTENT_URI
         }
 
         val nombreVideo = (System.currentTimeMillis()/1000).toString()+".mp4"
         ContentValues().put(MediaStore.Video.Media.DISPLAY_NAME, nombreVideo)
         ContentValues().put(MediaStore.Video.Media.RELATIVE_PATH, rutaAlmacenamiento)
-        val uriFinal = contentResolver.insert(uri, ContentValues())
-        videoUri = uriFinal
-        return uriFinal
+        videoUri = contentResolver.insert(uri, ContentValues())
+    }
+
+    private fun modificarPalabra(cargaPalabra: String){
+        val pref = getSharedPreferences(cargaPalabra, Context.MODE_PRIVATE)
+        uriImagen = pref.getString("uriimagen","")
+        uriVideo = pref.getString("urivideo","")
+
+        imvImagen.setImageURI(uriImagen!!.toUri())
+        vvwVideo.setVideoURI(uriVideo!!.toUri())
+        txtBloqueado.text = cargaPalabra
+        txtNombre.setText(cargaPalabra)
+        txtPalabra.setText(R.string.modify)
+        txtBloqueado.isVisible = true
+        txtNombre.isVisible = false
+        imvImagen.isVisible = true
+        imvVideo.isVisible = true
     }
 
     fun irInicio(view:View){
@@ -276,14 +260,36 @@ class CrearActivity : AppCompatActivity() {
         startActivity(iIn)
     }
 
+    private fun evaluarPermisos(){
+        for (i in permisos.indices) {
+            if (ContextCompat.checkSelfPermission(this, permisos[i]) == PackageManager.PERMISSION_DENIED){
+                ActivityCompat.requestPermissions(this, permisos ,codigos[i])
+            }
+        }
+        if ((shouldShowRequestPermissionRationale(permisos[0]))||
+            (shouldShowRequestPermissionRationale(permisos[1]))){
+            val builder = AlertDialog.Builder(this)
+            builder.setTitle(resources.getString(R.string.permissions))
+            builder.setMessage(resources.getString(R.string.suggestion))
+                .setPositiveButton(R.string.accept
+                ) { _, _ ->
+                    ActivityCompat.requestPermissions(this, permisos ,codigos[0])
+                }
+        }
+        if ((ContextCompat.checkSelfPermission(this, permisos[0]) == PackageManager.PERMISSION_GRANTED) &&
+            (ContextCompat.checkSelfPermission(this, permisos[1]) == PackageManager.PERMISSION_GRANTED)){
+            permisosOk = true
+        }
+    }
+
     override fun onRestart() {
         super.onRestart()
 
-        if (buscando==true){
+        if (buscando){
             buscando=false
             val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
             intent.type = "image/*"
-            startActivityForResult(intent,imagenRC)
+            startActivityForResult(intent,codigos[2])
         }
     }
 }

@@ -3,7 +3,7 @@
     <string name="app_logo">Logo</string>
     <string name="new_word">Crea una Palabra</string>
     <string name="see_library">Mira la Biblioteca</string>
-    <string name="recent">Reciente</string>
+    <string name="recent">Recientes</string>
     <string name="library">Biblioteca</string>
     <string name="word">Palabra</string>
     <string name="create_word">Crear</string>
@@ -14,8 +14,8 @@
     <string name="modify">Modificar</string>
     <string name="delete">Eliminar</string>
     <string name="delete_cancel">Eliminar la palabra</string>
-    <string name="camera_usage">Se requiere permiso para acceder a la camara</string>
-    <string name="permissions">Permiso Necesario</string>
+    <string name="suggestion">Se requieren los siquientes permisos para el correcto funcionamiento de la App</string>
+    <string name="permissions">Permisos Necesarios</string>
     <string name="accept">Aceptar</string>
     <string name="cancel">Cancelar</string>
     <string name="back_icon">Regresar</string>

@@ -26,7 +26,7 @@ class BibliotecaActivity : AppCompatActivity() {
 
         adapterDatos.setOnItemClickListener(object:AdapterDatos.onItemClickListener {
             override fun onItemClick(view: View) {
-                val palabra = listDatos.get(rvBiblioteca.getChildAdapterPosition(view)).getPalabra()
+                val palabra = listDatos[rvBiblioteca.getChildAdapterPosition(view)].getPalabra()
                 Toast.makeText(applicationContext,"Aprende la palabra $palabra!!",Toast.LENGTH_LONG).show()
                 verVideo(palabra)
             }
