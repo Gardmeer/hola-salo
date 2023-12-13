@@ -19,10 +19,12 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
+import androidx.core.view.GravityCompat
 import androidx.core.view.isVisible
+import androidx.drawerlayout.widget.DrawerLayout
 import java.util.TreeSet
 
-class CrearActivity : AppCompatActivity() {
+class CrearActivity : AppCompatActivity(R.layout.activity_crear) {
 
     private lateinit var txtNombre: EditText
     private lateinit var txtBloqueado : TextView
@@ -30,6 +32,7 @@ class CrearActivity : AppCompatActivity() {
     private lateinit var imvImagen: ImageView
     private lateinit var imvVideo: ImageView
     private lateinit var vvwVideo: VideoView
+    private lateinit var dlMenu : DrawerLayout
     private var uriImagen: String? = ""
     private var uriVideo: String? = ""
     private var permisosOk = false
@@ -44,7 +47,6 @@ class CrearActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_crear)
 
         val mPalabra = intent.getStringExtra("palabra")
 
@@ -54,43 +56,57 @@ class CrearActivity : AppCompatActivity() {
         imvImagen=findViewById(R.id.imvImagen)
         imvVideo=findViewById(R.id.imvVideo)
         vvwVideo=findViewById(R.id.vvwVideo)
+        dlMenu=findViewById(R.id.dlMenu)
 
         if(mPalabra != null){modificarPalabra(mPalabra)}
     }
 
     fun cargarImagen(view:View){
-        val lista = resources.getStringArray(R.array.picture_option)
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle(resources.getString(R.string.load_picture))
-        builder.setItems(lista){ _, posicion ->
-            when(posicion){
-                0 -> {
-                    evaluarPermisos()
+        val builderConf = AlertDialog.Builder(this)
+        builderConf.setMessage(resources.getString(R.string.load))
+            .setPositiveButton(R.string.yes
+            ) { _, _ ->
+                val lista = resources.getStringArray(R.array.picture_option)
+                val builder = AlertDialog.Builder(this)
+                builder.setTitle(resources.getString(R.string.load_picture))
+                builder.setItems(lista){ _, posicion ->
+                    when(posicion){
+                        0 -> {
+                            evaluarPermisos()
 
-                    if(permisosOk){
-                        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-                        crearImagen()
-                        intent.putExtra(MediaStore.EXTRA_OUTPUT,imageUri)
-                        if (intent.resolveActivity(packageManager) != null){
-                            startActivityForResult(intent,codigos[4])
+                            if(permisosOk){
+                                val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                                crearImagen()
+                                intent.putExtra(MediaStore.EXTRA_OUTPUT,imageUri)
+                                if (intent.resolveActivity(packageManager) != null){
+                                    startActivityForResult(intent,codigos[4])
+                                }
+                            }
+                        }
+                        1 -> {
+                            val palabra =  (txtNombre.text.toString())
+                            val buscar = Intent(Intent.ACTION_VIEW,Uri.parse("https://www.google.com/search?q=$palabra&tbm=isch"))
+                            startActivity(buscar)
+                            buscando=true
+                        }
+                        2 -> {
+                            val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
+                            intent.type = "image/*"
+                            startActivityForResult(intent,codigos[2])
                         }
                     }
                 }
-               1 -> {
-                   val palabra =  (txtNombre.text.toString())
-                   val buscar = Intent(Intent.ACTION_VIEW,Uri.parse("https://www.google.com/search?q=$palabra&tbm=isch"))
-                   startActivity(buscar)
-                   buscando=true
-                }
-                2 -> {
-                    val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
-                    intent.type = "image/*"
-                    startActivityForResult(intent,codigos[2])
-                }
+                builder.create()
+                builder.show()
             }
-        }
-        builder.create()
-        builder.show()
+            .setNegativeButton(R.string.no
+            ) { _, _ ->
+                imvImagen.setImageResource(R.drawable.nopicmini)
+                imvImagen.isVisible=true
+                uriImagen = R.drawable.nopicmini.toString()
+            }
+        builderConf.create()
+        builderConf.show()
     }
 
     fun cargarVideo (view:View){
@@ -160,13 +176,14 @@ class CrearActivity : AppCompatActivity() {
             if (it.isLowerCase()) it.titlecase() else it.toString() }
 
         if (uriImagen == ""){
-            Toast.makeText(this,"Selecciona una Imagen",Toast.LENGTH_LONG).show()
+            cargarImagen(view)
+            Toast.makeText(this,resources.getString(R.string.reminder_picture),Toast.LENGTH_LONG).show()
         }
         else if(uriVideo == ""){
-            Toast.makeText(this,"Selecciona un Video",Toast.LENGTH_LONG).show()
+            Toast.makeText(this,resources.getString(R.string.reminder_video),Toast.LENGTH_LONG).show()
         }
         else if(palabra == "") {
-            Toast.makeText(this, "Escribe la Palabra que aprenderás", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, resources.getString(R.string.reminder_word), Toast.LENGTH_LONG).show()
         }
         else{
             val pref = getSharedPreferences(palabra, Context.MODE_PRIVATE)
@@ -206,7 +223,7 @@ class CrearActivity : AppCompatActivity() {
             editarL.putStringSet("reclista",buReciente)
             editarL.apply()
 
-            Toast.makeText(this, "Palabra $palabra guardada!", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, resources.getString(R.string.word_saved,palabra), Toast.LENGTH_LONG).show()
             val iBl = Intent(this,BibliotecaActivity::class.java)
             startActivity(iBl)
         }
@@ -244,15 +261,30 @@ class CrearActivity : AppCompatActivity() {
         uriImagen = pref.getString("uriimagen","")
         uriVideo = pref.getString("urivideo","")
 
-        imvImagen.setImageURI(uriImagen!!.toUri())
-        vvwVideo.setVideoURI(uriVideo!!.toUri())
+        try {val bitmap = MediaStore.Images.Media.getBitmap(contentResolver,uriImagen?.toUri())
+        } catch (e:Exception){uriImagen=""}
+
+        try {val bitmap = MediaStore.Images.Media.getBitmap(contentResolver,uriVideo?.toUri())
+        } catch (e:Exception){uriVideo=""}
+
+        if(uriImagen!=""){
+            imvImagen.setImageURI(uriImagen!!.toUri())
+            imvImagen.isVisible = true
+        }
+        if(uriVideo!=""){
+            vvwVideo.setVideoURI(uriVideo!!.toUri())
+            imvVideo.isVisible = true
+        }
         txtBloqueado.text = cargaPalabra
         txtNombre.setText(cargaPalabra)
         txtPalabra.setText(R.string.modify)
         txtBloqueado.isVisible = true
         txtNombre.isVisible = false
-        imvImagen.isVisible = true
-        imvVideo.isVisible = true
+
+    }
+
+    fun verMenu(view:View){
+        dlMenu.openDrawer(GravityCompat.START)
     }
 
     fun irInicio(view:View){

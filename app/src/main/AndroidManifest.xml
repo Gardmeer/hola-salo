@@ -2,12 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO"/>
-    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
-    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO"/>
-
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
 
     <uses-feature
@@ -25,24 +25,25 @@
         android:theme="@style/Theme.HelloS"
         tools:targetApi="31">
         <activity
-            android:name=".PlayerActivity"
+            android:name=".TutorialActivity"
             android:exported="false"
-            android:screenOrientation="portrait" />
+            android:label="@string/title_activity_tutorial"
+            android:theme="@style/Theme.HelloS.NoActionBar" />
+        <activity
+            android:name=".PlayerActivity"
+            android:exported="false" />
         <activity
             android:name=".CrearActivity"
             android:configChanges="orientation"
-            android:exported="false"
-            android:screenOrientation="portrait" />
+            android:exported="false" />
         <activity
             android:name=".BibliotecaActivity"
             android:configChanges="orientation"
-            android:exported="false"
-            android:screenOrientation="portrait" />
+            android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:configChanges="orientation"
             android:exported="true"
-            android:screenOrientation="portrait"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

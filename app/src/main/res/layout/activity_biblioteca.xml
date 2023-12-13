@@ -1,92 +1,136 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/dlMenu"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/celeste"
     tools:context=".BibliotecaActivity">
 
-    <LinearLayout
-        android:id="@+id/linearLayout"
+    <com.google.android.material.navigation.NavigationView
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp"
-        android:orientation="horizontal">
+        android:layout_height="match_parent"
+        android:layout_gravity="start"/>
 
-        <ImageView
-            android:id="@+id/imvIcono"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_weight="1"
-            android:contentDescription="@string/app_logo"
-            app:srcCompat="@drawable/saloblanco" />
-
-        <Space
-            android:layout_width="16dp"
-            android:layout_height="match_parent" />
-
-        <TextView
-            android:id="@+id/txtApp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:fontFamily="@font/shortstack_regular"
-            android:text="@string/app_name"
-            android:textAlignment="center"
-            android:textColor="@color/white"
-            android:textSize="24sp"
-            android:textStyle="bold" />
-    </LinearLayout>
-    <!-- m -->
-    <ImageButton
-        android:id="@+id/btnRegresar"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_below="@+id/linearLayout"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="48dp"
-        android:background="@drawable/backarrow"
-        android:contentDescription="@string/back_icon"
-        android:onClick="irInicio"
-        android:src="@drawable/backarrow" />
-
-    <TextView
-        android:id="@+id/txtBiblioteca"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/linearLayout"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="48dp"
-        android:layout_marginEnd="24dp"
-        android:background="@drawable/bg_color"
-        android:fontFamily="@font/shortstack_regular"
-        android:padding="8dp"
-        android:text="@string/library"
-        android:textAlignment="textEnd"
-        android:textColor="@color/white"
-        android:textSize="24sp" />
-
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/txtBiblioteca"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="48dp"
-        android:layout_marginEnd="16dp"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvBiblioteca"
+        <RelativeLayout
+            android:id="@+id/rlNavegacion"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginTop="16dp">
 
+            <ImageButton
+                android:id="@+id/btnMenu"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_centerVertical="true"
+                android:background="@null"
+                android:onClick="verMenu"
+                android:scaleType="fitXY"
+                app:srcCompat="@drawable/menu" />
 
+            <LinearLayout
+                android:id="@+id/llNombreApp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:orientation="horizontal">
 
-</RelativeLayout>
+                <ImageView
+                    android:id="@+id/imvIcono"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_weight="1"
+                    android:contentDescription="@string/app_logo"
+                    app:srcCompat="@drawable/saloblanco" />
+
+                <Space
+                    android:layout_width="16dp"
+                    android:layout_height="match_parent" />
+
+                <TextView
+                    android:id="@+id/txtApp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/shortstack_regular"
+                    android:text="@string/app_name"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/btnAyuda"
+                android:layout_width="16dp"
+                android:layout_height="24dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:background="@null"
+                android:scaleType="fitXY"
+                app:srcCompat="@drawable/ayuda" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rlActividad"
+            android:layout_below="@+id/rlNavegacion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginTop="32dp"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/btnRegresar"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_alignParentStart="true"
+                android:src="@drawable/backarrow"
+                android:background="@null"
+                android:contentDescription="@string/back_icon"
+                android:onClick="irInicio" />
+
+            <TextView
+                android:id="@+id/txtBiblioteca"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:background="@drawable/rect_violeta"
+                android:fontFamily="@font/shortstack_regular"
+                android:padding="8dp"
+                android:text="@string/library"
+                android:textAlignment="textEnd"
+                android:textColor="@color/white"
+                android:textSize="24sp" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/rlActividad"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="48dp"
+            android:layout_marginEnd="16dp"
+            android:orientation="vertical">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvBiblioteca"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </RelativeLayout>
+
+</androidx.drawerlayout.widget.DrawerLayout>

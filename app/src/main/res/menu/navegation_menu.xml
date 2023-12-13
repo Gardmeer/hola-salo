@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <item
+        android:id="@+id/mnCrear"
+        android:icon="@drawable/pencil"
+        android:title="@string/create_word"/>
+
+    <item
+        android:id="@+id/mnBiblioteca"
+        android:icon="@drawable/library"
+        android:title="@string/library"/>
+
+    <item
+        android:id="@+id/mnTutorial"
+        android:icon="@drawable/ayudablue"
+        android:title="@string/tutorial"/>
+
+    <item
+        android:id="@+id/mnSalir"
+        android:icon="@drawable/salir"
+        android:title="@string/exit"/>
+
+</menu>

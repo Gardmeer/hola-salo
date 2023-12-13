@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Hola Salo</string>
+    <string name="app_logo">Logo</string>
+    <string name="new_word">Crea una Palabra</string>
+    <string name="see_library">Mira la Biblioteca</string>
+    <string name="recent">Recientes</string>
+    <string name="library">Biblioteca</string>
+    <string name="word">Palabra</string>
+    <string name="create_word">Crear</string>
+    <string name="learn">Aprende</string>
+    <string name="tutorial">Tutorial</string>
+    <string name="load">Deseas cargar una imagen</string>
+    <string name="load_picture">Cargar Imagen</string>
+    <string name="load_video">Cargar Video</string>
+    <string name="reminder_picture">Escoge una imagen</string>
+    <string name="reminder_video">Escoge un video</string>
+    <string name="reminder_word">Escribe la Palabra que aprenderás</string>
+    <string name="save">Guardar</string>
+    <string name="modify">Modificar</string>
+    <string name="word_saved">Palabra %1$s guardada!</string>
+    <string name="word_deleted">Palabra %1$s eliminada</string>
+    <string name="delete">Eliminar</string>
+    <string name="delete_cancel">Eliminar la palabra</string>
+    <string name="not_found">Video no encontrado</string>
+    <string name="change_video">Se recomienda Modificar o Eliminar</string>
+    <string name="suggestion">Se requieren los siguientes permisos para el correcto funcionamiento de la App</string>
+    <string name="permissions">Permisos Necesarios</string>
+    <string name="accept">Aceptar</string>
+    <string name="cancel">Cancelar</string>
+    <string name="exit">Salir</string>
+    <string name="yes">Si</string>
+    <string name="no">No</string>
+    <string name="back_icon">Regresar</string>
+    <string-array name="video_option">
+        <item>Grabar video nuevo</item>
+        <item>Buscar en la galería</item>
+        <item>Cancelar</item>
+    </string-array>
+    <string-array name="picture_option">
+        <item>Tomar foto</item>
+        <item>Descargar</item>
+        <item>Buscar en la galería</item>
+        <item>Cancelar</item>
+    </string-array>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>

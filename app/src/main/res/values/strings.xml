@@ -1,33 +1,49 @@
 <resources>
     <string name="app_name">Hola Salo</string>
     <string name="app_logo">Logo</string>
-    <string name="new_word">Crea una Palabra</string>
-    <string name="see_library">Mira la Biblioteca</string>
-    <string name="recent">Recientes</string>
-    <string name="library">Biblioteca</string>
-    <string name="word">Palabra</string>
-    <string name="create_word">Crear</string>
-    <string name="learn">Aprende</string>
-    <string name="load_picture">Cargar Imagen</string>
-    <string name="load_video">Cargar Video</string>
-    <string name="save">Guardar</string>
-    <string name="modify">Modificar</string>
-    <string name="delete">Eliminar</string>
-    <string name="delete_cancel">Eliminar la palabra</string>
-    <string name="suggestion">Se requieren los siquientes permisos para el correcto funcionamiento de la App</string>
-    <string name="permissions">Permisos Necesarios</string>
-    <string name="accept">Aceptar</string>
-    <string name="cancel">Cancelar</string>
-    <string name="back_icon">Regresar</string>
+    <string name="new_word">Create a Word</string>
+    <string name="see_library">Look at the Library</string>
+    <string name="recent">Recent</string>
+    <string name="library">Library</string>
+    <string name="word">Word</string>
+    <string name="create_word">Create</string>
+    <string name="learn">Learn</string>
+    <string name="tutorial">Tutorial</string>
+    <string name="load">Do you want to upload a picture</string>
+    <string name="load_picture">Load Picture</string>
+    <string name="load_video">Load Video</string>
+    <string name="reminder_picture">Load a picture</string>
+    <string name="reminder_video">Load a video</string>
+    <string name="reminder_word">Type the word you are learning</string>
+    <string name="save">Save</string>
+    <string name="modify">Modify</string>
+    <string name="word_saved">Word %1$s saved!</string>
+    <string name="word_deleted">Word %1$s deleted</string>
+    <string name="delete">Delete</string>
+    <string name="delete_cancel">Delete word</string>
+    <string name="not_found">Video not found</string>
+    <string name="change_video">It is recommended to Modify or Delete</string>
+    <string name="suggestion">The following permissions are necessary for the correct functioning of the App</string>
+    <string name="permissions">Necessary Permissions</string>
+    <string name="accept">Accept</string>
+    <string name="cancel">Cancel</string>
+    <string name="exit">Exit</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="back_icon">Back</string>
     <string-array name="video_option">
-        <item>Grabar video nuevo</item>
-        <item>Buscar en la galeria</item>
-        <item>Cancelar</item>
+        <item>Capture new Video</item>
+        <item>Search in gallery</item>
+        <item>Cancel</item>
     </string-array>
     <string-array name="picture_option">
-        <item>Tomar foto</item>
-        <item>Descargar</item>
-        <item>Buscar en la galeria</item>
-        <item>Cancelar</item>
+        <item>Take a photo</item>
+        <item>Search the web</item>
+        <item>Search in gallery</item>
+        <item>Cancel</item>
     </string-array>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_tutorial">TutorialActivity</string>
+    <string name="tab_text_1">Tab 1</string>
+    <string name="tab_text_2">Tab 2</string>
 </resources>
