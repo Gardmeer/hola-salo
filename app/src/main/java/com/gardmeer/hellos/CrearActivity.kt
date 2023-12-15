@@ -1,5 +1,6 @@
 package com.gardmeer.hellos
 
+import android.content.ActivityNotFoundException
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
@@ -32,7 +33,6 @@ class CrearActivity : AppCompatActivity(R.layout.activity_crear) {
     private lateinit var imvImagen: ImageView
     private lateinit var imvVideo: ImageView
     private lateinit var vvwVideo: VideoView
-    private lateinit var dlMenu : DrawerLayout
     private var uriImagen: String? = ""
     private var uriVideo: String? = ""
     private var permisosOk = false
@@ -56,57 +56,44 @@ class CrearActivity : AppCompatActivity(R.layout.activity_crear) {
         imvImagen=findViewById(R.id.imvImagen)
         imvVideo=findViewById(R.id.imvVideo)
         vvwVideo=findViewById(R.id.vvwVideo)
-        dlMenu=findViewById(R.id.dlMenu)
 
         if(mPalabra != null){modificarPalabra(mPalabra)}
     }
 
     fun cargarImagen(view:View){
-        val builderConf = AlertDialog.Builder(this)
-        builderConf.setMessage(resources.getString(R.string.load))
-            .setPositiveButton(R.string.yes
-            ) { _, _ ->
-                val lista = resources.getStringArray(R.array.picture_option)
-                val builder = AlertDialog.Builder(this)
-                builder.setTitle(resources.getString(R.string.load_picture))
-                builder.setItems(lista){ _, posicion ->
-                    when(posicion){
-                        0 -> {
-                            evaluarPermisos()
+        val lista = resources.getStringArray(R.array.picture_option)
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle(resources.getString(R.string.load_picture))
+        builder.setItems(lista){ _, posicion ->
+            when(posicion){
+                0 -> {
+                    evaluarPermisos()
 
-                            if(permisosOk){
-                                val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-                                crearImagen()
-                                intent.putExtra(MediaStore.EXTRA_OUTPUT,imageUri)
-                                if (intent.resolveActivity(packageManager) != null){
-                                    startActivityForResult(intent,codigos[4])
-                                }
-                            }
-                        }
-                        1 -> {
-                            val palabra =  (txtNombre.text.toString())
-                            val buscar = Intent(Intent.ACTION_VIEW,Uri.parse("https://www.google.com/search?q=$palabra&tbm=isch"))
-                            startActivity(buscar)
-                            buscando=true
-                        }
-                        2 -> {
-                            val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
-                            intent.type = "image/*"
-                            startActivityForResult(intent,codigos[2])
+                    if(permisosOk){
+                        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                        crearImagen()
+                        intent.putExtra(MediaStore.EXTRA_OUTPUT,imageUri)
+                        try{startActivityForResult(intent,codigos[4])}
+                        catch (ex:ActivityNotFoundException){
+                            Toast.makeText(this,"Not Found",Toast.LENGTH_SHORT).show()
                         }
                     }
                 }
-                builder.create()
-                builder.show()
+                1 -> {
+                    val palabra =  (txtNombre.text.toString())
+                    val buscar = Intent(Intent.ACTION_VIEW,Uri.parse("https://www.google.com/search?q=$palabra&tbm=isch"))
+                    startActivity(buscar)
+                    buscando=true
+                }
+                2 -> {
+                    val intent = Intent(Intent.ACTION_PICK)
+                    intent.type = "image/*"
+                    startActivityForResult(intent,codigos[2])
+                }
             }
-            .setNegativeButton(R.string.no
-            ) { _, _ ->
-                imvImagen.setImageResource(R.drawable.nopicmini)
-                imvImagen.isVisible=true
-                uriImagen = R.drawable.nopicmini.toString()
-            }
-        builderConf.create()
-        builderConf.show()
+        }
+        builder.create()
+        builder.show()
     }
 
     fun cargarVideo (view:View){
@@ -122,13 +109,14 @@ class CrearActivity : AppCompatActivity(R.layout.activity_crear) {
                         val intent = Intent(MediaStore.ACTION_VIDEO_CAPTURE)
                         crearVideo()
                         intent.putExtra(MediaStore.EXTRA_OUTPUT,videoUri)
-                        if (intent.resolveActivity(packageManager) != null){
-                            startActivityForResult(intent,codigos[5])
+                        try{startActivityForResult(intent,codigos[5])}
+                        catch (ex:ActivityNotFoundException){
+                            Toast.makeText(this,"Not Found",Toast.LENGTH_SHORT).show()
                         }
                     }
                 }
                 1 -> {
-                    val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
+                    val intent = Intent(Intent.ACTION_PICK)
                     intent.type = "video/*"
                     startActivityForResult(intent,codigos[3])
                 }
@@ -145,14 +133,12 @@ class CrearActivity : AppCompatActivity(R.layout.activity_crear) {
             when(requestCode){
                 codigos[2] -> {
                     imageUri = data?.data
-                    contentResolver.takePersistableUriPermission(imageUri!!,Intent.FLAG_GRANT_READ_URI_PERMISSION)
                     imvImagen.setImageURI(imageUri)
                     imvImagen.isVisible=true
                     uriImagen = imageUri.toString()
                 }
                 codigos[3] -> {
                     videoUri = data?.data
-                    contentResolver.takePersistableUriPermission(videoUri!!,Intent.FLAG_GRANT_READ_URI_PERMISSION)
                     vvwVideo.setVideoURI(videoUri)
                     imvVideo.isVisible=true
                     uriVideo = videoUri.toString()
@@ -175,15 +161,28 @@ class CrearActivity : AppCompatActivity(R.layout.activity_crear) {
         val palabra =  (txtNombre.text.toString().lowercase()).replaceFirstChar {
             if (it.isLowerCase()) it.titlecase() else it.toString() }
 
-        if (uriImagen == ""){
-            cargarImagen(view)
-            Toast.makeText(this,resources.getString(R.string.reminder_picture),Toast.LENGTH_LONG).show()
+        if (palabra == ""){
+            Toast.makeText(this,resources.getString(R.string.reminder_word),Toast.LENGTH_LONG).show()
         }
         else if(uriVideo == ""){
             Toast.makeText(this,resources.getString(R.string.reminder_video),Toast.LENGTH_LONG).show()
         }
-        else if(palabra == "") {
-            Toast.makeText(this, resources.getString(R.string.reminder_word), Toast.LENGTH_LONG).show()
+        else if(uriImagen == "") {
+            val builder = AlertDialog.Builder(this)
+            builder.setMessage(resources.getString(R.string.load))
+                .setPositiveButton(R.string.yes
+                ) { _, _ ->
+                    cargarImagen(view)
+                }
+                .setNegativeButton(R.string.no
+                ) { _, _ ->
+                    uriImagen=R.drawable.nopicmini.toString()
+                    imvImagen.setImageResource(R.drawable.nopicmini)
+                    imvImagen.isVisible=true
+                }
+            builder.create()
+            builder.show()
+
         }
         else{
             val pref = getSharedPreferences(palabra, Context.MODE_PRIVATE)
@@ -281,10 +280,6 @@ class CrearActivity : AppCompatActivity(R.layout.activity_crear) {
         txtBloqueado.isVisible = true
         txtNombre.isVisible = false
 
-    }
-
-    fun verMenu(view:View){
-        dlMenu.openDrawer(GravityCompat.START)
     }
 
     fun irInicio(view:View){

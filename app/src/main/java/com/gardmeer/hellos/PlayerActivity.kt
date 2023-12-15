@@ -17,11 +17,9 @@ import android.widget.Toast
 import android.widget.VideoView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.net.toUri
-import androidx.core.view.GravityCompat
 import androidx.core.view.isGone
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
-import androidx.drawerlayout.widget.DrawerLayout
 
 class PlayerActivity : AppCompatActivity((R.layout.activity_player)) {
     private lateinit var vvwAprende : VideoView
@@ -32,7 +30,6 @@ class PlayerActivity : AppCompatActivity((R.layout.activity_player)) {
     private lateinit var scrPalabra: ScrollView
     private lateinit var rltVideo : RelativeLayout
     private lateinit var txtVideo : TextView
-    private lateinit var dlMenu : DrawerLayout
     private lateinit var sp : SoundPool
     private var sonido = 0
     private var noPic = false
@@ -51,7 +48,6 @@ class PlayerActivity : AppCompatActivity((R.layout.activity_player)) {
         scrPalabra=findViewById(R.id.scrPalabra)
         rltVideo=findViewById(R.id.rltVideo)
         txtVideo=findViewById(R.id.txtVideo)
-        dlMenu=findViewById(R.id.dlMenu)
 
         cargarVideo(palabra)
         sp = SoundPool(1,AudioManager.STREAM_MUSIC,1)
@@ -59,22 +55,19 @@ class PlayerActivity : AppCompatActivity((R.layout.activity_player)) {
     }
 
     fun reproducirVideo(view:View){
-        rlActividad.isVisible=false
-        scrPalabra.isVisible=false
-        rltVideo.isVisible=true
+        cambiarVista()
         givYahoo.isVisible =false
         imvAprende.isVisible =false
         sp.autoPause()
+        vvwAprende.seekTo(0)
         vvwAprende.start()
     }
 
     fun regresarPalabra(view:View){
-        rlActividad.isVisible=true
-        scrPalabra.isVisible=true
-        rltVideo.isVisible=false
+        cambiarVista()
         if (noPic){imvAprende.isVisible =false}
         else {imvAprende.isInvisible =false}
-
+        vvwAprende.pause()
     }
 
     fun yahoo(view:View){
@@ -160,14 +153,16 @@ class PlayerActivity : AppCompatActivity((R.layout.activity_player)) {
         imvAprendeMini.setImageURI(imagen)
         txtVideo.text = cargarPalabra
         vvwAprende.setVideoURI(video)
-        val mediaController = MediaController(this)
-        vvwAprende.setMediaController(mediaController)
+        val mc = MediaController(this)
+        vvwAprende.setMediaController(mc)
+        vvwAprende.setOnPreparedListener {it.isLooping=true}
     }
 
-    fun verMenu(view:View){
-        dlMenu.openDrawer(GravityCompat.START)
+    fun cambiarVista(){
+        rlActividad.isVisible=!rlActividad.isVisible
+        scrPalabra.isVisible=!scrPalabra.isVisible
+        rltVideo.isVisible=!rltVideo.isVisible
     }
-
     fun irInicio(view:View){
         val iIn = Intent(this,MainActivity::class.java)
         startActivity(iIn)

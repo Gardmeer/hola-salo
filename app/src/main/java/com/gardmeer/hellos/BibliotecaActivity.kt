@@ -16,12 +16,9 @@ import androidx.recyclerview.widget.RecyclerView
 
 class BibliotecaActivity : AppCompatActivity(R.layout.activity_biblioteca) {
     val listDatos = ArrayList<NuevaPalabra>()
-    private lateinit var dlMenu : DrawerLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        dlMenu=findViewById(R.id.dlMenu)
 
         val adapterDatos = AdapterDatos(listDatos)
         val rvBiblioteca: RecyclerView = findViewById(R.id.rvBiblioteca)
@@ -36,10 +33,6 @@ class BibliotecaActivity : AppCompatActivity(R.layout.activity_biblioteca) {
                 verVideo(palabra)
             }
         })
-    }
-
-    fun verMenu(view:View){
-        dlMenu.openDrawer(GravityCompat.START)
     }
 
     fun verVideo(palabra:String?){

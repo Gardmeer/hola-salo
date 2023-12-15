@@ -1,9 +1,13 @@
 package com.gardmeer.hellos
 
+import android.content.ActivityNotFoundException
 import android.content.ContentResolver
+import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
@@ -11,6 +15,9 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AlertDialog
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
@@ -22,6 +29,14 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     val listDatos = ArrayList<NuevaPalabra>()
     private lateinit var dlMenu : DrawerLayout
     private lateinit var nvNavegacion : NavigationView
+    private val carpetaRaiz = "ArchivosApp/"
+    private val rutaAlmacenamiento = carpetaRaiz+"HolaSalo/"
+    private var imageUri: Uri? = null
+    private var videoUri: Uri? = null
+    private var permisosOk = false
+    private val codigos = arrayOf(10,20,123,321,124,324) // Camara, Escritura, Imagen, Video, CapImagen, CapVideo
+    private val permisos = arrayOf("android.permission.CAMERA","android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.READ_MEDIA_VIDEO","android.permission.READ_MEDIA_IMAGES","android.permission.READ_MEDIA_AUDIO")
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.Theme_HelloS)
         super.onCreate(savedInstanceState)
@@ -47,20 +62,38 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
         nvNavegacion.setNavigationItemSelectedListener {
             when(it.itemId){
-                R.id.mnCrear -> {
-                    val cWr = Intent(this,CrearActivity::class.java)
-                    startActivity(cWr)
-                }
-                R.id.mnBiblioteca -> {
-                    val sLb = Intent(this,BibliotecaActivity::class.java)
-                    startActivity(sLb)
-                }
-                R.id.mnTutorial -> {
+                R.id.mnVideo -> {
+                    evaluarPermisos()
 
+                    if(permisosOk){
+                        val intent = Intent(MediaStore.ACTION_VIDEO_CAPTURE)
+                        crearVideo()
+                        intent.putExtra(MediaStore.EXTRA_OUTPUT,videoUri)
+                        try{startActivityForResult(intent,codigos[4])}
+                        catch (ex:ActivityNotFoundException){
+                            Toast.makeText(this,"Not Found",Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+                R.id.mnImagen -> {
+                    evaluarPermisos()
+
+                    if(permisosOk){
+                        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                        crearImagen()
+                        intent.putExtra(MediaStore.EXTRA_OUTPUT,imageUri)
+                        try{startActivityForResult(intent,codigos[4])}
+                        catch (ex: ActivityNotFoundException){
+                            Toast.makeText(this,"Not Found",Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+                R.id.mnWeb -> {
+                    val buscar = Intent(Intent.ACTION_VIEW,Uri.parse("https://www.google.com/imghp"))
+                    startActivity(buscar)
                 }
                 R.id.mnSalir -> {
-                    finish()
-                }
+                    dlMenu.closeDrawer(GravityCompat.START)}
             }
             true
         }
@@ -114,5 +147,53 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
                 noPic=false
             } else {listDatos.add(NuevaPalabra(it,uriImagen?.toUri()))}
         }
+    }
+
+    private fun evaluarPermisos(){
+        for (i in permisos.indices) {
+            if (ContextCompat.checkSelfPermission(this, permisos[i]) == PackageManager.PERMISSION_DENIED){
+                ActivityCompat.requestPermissions(this, permisos ,codigos[i])
+            }
+        }
+        if ((shouldShowRequestPermissionRationale(permisos[0]))||
+            (shouldShowRequestPermissionRationale(permisos[1]))){
+            val builder = AlertDialog.Builder(this)
+            builder.setTitle(resources.getString(R.string.permissions))
+            builder.setMessage(resources.getString(R.string.suggestion))
+                .setPositiveButton(R.string.accept
+                ) { _, _ ->
+                    ActivityCompat.requestPermissions(this, permisos ,codigos[0])
+                }
+        }
+        if ((ContextCompat.checkSelfPermission(this, permisos[0]) == PackageManager.PERMISSION_GRANTED) &&
+            (ContextCompat.checkSelfPermission(this, permisos[1]) == PackageManager.PERMISSION_GRANTED)){
+            permisosOk = true
+        }
+    }
+
+    private fun crearImagen() {
+        val uri: Uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
+            MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
+        } else {
+            MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+        }
+
+        val nombreImagen = (System.currentTimeMillis()/1000).toString()+".jpg"
+        ContentValues().put(MediaStore.Images.Media.DISPLAY_NAME, nombreImagen)
+        ContentValues().put(MediaStore.Images.Media.RELATIVE_PATH, rutaAlmacenamiento)
+        imageUri = contentResolver.insert(uri, ContentValues())
+    }
+
+    private fun crearVideo(){
+        val uri: Uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
+            MediaStore.Video.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
+        } else {
+            MediaStore.Video.Media.EXTERNAL_CONTENT_URI
+        }
+
+        val nombreVideo = (System.currentTimeMillis()/1000).toString()+".mp4"
+        ContentValues().put(MediaStore.Video.Media.DISPLAY_NAME, nombreVideo)
+        ContentValues().put(MediaStore.Video.Media.RELATIVE_PATH, rutaAlmacenamiento)
+        videoUri = contentResolver.insert(uri, ContentValues())
     }
 }

@@ -4,19 +4,19 @@
     tools:showIn="navigation_view">
 
     <item
-        android:id="@+id/mnCrear"
-        android:icon="@drawable/pencil"
-        android:title="@string/create_word"/>
+        android:id="@+id/mnVideo"
+        android:icon="@drawable/video"
+        android:title="@string/video_capture"/>
 
     <item
-        android:id="@+id/mnBiblioteca"
-        android:icon="@drawable/library"
-        android:title="@string/library"/>
+        android:id="@+id/mnImagen"
+        android:icon="@drawable/imagen"
+        android:title="@string/picture_capture"/>
 
     <item
-        android:id="@+id/mnTutorial"
-        android:icon="@drawable/ayudablue"
-        android:title="@string/tutorial"/>
+        android:id="@+id/mnWeb"
+        android:icon="@drawable/web"
+        android:title="@string/download"/>
 
     <item
         android:id="@+id/mnSalir"

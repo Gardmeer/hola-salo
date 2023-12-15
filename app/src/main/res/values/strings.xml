@@ -31,14 +31,17 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="back_icon">Back</string>
+    <string name="video_capture">Capture video</string>
+    <string name="picture_capture">Take a photo</string>
+    <string name="download">Search the Web</string>
     <string-array name="video_option">
-        <item>Capture new Video</item>
+        <item>Capture video</item>
         <item>Search in gallery</item>
         <item>Cancel</item>
     </string-array>
     <string-array name="picture_option">
         <item>Take a photo</item>
-        <item>Search the web</item>
+        <item>Search the Web</item>
         <item>Search in gallery</item>
         <item>Cancel</item>
     </string-array>
