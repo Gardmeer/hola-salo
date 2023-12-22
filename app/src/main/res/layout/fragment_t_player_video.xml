@@ -13,10 +13,21 @@
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp">
 
+        <TextView
+            android:id="@+id/txtPlayerOptions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="@string/player_face"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
         <LinearLayout
             android:id="@+id/llPlayer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/txtPlayerOptions"
+            android:layout_marginTop="8dp"
             android:layout_centerHorizontal="true">
 
             <ImageView
@@ -43,10 +54,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/llPlayer"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="8dp"
             android:layout_centerHorizontal="true"
             android:gravity="center"
-            android:text="@string/player_face"
+            android:text="@string/player_types"
             android:textColor="@color/black"
             android:textSize="16sp" />
     </RelativeLayout>

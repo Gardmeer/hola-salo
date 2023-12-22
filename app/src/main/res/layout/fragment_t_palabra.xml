@@ -22,7 +22,7 @@
             <ImageView
                 android:id="@+id/imvPerCamara"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="180dp"
                 android:src="@drawable/tcamara" />
 
             <Space
@@ -32,7 +32,7 @@
             <ImageView
                 android:id="@+id/imvPerAlma"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="180dp"
                 android:src="@drawable/talmacena" />
         </LinearLayout>
 

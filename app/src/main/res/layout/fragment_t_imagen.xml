@@ -16,7 +16,7 @@
         <ImageView
             android:id="@+id/imvCargarI"
             android:layout_width="wrap_content"
-            android:layout_height="250dp"
+            android:layout_height="200dp"
             android:layout_centerHorizontal="true"
             android:src="@drawable/timagen" />
 
@@ -35,7 +35,7 @@
         <ImageView
             android:id="@+id/imvUpload"
             android:layout_width="wrap_content"
-            android:layout_height="100dp"
+            android:layout_height="80dp"
             android:layout_below="@+id/txtCargar"
             android:layout_marginTop="24dp"
             android:layout_centerHorizontal="true"

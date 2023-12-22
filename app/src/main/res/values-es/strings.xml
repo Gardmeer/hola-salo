@@ -55,26 +55,28 @@
     <string name="main_screen">La pantalla principal consta de:</string>
     <string name="main_option">1.	Crear un nuevo elemento de aprendizaje\n
                                 2.	Mirar los elementos que se han creado\n
-                                3.	Elementos que se han creado o modificado recientemente\n
+                                3.	Elementos agregados recientemente\n
                                 4.	Un menú lateral desplegable\n
                                 5.	Ayuda sobre el manejo de la App</string>
-    <string name="tut_create">Al crear un nuevo elemento lo asociamos con:\n\n
-                                Una palabra que puede ser un objeto o una acción\n\n
-                                Un video que muestre el objeto, la acción o la persona que está enseñando la palabra\n\n
-                                Una imagen (opcional, si el video no muestra el objeto asociado a la palabra)</string>
+    <string name="tut_create">Al crear un nuevo elemento lo asociamos con:</string>
+    <string name="create_options">Una palabra que puede ser un objeto o una acción\n\n
+                                Un video que represente la palabra o muestre la persona que la enseña\n\n
+                                Una imagen (opcional, si el video muestra la persona)</string>
     <string name="tut_video">Al cargar un video podemos grabar desde la cámara o agregar un video previamente grabado que se encuentre en el dispositivo</string>
-    <string name="tut_image">La imagen igualmente puede ser agregada al capturar por cámara, desde el almacenamiento del dispositivo o acceder a Internet y descargarla.\n\n
-                                Si no se agrega ninguna imagen, al guardar se preguntará si deseamos dejar sin imagen opcionalmente</string>
+    <string name="tut_image">La imagen igualmente puede ser agregada al capturar por cámara, acceder a Internet y descargarla o desde el almacenamiento del dispositivo.\n\n
+                                Si no se agrega ninguna imagen, se puede guardar igualmente</string>
     <string name="tut_permissions">Para poder capturar imágenes y videos o acceder a ellos desde el dispositivo son necesarios estos permisos, si no se conceden la App no funcionara correctamente</string>
-    <string name="tut_library">En el menú de Biblioteca encontraremos todos los elementos que hallamos creado hasta el momento y en la pantalla de inicio veremos los 2 más recientes</string>
+    <string name="tut_library">En el menú de Biblioteca encontraremos todos los elementos que hallamos creado hasta el momento y en la pantalla de inicio veremos los dos más recientes</string>
     <string name="tut_player">Al acceder a cualquier elemento creado nos mostrara estos elementos:</string>
     <string name="player_option">1.	Imagen asociada, si hay una\n
                                     2.	Reproducir el video\n
-                                    3.	Felicitaciones, una vez el aprendiz repita la palabra\n
-                                    4.	Modificar en caso de querer cambiar el video o la imagen\n
-                                    5.	Eliminar si no deseamos tener este elemento más en la biblioteca</string>
-    <string name="player_face">Al reproducir el video lo veremos de esta manera, el propósito de la App es grabar el video con una voz familiar para quien aprenderá la palabra y así la repita.\n\n
-                                El video puede ser de un objeto, acción o simplemente una cara familiar que capte la atención del aprendiz</string>
+                                    3.	Felicitaciones al aprender una palabra\n
+                                    4.	Cambiar el video o la imagen\n
+                                    5.	Eliminar de la biblioteca</string>
+    <string name="player_face">Al reproducir el video lo veremos de esta manera</string>
+    <string name="player_types">Como en la izquierda, una persona diciendo la palabra y la imagen que la representa\n\n
+                                O como en la derecha, un video que muestre la palabra, sin necesidad de una imagen\n\n
+                                En cualquier caso se debe escuchar una voz que diga la palabra a aprender</string>
     <string name="side_menu">El menú lateral del inicio brinda opciones para capturar video e imagen desde la cámara, o descargar una imagen de Internet para luego ser usados en la creación de palabras</string>
     <string name="help_menu">Y el icono de ayuda te lleva al tutorial que acabas de ver</string>
     <string name="letsgo">¡Es hora de empezar a Crear y Aprender!</string>

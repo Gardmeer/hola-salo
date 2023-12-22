@@ -37,9 +37,9 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     private val permisos = arrayOf("android.permission.CAMERA","android.permission.WRITE_EXTERNAL_STORAGE",
         "android.permission.READ_EXTERNAL_STORAGE","android.permission.READ_MEDIA_VIDEO","android.permission.READ_MEDIA_IMAGES")
     override fun onCreate(savedInstanceState: Bundle?) {
-        setTheme(R.style.Theme_HelloS)
         cargarTutorial()
-
+        setTheme(R.style.Theme_HelloS)
+        Thread.sleep(500)
         super.onCreate(savedInstanceState)
 
         dlMenu=findViewById(R.id.dlMenu)
@@ -54,7 +54,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
         llenarReciente()
 
-        adapterDatos.setOnItemClickListener(object:AdapterDatos.onItemClickListener {
+        adapterDatos.setOnItemClickListener(object:AdapterDatos.OnItemClickListener {
             override fun onItemClick(view:View) {
                 val palabra = listDatos[rvReciente.getChildAdapterPosition(view)].getPalabra()
                 verVideo(palabra)

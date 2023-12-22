@@ -13,10 +13,21 @@
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp">
 
+        <TextView
+            android:id="@+id/txtCrear"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="@string/tut_create"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
         <ImageView
             android:id="@+id/imvCreacion"
             android:layout_width="wrap_content"
-            android:layout_height="300dp"
+            android:layout_height="240dp"
+            android:layout_below="@+id/txtCrear"
+            android:layout_marginTop="24dp"
             android:layout_centerHorizontal="true"
             android:src="@drawable/tcreate" />
 
@@ -28,7 +39,7 @@
             android:layout_marginTop="24dp"
             android:layout_centerHorizontal="true"
             android:gravity="center"
-            android:text="@string/tut_create"
+            android:text="@string/create_options"
             android:textColor="@color/black"
             android:textSize="16sp" />
     </RelativeLayout>

@@ -52,29 +52,31 @@
 
     <string name="intro">“Hola Salo” is an App for vocabulary learning, through video and picture association. By matching a visual guide from a familiar perspective with simple pictures and words</string>
     <string name="main_screen">The main screen consists of:</string>
-    <string name="main_option">1.	Create a new element to learn\n
+    <string name="main_option"> 1.	Create a new element to learn\n
                                 2.	Look through created elements\n
-                                3.	Recently created or modified elements\n
+                                3.	Recently added elements\n
                                 4.	A side menu\n
-                                5.	Help on the App</string>
-    <string name="tut_create">When creating a new element, you match it with:\n\n
-                                A word which can be an object or an action\n\n
-                                A video that shows the object, action or the person who is teaching\n\n
-                                A picture (optional if the video doesn’t show the associated word)</string>
-    <string name="tut_video">When uploading a video, you can capture from camera or add a previously recorded video from the device</string>
-    <string name="tut_image">The picture can be captured from camera, from the device storage or downloaded from the web.\n\n
-                                If no picture is added, on saving the App ask if you leave it without one</string>
+                                5.	App\'s tutorial</string>
+    <string name="tut_create">When creating a new element, you match it with:</string>
+    <string name="create_options">A word which can be an object or an action\n\n
+                                A video that represents the word or shows the person who is teaching\n\n
+                                A picture (optional if the video shows the person)</string>
+    <string name="tut_video">When uploading a video, you can capture it from camera or add a previously recorded video from the device</string>
+    <string name="tut_image">The picture can be captured from camera, downloaded from the web or uploaded from the device storage.\n\n
+                                If no picture is added, you can save without one</string>
     <string name="tut_permissions">To be able to capture pictures and videos or accessing them from storage these permissions are necessary, if they are not allowed the App won’t work properly</string>
-    <string name="tut_library">In the Library menu you can find all the elements that have been created so far and in the home screen you will see most recent 2</string>
-    <string name="tut_player">When clicking on any element you’ll see these items:</string>
+    <string name="tut_library">In the Library menu you can find all the elements that have been created so far and in the home screen you will see most recent two</string>
+    <string name="tut_player">When clicking on any element you\'ll see these items:</string>
     <string name="player_option">1.	An associated picture, if there is one\n
                                     2.	Play the video\n
-                                    3.	Congratulations once the learner repeats the word\n
-                                    4.	Modify if you want to change the video or picture\n
-                                    5.	Delete if you no longer wish to have this element in the library</string>
-    <string name="player_face">When playing the video, you will see it like this, the goal of the App is to record a video with a familiar voice so the one learning recognize and repeat the word.\n\n
-                                The video can be an object, an action or just a familiar face that captures the learner´s attention</string>
+                                    3.	Congratulations on learning a word\n
+                                    4.	Change the video or picture\n
+                                    5.	Delete from the library</string>
+    <string name="player_face">When playing the video, you will see it like this</string>
+    <string name="player_types">As on the left, a person saying the word and a picture that represents it\n\n
+                                Or as on the right, a video that shows the word, without a picture\n\n
+                                In any case you must listen to a voice saying the word to learn</string>
     <string name="side_menu">The side menu on the home screen provides options for capturing videos and pictures, or downloading images from the web for later use in creating words</string>
     <string name="help_menu">And the help Icon takes you to the tutorial you just went through</string>
-    <string name="letsgo">¡It’s time to start Creating and Learning!</string>
+    <string name="letsgo">¡It\'s time to start Creating and Learning!</string>
 </resources>

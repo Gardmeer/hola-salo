@@ -85,7 +85,7 @@ class CrearActivity : AppCompatActivity(R.layout.activity_crear) {
                     buscando=true
                 }
                 2 -> {
-                    val intent = Intent(Intent.ACTION_PICK)
+                    val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
                     intent.type = "image/*"
                     startActivityForResult(intent,codigos[2])
                 }
@@ -115,7 +115,7 @@ class CrearActivity : AppCompatActivity(R.layout.activity_crear) {
                     }
                 }
                 1 -> {
-                    val intent = Intent(Intent.ACTION_PICK)
+                    val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
                     intent.type = "video/*"
                     startActivityForResult(intent,codigos[3])
                 }
@@ -132,12 +132,14 @@ class CrearActivity : AppCompatActivity(R.layout.activity_crear) {
             when(requestCode){
                 codigos[2] -> {
                     imageUri = data?.data
+                    contentResolver.takePersistableUriPermission(imageUri!!,Intent.FLAG_GRANT_READ_URI_PERMISSION)
                     imvImagen.setImageURI(imageUri)
                     imvImagen.isVisible=true
                     uriImagen = imageUri.toString()
                 }
                 codigos[3] -> {
                     videoUri = data?.data
+                    contentResolver.takePersistableUriPermission(videoUri!!,Intent.FLAG_GRANT_READ_URI_PERMISSION)
                     vvwVideo.setVideoURI(videoUri)
                     imvVideo.isVisible=true
                     uriVideo = videoUri.toString()

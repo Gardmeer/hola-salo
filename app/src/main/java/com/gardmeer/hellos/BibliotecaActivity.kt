@@ -25,7 +25,7 @@ class BibliotecaActivity : AppCompatActivity(R.layout.activity_biblioteca) {
 
         llenarBiblioteca()
 
-        adapterDatos.setOnItemClickListener(object:AdapterDatos.onItemClickListener {
+        adapterDatos.setOnItemClickListener(object:AdapterDatos.OnItemClickListener {
             override fun onItemClick(view: View) {
                 val palabra = listDatos[rvBiblioteca.getChildAdapterPosition(view)].getPalabra()
                 verVideo(palabra)

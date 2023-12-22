@@ -10,17 +10,17 @@ import androidx.recyclerview.widget.RecyclerView
 class AdapterDatos(private val listaDatos: ArrayList<NuevaPalabra>) :
     RecyclerView.Adapter<AdapterDatos.ViewHolderDatos>()  {
 
-    private lateinit var mListener : onItemClickListener
+    private lateinit var mListener : OnItemClickListener
 
-    interface onItemClickListener{
+    interface OnItemClickListener{
         fun onItemClick(view:View)
     }
 
-    fun setOnItemClickListener(listener:onItemClickListener){
+    fun setOnItemClickListener(listener:OnItemClickListener){
         mListener=listener
     }
 
-    class ViewHolderDatos(view: View, listener:onItemClickListener) : RecyclerView.ViewHolder(view) {
+    class ViewHolderDatos(view: View, listener:OnItemClickListener) : RecyclerView.ViewHolder(view) {
         val datoPalabra: TextView
         val datoImagen: ImageView
 
