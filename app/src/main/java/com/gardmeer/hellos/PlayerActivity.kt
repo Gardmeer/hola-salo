@@ -158,7 +158,7 @@ class PlayerActivity : AppCompatActivity((R.layout.activity_player)) {
         vvwAprende.setOnPreparedListener {it.isLooping=true}
     }
 
-    fun cambiarVista(){
+    private fun cambiarVista(){
         rlActividad.isVisible=!rlActividad.isVisible
         scrPalabra.isVisible=!scrPalabra.isVisible
         rltVideo.isVisible=!rltVideo.isVisible

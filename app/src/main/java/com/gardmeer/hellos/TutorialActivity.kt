@@ -23,13 +23,29 @@ class TutorialActivity : AppCompatActivity() {
 
         llPuntos=findViewById(R.id.llPuntos)
 
-        val TBFragmentInstance = TutorialBibliotecaFragment.newInstance("param","param")
-        val TVFragmentInstance = TutorialVideoFragment.newInstance("param","param")
-        val TCFragmentInstance = TutorialCrearFragment.newInstance("param","param")
+        val tPInstance = TPresentacionFragment.newInstance("param","param")
+        val tIInstance = TInicioFragment.newInstance("param","param")
+        val tCInstance = TCrearFragment.newInstance("param","param")
+        val tVInstance = TVideoFragment.newInstance("param","param")
+        val tImInstance = TImagenFragment.newInstance("param","param")
+        val tPaInstance = TPalabraFragment.newInstance("param","param")
+        val tBInstance = TBibliotecaFragment.newInstance("param","param")
+        val tPmInstance = TPlayerMainFragment.newInstance("param","param")
+        val tPvInstance = TPlayerVideoFragment.newInstance("param","param")
+        val tLInstance = TLateralFragment.newInstance("param","param")
+        val tFInstance = TFinalFragment.newInstance("param","param")
         val fAdapter = AdapterFragment(supportFragmentManager,FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT)
-        fAdapter.agregarFragment(TBFragmentInstance)
-        fAdapter.agregarFragment(TVFragmentInstance)
-        fAdapter.agregarFragment(TCFragmentInstance)
+        fAdapter.agregarFragment(tPInstance)
+        fAdapter.agregarFragment(tIInstance)
+        fAdapter.agregarFragment(tCInstance)
+        fAdapter.agregarFragment(tVInstance)
+        fAdapter.agregarFragment(tImInstance)
+        fAdapter.agregarFragment(tPaInstance)
+        fAdapter.agregarFragment(tBInstance)
+        fAdapter.agregarFragment(tPmInstance)
+        fAdapter.agregarFragment(tPvInstance)
+        fAdapter.agregarFragment(tLInstance)
+        fAdapter.agregarFragment(tFInstance)
 
         val viewPager: ViewPager = binding.viewPager
         viewPager.adapter = fAdapter
@@ -45,10 +61,10 @@ class TutorialActivity : AppCompatActivity() {
     }
 
     private fun agregarIndPuntos(pos: Int) {
-        puntosSlide=ArrayList(3)
+        puntosSlide=ArrayList(11)
         llPuntos.removeAllViews()
 
-        for (i in 0..2){
+        for (i in 0..10){
             puntosSlide.add(TextView(this))
             puntosSlide[i].text = Html.fromHtml("&#8226")
             puntosSlide[i].textSize = 35f

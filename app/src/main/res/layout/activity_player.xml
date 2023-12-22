@@ -8,22 +8,16 @@
     android:background="@color/celeste"
     tools:context=".PlayerActivity">
 
-    <RelativeLayout
-        android:id="@+id/rlNavegacion"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginStart="24dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginTop="16dp">
-
         <LinearLayout
             android:id="@+id/llNombreApp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_centerInParent="true"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginTop="16dp">
 
             <ImageView
                 android:id="@+id/imvIcono"
@@ -50,11 +44,9 @@
                 android:textStyle="bold"/>
         </LinearLayout>
 
-    </RelativeLayout>
-
     <RelativeLayout
         android:id="@+id/rlActividad"
-        android:layout_below="@+id/rlNavegacion"
+        android:layout_below="@+id/llNombreApp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
@@ -221,7 +213,7 @@
         android:id="@+id/rltVideo"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/rlNavegacion"
+        android:layout_below="@+id/llNombreApp"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="8dp"

@@ -20,9 +20,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
-import androidx.core.view.GravityCompat
 import androidx.core.view.isVisible
-import androidx.drawerlayout.widget.DrawerLayout
 import java.util.TreeSet
 
 class CrearActivity : AppCompatActivity(R.layout.activity_crear) {
@@ -36,6 +34,7 @@ class CrearActivity : AppCompatActivity(R.layout.activity_crear) {
     private var uriImagen: String? = ""
     private var uriVideo: String? = ""
     private var permisosOk = false
+    private var permisosRq = false
     private var buscando = false
     private val carpetaRaiz = "ArchivosApp/"
     private val rutaAlmacenamiento = carpetaRaiz+"HolaSalo/"
@@ -43,7 +42,7 @@ class CrearActivity : AppCompatActivity(R.layout.activity_crear) {
     private var videoUri: Uri? = null
     private val codigos = arrayOf(10,20,123,321,124,324) // Camara, Escritura, Imagen, Video, CapImagen, CapVideo
     private val permisos = arrayOf("android.permission.CAMERA","android.permission.WRITE_EXTERNAL_STORAGE",
-        "android.permission.READ_MEDIA_VIDEO","android.permission.READ_MEDIA_IMAGES","android.permission.READ_MEDIA_AUDIO")
+        "android.permission.READ_EXTERNAL_STORAGE","android.permission.READ_MEDIA_VIDEO","android.permission.READ_MEDIA_IMAGES")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -230,7 +229,7 @@ class CrearActivity : AppCompatActivity(R.layout.activity_crear) {
 
 
     private fun crearImagen() {
-        val uri: Uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
+        val uri: Uri = if (Build.VERSION.SDK_INT >= 29){
             MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
         } else {
             MediaStore.Images.Media.EXTERNAL_CONTENT_URI
@@ -243,7 +242,7 @@ class CrearActivity : AppCompatActivity(R.layout.activity_crear) {
     }
 
     private fun crearVideo(){
-        val uri: Uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
+        val uri: Uri = if (Build.VERSION.SDK_INT >= 29){
             MediaStore.Video.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
         } else {
             MediaStore.Video.Media.EXTERNAL_CONTENT_URI
@@ -288,25 +287,31 @@ class CrearActivity : AppCompatActivity(R.layout.activity_crear) {
     }
 
     private fun evaluarPermisos(){
-        for (i in permisos.indices) {
-            if (ContextCompat.checkSelfPermission(this, permisos[i]) == PackageManager.PERMISSION_DENIED){
-                ActivityCompat.requestPermissions(this, permisos ,codigos[i])
-            }
-        }
-        if ((shouldShowRequestPermissionRationale(permisos[0]))||
-            (shouldShowRequestPermissionRationale(permisos[1]))){
-            val builder = AlertDialog.Builder(this)
-            builder.setTitle(resources.getString(R.string.permissions))
-            builder.setMessage(resources.getString(R.string.suggestion))
-                .setPositiveButton(R.string.accept
-                ) { _, _ ->
-                    ActivityCompat.requestPermissions(this, permisos ,codigos[0])
-                }
-        }
-        if ((ContextCompat.checkSelfPermission(this, permisos[0]) == PackageManager.PERMISSION_GRANTED) &&
-            (ContextCompat.checkSelfPermission(this, permisos[1]) == PackageManager.PERMISSION_GRANTED)){
+        if (ContextCompat.checkSelfPermission(this, permisos[0]) == PackageManager.PERMISSION_GRANTED&&
+            (((ContextCompat.checkSelfPermission(this, permisos[1]) == PackageManager.PERMISSION_GRANTED) &&
+                    (ContextCompat.checkSelfPermission(this, permisos[2]) == PackageManager.PERMISSION_GRANTED)) ||
+                    ((ContextCompat.checkSelfPermission(this, permisos[3]) == PackageManager.PERMISSION_GRANTED) &&
+                            (ContextCompat.checkSelfPermission(this, permisos[4]) == PackageManager.PERMISSION_GRANTED)))){
             permisosOk = true
         }
+
+        for (i in permisos.indices) {
+            if (ContextCompat.checkSelfPermission(this, permisos[i]) == PackageManager.PERMISSION_DENIED){
+                if(!permisosRq&&!permisosOk){
+                    val builder = AlertDialog.Builder(this)
+                    builder.setTitle(resources.getString(R.string.permissions))
+                    builder.setMessage(resources.getString(R.string.suggestion))
+                        .setPositiveButton(R.string.accept
+                        ) { _, _ ->
+                            ActivityCompat.requestPermissions(this, permisos ,codigos[0])
+                        }
+                    builder.create()
+                    builder.show()
+                    permisosRq=true
+                }
+            }
+        }
+        permisosRq=false
     }
 
     override fun onRestart() {

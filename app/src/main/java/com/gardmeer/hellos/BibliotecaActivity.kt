@@ -9,8 +9,6 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
 import androidx.core.net.toUri
-import androidx.core.view.GravityCompat
-import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 

@@ -11,10 +11,8 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
-import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
-import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -34,11 +32,14 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     private var imageUri: Uri? = null
     private var videoUri: Uri? = null
     private var permisosOk = false
+    private var permisosRq = false
     private val codigos = arrayOf(10,20,123,321,124,324) // Camara, Escritura, Imagen, Video, CapImagen, CapVideo
     private val permisos = arrayOf("android.permission.CAMERA","android.permission.WRITE_EXTERNAL_STORAGE",
-        "android.permission.READ_MEDIA_VIDEO","android.permission.READ_MEDIA_IMAGES","android.permission.READ_MEDIA_AUDIO")
+        "android.permission.READ_EXTERNAL_STORAGE","android.permission.READ_MEDIA_VIDEO","android.permission.READ_MEDIA_IMAGES")
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.Theme_HelloS)
+        cargarTutorial()
+
         super.onCreate(savedInstanceState)
 
         dlMenu=findViewById(R.id.dlMenu)
@@ -69,7 +70,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
                         val intent = Intent(MediaStore.ACTION_VIDEO_CAPTURE)
                         crearVideo()
                         intent.putExtra(MediaStore.EXTRA_OUTPUT,videoUri)
-                        try{startActivityForResult(intent,codigos[4])}
+                        try{startActivityForResult(intent,codigos[5])}
                         catch (ex:ActivityNotFoundException){
                             Toast.makeText(this,"Not Found",Toast.LENGTH_SHORT).show()
                         }
@@ -124,6 +125,19 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         startActivity(sVp)
     }
 
+    private fun cargarTutorial(){
+        val prefB = getSharedPreferences("bandera", Context.MODE_PRIVATE)
+        val editor = prefB.edit()
+        val valorB = prefB.getString("valorBandera", "0")?.toInt()
+
+        if(valorB == 0){
+            val vTu = Intent(this,TutorialActivity::class.java)
+            startActivity(vTu)
+            editor.putString("valorBandera", "1")
+            editor.apply()
+        }
+    }
+
     private fun llenarReciente() {
         val prefL = getSharedPreferences("lista", Context.MODE_PRIVATE)
         val lista = prefL.getStringSet("reclista",sortedSetOf<String?>())
@@ -135,9 +149,12 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
             .appendPath(resources.getResourceEntryName(resourceId))
             .build()
 
+        println(lista)
         lista!!.forEach {
             val pref = getSharedPreferences(it, Context.MODE_PRIVATE)
             val uriImagen = pref.getString("uriimagen","")
+
+            println(uriImagen+"no")
 
             try {val bitmap = MediaStore.Images.Media.getBitmap(contentResolver,uriImagen?.toUri())
             } catch (e:Exception){noPic=true}
@@ -150,42 +167,48 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     }
 
     private fun evaluarPermisos(){
-        for (i in permisos.indices) {
-            if (ContextCompat.checkSelfPermission(this, permisos[i]) == PackageManager.PERMISSION_DENIED){
-                ActivityCompat.requestPermissions(this, permisos ,codigos[i])
-            }
-        }
-        if ((shouldShowRequestPermissionRationale(permisos[0]))||
-            (shouldShowRequestPermissionRationale(permisos[1]))){
-            val builder = AlertDialog.Builder(this)
-            builder.setTitle(resources.getString(R.string.permissions))
-            builder.setMessage(resources.getString(R.string.suggestion))
-                .setPositiveButton(R.string.accept
-                ) { _, _ ->
-                    ActivityCompat.requestPermissions(this, permisos ,codigos[0])
-                }
-        }
-        if ((ContextCompat.checkSelfPermission(this, permisos[0]) == PackageManager.PERMISSION_GRANTED) &&
-            (ContextCompat.checkSelfPermission(this, permisos[1]) == PackageManager.PERMISSION_GRANTED)){
+        if (ContextCompat.checkSelfPermission(this, permisos[0]) == PackageManager.PERMISSION_GRANTED&&
+            (((ContextCompat.checkSelfPermission(this, permisos[1]) == PackageManager.PERMISSION_GRANTED) &&
+            (ContextCompat.checkSelfPermission(this, permisos[2]) == PackageManager.PERMISSION_GRANTED)) ||
+            ((ContextCompat.checkSelfPermission(this, permisos[3]) == PackageManager.PERMISSION_GRANTED) &&
+            (ContextCompat.checkSelfPermission(this, permisos[4]) == PackageManager.PERMISSION_GRANTED)))){
             permisosOk = true
         }
+
+        for (i in permisos.indices) {
+            if (ContextCompat.checkSelfPermission(this, permisos[i]) == PackageManager.PERMISSION_DENIED){
+                if(!permisosRq&&!permisosOk){
+                    val builder = AlertDialog.Builder(this)
+                    builder.setTitle(resources.getString(R.string.permissions))
+                    builder.setMessage(resources.getString(R.string.suggestion))
+                        .setPositiveButton(R.string.accept
+                        ) { _, _ ->
+                            ActivityCompat.requestPermissions(this, permisos ,codigos[0])
+                        }
+                    builder.create()
+                    builder.show()
+                    permisosRq=true
+                }
+            }
+        }
+        permisosRq=false
     }
 
     private fun crearImagen() {
-        val uri: Uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
+        val uri: Uri = if (Build.VERSION.SDK_INT >= 29){
             MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
         } else {
             MediaStore.Images.Media.EXTERNAL_CONTENT_URI
         }
 
         val nombreImagen = (System.currentTimeMillis()/1000).toString()+".jpg"
-        ContentValues().put(MediaStore.Images.Media.DISPLAY_NAME, nombreImagen)
-        ContentValues().put(MediaStore.Images.Media.RELATIVE_PATH, rutaAlmacenamiento)
+        ContentValues().put(MediaStore.MediaColumns.DISPLAY_NAME, nombreImagen)
+        ContentValues().put(MediaStore.MediaColumns.RELATIVE_PATH,rutaAlmacenamiento)
         imageUri = contentResolver.insert(uri, ContentValues())
     }
 
     private fun crearVideo(){
-        val uri: Uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
+        val uri: Uri = if (Build.VERSION.SDK_INT >= 29){
             MediaStore.Video.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
         } else {
             MediaStore.Video.Media.EXTERNAL_CONTENT_URI

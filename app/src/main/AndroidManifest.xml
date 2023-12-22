@@ -27,9 +27,11 @@
             android:name=".TutorialActivity"
             android:exported="false"
             android:label="@string/title_activity_tutorial"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.HelloS.NoActionBar" />
         <activity
             android:name=".PlayerActivity"
+            android:configChanges="orientation"
             android:exported="false" />
         <activity
             android:name=".CrearActivity"
