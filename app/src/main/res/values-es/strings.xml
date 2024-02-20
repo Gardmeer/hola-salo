@@ -21,6 +21,8 @@
     <string name="word_saved">Palabra %1$s guardada!</string>
     <string name="word_deleted">Palabra %1$s eliminada</string>
     <string name="delete">Eliminar</string>
+    <string name="modelete">Modifica o Elimina</string>
+    <string name="modify_word">Opciones de modificación</string>
     <string name="delete_cancel">Eliminar la palabra</string>
     <string name="not_found">Video no encontrado</string>
     <string name="change_video">Se recomienda Modificar o Eliminar</string>
@@ -44,6 +46,11 @@
         <item>Tomar foto</item>
         <item>Buscar en Internet</item>
         <item>Buscar en la galería</item>
+        <item>Cancelar</item>
+    </string-array>
+    <string-array name="modify_option">
+        <item>Modificar palabra</item>
+        <item>Eliminar</item>
         <item>Cancelar</item>
     </string-array>
     <string name="hello_blank_fragment">Hello blank fragment</string>

@@ -117,6 +117,7 @@ class CrearActivity : AppCompatActivity(R.layout.activity_crear) {
                 1 -> {
                     val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
                     intent.type = "video/*"
+
                     startActivityForResult(intent,codigos[3])
                 }
             }
@@ -224,8 +225,9 @@ class CrearActivity : AppCompatActivity(R.layout.activity_crear) {
             editarL.apply()
 
             Toast.makeText(this, resources.getString(R.string.word_saved,palabra), Toast.LENGTH_LONG).show()
-            val iBl = Intent(this,BibliotecaActivity::class.java)
-            startActivity(iBl)
+            finish()
+        //val iBl = Intent(this,BibliotecaActivity::class.java)
+            //startActivity(iBl)
         }
     }
 
@@ -281,11 +283,6 @@ class CrearActivity : AppCompatActivity(R.layout.activity_crear) {
         txtBloqueado.isVisible = true
         txtNombre.isVisible = false
 
-    }
-
-    fun irInicio(view:View){
-        val iIn = Intent(this,MainActivity::class.java)
-        startActivity(iIn)
     }
 
     private fun evaluarPermisos(){

@@ -8,87 +8,69 @@
     android:background="@color/celeste"
     tools:context=".PlayerActivity">
 
-        <LinearLayout
-            android:id="@+id/llNombreApp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_centerInParent="true"
-            android:orientation="horizontal"
-            android:layout_marginStart="24dp"
-            android:layout_marginEnd="24dp"
-            android:layout_marginTop="16dp">
-
-            <ImageView
-                android:id="@+id/imvIcono"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_weight="1"
-                android:contentDescription="@string/app_logo"
-                app:srcCompat="@drawable/saloblanco"/>
-
-            <Space
-                android:layout_width="16dp"
-                android:layout_height="match_parent"/>
-
-            <TextView
-                android:id="@+id/txtApp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:fontFamily="@font/shortstack_regular"
-                android:text="@string/app_name"
-                android:textAlignment="center"
-                android:textColor="@color/white"
-                android:textSize="24sp"
-                android:textStyle="bold"/>
-        </LinearLayout>
-
-    <RelativeLayout
-        android:id="@+id/rlActividad"
-        android:layout_below="@+id/llNombreApp"
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:id="@+id/llNombreApp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
+        android:layout_alignParentTop="true"
+        android:layout_centerInParent="true"
+        android:orientation="horizontal"
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
-        android:layout_marginTop="32dp"
-        android:orientation="horizontal">
+        android:layout_marginTop="16dp">
 
-        <ImageButton
-            android:id="@+id/btnRegresar"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_alignParentStart="true"
-            android:src="@drawable/backarrow"
-            android:background="@null"
-            android:contentDescription="@string/back_icon"
-            android:onClick="irInicio" />
+        <ImageView
+            android:id="@+id/imvIcono"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_weight="1"
+            android:contentDescription="@string/app_logo"
+            app:srcCompat="@drawable/saloblanco"/>
+
+        <Space
+            android:layout_width="16dp"
+            android:layout_height="match_parent"/>
 
         <TextView
-            android:id="@+id/txtAprende"
+            android:id="@+id/txtApp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:background="@drawable/rect_violeta"
+            android:layout_weight="1"
             android:fontFamily="@font/shortstack_regular"
-            android:padding="8dp"
-            android:text="@string/learn"
-            android:textAlignment="textEnd"
+            android:text="@string/app_name"
+            android:textAlignment="center"
             android:textColor="@color/white"
-            android:textSize="24sp" />
-    </RelativeLayout>
+            android:textSize="24sp"
+            android:textStyle="bold"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/txtAprende"
+        android:layout_below="@+id/llNombreApp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/shortstack_regular"
+        android:padding="8dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="32dp"
+        android:text="@string/learn"
+        android:textAlignment="textEnd"
+        android:textColor="@color/indigo"
+        android:textSize="24sp" />
+
 
     <ScrollView
         android:id="@+id/scrPalabra"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/rlActividad"
+        android:layout_below="@+id/txtAprende"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="8dp"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="8dp"
+        android:layout_marginBottom="24dp"
         android:visibility="visible">
 
         <RelativeLayout
@@ -155,56 +137,6 @@
                     android:background="@drawable/rect_blue"
                     android:onClick="yahoo"
                     android:src="@drawable/yahoo" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/llModEli"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/llBotones"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="24dp"
-                android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/btnModificar"
-                    android:layout_width="160dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginBottom="16dp"
-                    android:background="@drawable/rect_blanco"
-                    android:drawableStart="@drawable/modify"
-                    android:fontFamily="@font/shortstack_regular"
-                    android:gravity="center"
-                    android:onClick="modificarPalabra"
-                    android:paddingHorizontal="8dp"
-                    android:text="@string/modify"
-                    android:textAllCaps="false"
-                    android:textColor="@color/violet"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-
-                <Space
-                    android:layout_width="8dp"
-                    android:layout_height="match_parent" />
-
-                <Button
-                    android:id="@+id/btnEliminar"
-                    android:layout_width="140dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginBottom="16dp"
-                    android:background="@drawable/rect_blanco"
-                    android:drawableStart="@drawable/delete"
-                    android:fontFamily="@font/shortstack_regular"
-                    android:gravity="center"
-                    android:onClick="eliminarPalabra"
-                    android:paddingHorizontal="8dp"
-                    android:text="@string/delete"
-                    android:textAllCaps="false"
-                    android:textColor="@color/violet"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
             </LinearLayout>
         </RelativeLayout>
     </ScrollView>

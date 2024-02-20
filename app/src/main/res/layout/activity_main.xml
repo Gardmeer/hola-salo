@@ -133,6 +133,26 @@
                         android:textColor="@color/violet"
                         android:textSize="20sp"
                         android:textStyle="bold" />
+
+                    <Space
+                        android:layout_width="match_parent"
+                        android:layout_height="16dp" />
+
+                    <Button
+                        android:id="@+id/btnModificar"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/rect_blanco"
+                        android:drawableStart="@drawable/delete"
+                        android:fontFamily="@font/shortstack_regular"
+                        android:gravity="center"
+                        android:onClick="modificarBorrar"
+                        android:paddingHorizontal="20dp"
+                        android:text="@string/modelete"
+                        android:textAllCaps="false"
+                        android:textColor="@color/violet"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
                 </LinearLayout>
 
                 <TextView
@@ -143,11 +163,10 @@
                     android:layout_alignParentStart="true"
                     android:layout_marginStart="24dp"
                     android:layout_marginTop="48dp"
-                    android:background="@drawable/rect_violeta"
                     android:fontFamily="@font/shortstack_regular"
                     android:padding="8dp"
                     android:text="@string/recent"
-                    android:textColor="@color/white"
+                    android:textColor="@color/indigo"
                     android:textSize="24sp" />
 
                 <LinearLayout

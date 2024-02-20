@@ -18,10 +18,13 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.core.view.GravityCompat
+import androidx.core.view.isInvisible
+import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.navigation.NavigationView
+import kotlin.system.exitProcess
 
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
     val listDatos = ArrayList<NuevaPalabra>()
@@ -119,6 +122,12 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         startActivity(sLb)
     }
 
+    fun modificarBorrar(view:View){
+        val mDe = Intent(this,BibliotecaActivity::class.java)
+        mDe.putExtra("modificar",true)
+        startActivity(mDe)
+    }
+
     fun verVideo(palabra:String?){
         val sVp = Intent(this,PlayerActivity::class.java)
         sVp.putExtra("palabra",palabra)
@@ -149,12 +158,9 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
             .appendPath(resources.getResourceEntryName(resourceId))
             .build()
 
-        println(lista)
         lista!!.forEach {
             val pref = getSharedPreferences(it, Context.MODE_PRIVATE)
             val uriImagen = pref.getString("uriimagen","")
-
-            println(uriImagen+"no")
 
             try {val bitmap = MediaStore.Images.Media.getBitmap(contentResolver,uriImagen?.toUri())
             } catch (e:Exception){noPic=true}

@@ -20,6 +20,8 @@
     <string name="word_saved">Word %1$s saved!</string>
     <string name="word_deleted">Word %1$s deleted</string>
     <string name="delete">Delete</string>
+    <string name="modelete">Modify or Delete</string>
+    <string name="modify_word">Modify options</string>
     <string name="delete_cancel">Delete word</string>
     <string name="not_found">Video not found</string>
     <string name="change_video">It is recommended to Modify or Delete</string>
@@ -43,6 +45,11 @@
         <item>Take a photo</item>
         <item>Search the Web</item>
         <item>Search in gallery</item>
+        <item>Cancel</item>
+    </string-array>
+    <string-array name="modify_option">
+        <item>Modify word</item>
+        <item>Delete</item>
         <item>Cancel</item>
     </string-array>
     <string name="hello_blank_fragment">Hello blank fragment</string>

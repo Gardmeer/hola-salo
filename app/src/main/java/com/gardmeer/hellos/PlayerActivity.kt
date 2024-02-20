@@ -26,7 +26,6 @@ class PlayerActivity : AppCompatActivity((R.layout.activity_player)) {
     private lateinit var imvAprende : ImageView
     private lateinit var imvAprendeMini : ImageView
     private lateinit var givYahoo : ImageView
-    private lateinit var rlActividad: RelativeLayout
     private lateinit var scrPalabra: ScrollView
     private lateinit var rltVideo : RelativeLayout
     private lateinit var txtVideo : TextView
@@ -44,7 +43,6 @@ class PlayerActivity : AppCompatActivity((R.layout.activity_player)) {
         imvAprende=findViewById(R.id.imvAprende)
         imvAprendeMini=findViewById(R.id.imvAprendeMini)
         givYahoo=findViewById(R.id.givYahoo)
-        rlActividad=findViewById(R.id.rlActividad)
         scrPalabra=findViewById(R.id.scrPalabra)
         rltVideo=findViewById(R.id.rltVideo)
         txtVideo=findViewById(R.id.txtVideo)
@@ -82,48 +80,6 @@ class PlayerActivity : AppCompatActivity((R.layout.activity_player)) {
         }
     }
 
-    fun modificarPalabra(view:View){
-        val palabra = txtVideo.text.toString()
-        val mPa = Intent(this,CrearActivity::class.java)
-        mPa.putExtra("palabra",palabra)
-        startActivity(mPa)
-    }
-
-    fun eliminarPalabra(view:View){
-        val builder = AlertDialog.Builder(this)
-        builder.setMessage(resources.getString(R.string.delete_cancel) + " ${txtVideo.text}")
-            .setPositiveButton(R.string.accept
-            ) { _, _ ->
-                val palabra = txtVideo.text.toString()
-                val prefL = getSharedPreferences("lista", Context.MODE_PRIVATE)
-                val editarL = prefL.edit()
-                val lista = prefL.getStringSet("addlista", sortedSetOf<String?>())
-                val reciente = prefL.getStringSet("reclista", sortedSetOf<String?>())
-                val buLista = lista
-                val buReciente = reciente
-
-                editarL.remove("addlista")
-                editarL.remove("reclista")
-                editarL.apply()
-
-                buLista!!.remove(palabra)
-                buReciente!!.remove(palabra)
-                editarL.putStringSet("addlista", buLista)
-                editarL.putStringSet("reclista", buReciente)
-                editarL.apply()
-
-                Toast.makeText(applicationContext, resources.getString(R.string.word_deleted,palabra), Toast.LENGTH_LONG).show()
-
-                val iIn = Intent(this, MainActivity::class.java)
-                startActivity(iIn)
-            }
-            .setNegativeButton(R.string.cancel
-            ) { _, _ ->
-            }
-        builder.create()
-        builder.show()
-    }
-
     private fun cargarVideo(cargarPalabra: String?){
         val pref = getSharedPreferences(cargarPalabra, Context.MODE_PRIVATE)
         var imagen = pref.getString("uriimagen","")!!.toUri()
@@ -159,17 +115,21 @@ class PlayerActivity : AppCompatActivity((R.layout.activity_player)) {
     }
 
     private fun cambiarVista(){
-        rlActividad.isVisible=!rlActividad.isVisible
         scrPalabra.isVisible=!scrPalabra.isVisible
         rltVideo.isVisible=!rltVideo.isVisible
-    }
-    fun irInicio(view:View){
-        val iIn = Intent(this,MainActivity::class.java)
-        startActivity(iIn)
     }
 
     override fun onStop() {
         super.onStop()
         sp.autoPause()
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        cambiarVista()
+        if (noPic){imvAprende.isVisible =false}
+        else {imvAprende.isInvisible =false}
+        vvwAprende.pause()
+        recreate()
     }
 }
