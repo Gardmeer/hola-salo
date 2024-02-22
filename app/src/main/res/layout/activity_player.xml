@@ -141,8 +141,8 @@
         </RelativeLayout>
     </ScrollView>
 
-    <RelativeLayout
-        android:id="@+id/rltVideo"
+    <FrameLayout
+        android:id="@+id/frPlayer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/llNombreApp"
@@ -151,37 +151,6 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginTop="16dp"
-        android:layout_marginBottom="8dp"
-        android:visibility="gone">
-
-        <VideoView
-            android:id="@+id/vvwAprende"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true" />
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fabRegresar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="32dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:onClick="regresarPalabra"
-            android:src="@drawable/salir"
-            app:backgroundTint="@color/white" />
-
-        <ImageView
-            android:id="@+id/imvAprendeMini"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="4dp" />
-    </RelativeLayout>
+        android:layout_marginBottom="8dp"></FrameLayout>
 
 </RelativeLayout>
