@@ -11,8 +11,11 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import android.widget.VideoView
@@ -20,19 +23,26 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
+import androidx.core.view.forEach
+import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import java.util.TreeSet
 
 class CrearActivity : AppCompatActivity(R.layout.activity_crear) {
 
-    private lateinit var txtNombre: EditText
+    private lateinit var txtNombre : EditText
+    private lateinit var txtCategoria: EditText
     private lateinit var txtBloqueado : TextView
     private lateinit var txtPalabra : TextView
     private lateinit var imvImagen: ImageView
     private lateinit var imvVideo: ImageView
     private lateinit var vvwVideo: VideoView
+    private lateinit var spCategoria: Spinner
+    private val listaCategorias = ArrayList<String>()
+    private var posCheck = 0
     private var uriImagen: String? = ""
     private var uriVideo: String? = ""
+    private var categoria :String? = ""
     private var permisosOk = false
     private var permisosRq = false
     private var buscando = false
@@ -52,9 +62,14 @@ class CrearActivity : AppCompatActivity(R.layout.activity_crear) {
         txtNombre=findViewById(R.id.txtNombre)
         txtBloqueado=findViewById(R.id.txtBloqueado)
         txtPalabra=findViewById(R.id.txtPalabra)
+        txtCategoria=findViewById(R.id.txtCategoria)
         imvImagen=findViewById(R.id.imvImagen)
         imvVideo=findViewById(R.id.imvVideo)
         vvwVideo=findViewById(R.id.vvwVideo)
+        spCategoria=findViewById(R.id.spCategoria)
+
+        cargarCategorias()
+        clickCategorias()
 
         if(mPalabra != null){modificarPalabra(mPalabra)}
     }
@@ -162,12 +177,17 @@ class CrearActivity : AppCompatActivity(R.layout.activity_crear) {
     fun guardarPalabra(view:View){
         val palabra =  (txtNombre.text.toString().lowercase()).replaceFirstChar {
             if (it.isLowerCase()) it.titlecase() else it.toString() }
+        val categorias =  (txtCategoria.text.toString().lowercase()).replaceFirstChar {
+            if (it.isLowerCase()) it.titlecase() else it.toString() }
 
         if (palabra == ""){
             Toast.makeText(this,resources.getString(R.string.reminder_word),Toast.LENGTH_LONG).show()
         }
         else if(uriVideo == ""){
             Toast.makeText(this,resources.getString(R.string.reminder_video),Toast.LENGTH_LONG).show()
+        }
+        else if(posCheck == 2 &&  categorias== ""){
+            Toast.makeText(this,resources.getString(R.string.reminder_category),Toast.LENGTH_LONG).show()
         }
         else if(uriImagen == "") {
             val builder = AlertDialog.Builder(this)
@@ -185,12 +205,12 @@ class CrearActivity : AppCompatActivity(R.layout.activity_crear) {
             builder.create()
             builder.show()
 
-        }
-        else{
+        } else{
             val pref = getSharedPreferences(palabra, Context.MODE_PRIVATE)
             val editor = pref.edit()
             editor.putString("urivideo", uriVideo)
             editor.putString("uriimagen", uriImagen)
+            editor.putString("categorias", categorias)
             editor.apply()
 
             val prefL = getSharedPreferences("lista", Context.MODE_PRIVATE)
@@ -226,8 +246,6 @@ class CrearActivity : AppCompatActivity(R.layout.activity_crear) {
 
             Toast.makeText(this, resources.getString(R.string.word_saved,palabra), Toast.LENGTH_LONG).show()
             finish()
-        //val iBl = Intent(this,BibliotecaActivity::class.java)
-            //startActivity(iBl)
         }
     }
 
@@ -262,6 +280,7 @@ class CrearActivity : AppCompatActivity(R.layout.activity_crear) {
         val pref = getSharedPreferences(cargaPalabra, Context.MODE_PRIVATE)
         uriImagen = pref.getString("uriimagen","")
         uriVideo = pref.getString("urivideo","")
+        categoria = pref.getString("categorias","")
 
         try {val bitmap = MediaStore.Images.Media.getBitmap(contentResolver,uriImagen?.toUri())
         } catch (e:Exception){uriImagen=""}
@@ -277,12 +296,21 @@ class CrearActivity : AppCompatActivity(R.layout.activity_crear) {
             vvwVideo.setVideoURI(uriVideo!!.toUri())
             imvVideo.isVisible = true
         }
+        if(categoria!=""){
+            txtCategoria.setText(categoria)
+            txtCategoria.isVisible = true
+        }
         txtBloqueado.text = cargaPalabra
         txtNombre.setText(cargaPalabra)
         txtPalabra.setText(R.string.modify)
         txtBloqueado.isVisible = true
         txtNombre.isVisible = false
 
+        for (i in 0..listaCategorias.size-1){
+            if(spCategoria.getItemAtPosition(i)==categoria){
+                spCategoria.setSelection(i)
+            }
+        }
     }
 
     private fun evaluarPermisos(){
@@ -313,6 +341,56 @@ class CrearActivity : AppCompatActivity(R.layout.activity_crear) {
         permisosRq=false
     }
 
+    private fun cargarCategorias(){
+
+        val prefL = getSharedPreferences("lista", Context.MODE_PRIVATE)
+        val lista = prefL.getStringSet("addlista",sortedSetOf<String?>())
+        var categoriaTemp = mutableSetOf<String>()
+
+        listaCategorias.add(resources.getString(R.string.category_option))
+        listaCategorias.add(resources.getString(R.string.no_category))
+        listaCategorias.add(resources.getString(R.string.new_category))
+
+        lista!!.forEach {
+            val pref = getSharedPreferences(it, Context.MODE_PRIVATE)
+            val categoriaFill = pref.getString("categorias","")
+            if (categoriaFill!=""){
+                categoriaTemp.add(categoriaFill.toString())
+            }
+        }
+        categoriaTemp.forEach{
+            listaCategorias.add(it)
+        }
+
+        val adp= ArrayAdapter(this,android.R.layout.simple_spinner_dropdown_item,listaCategorias)
+        spCategoria.adapter=adp
+    }
+    private fun clickCategorias(){
+        spCategoria.onItemSelectedListener = object : AdapterView.OnItemSelectedListener,
+            AdapterView.OnItemClickListener {
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
+
+                posCheck=position
+                if (position>2){
+                    txtCategoria.setText(listaCategorias[position])
+                }
+                else {
+                    txtCategoria.setText("")
+
+                    if (position==2){
+                        txtCategoria.isVisible=true
+                    } else {txtCategoria.isGone=true}
+                }
+            }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+            }
+
+            override fun onItemClick(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+            }
+
+        }
+    }
     override fun onRestart() {
         super.onRestart()
 

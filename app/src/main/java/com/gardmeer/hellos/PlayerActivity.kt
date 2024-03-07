@@ -1,6 +1,7 @@
 package com.gardmeer.hellos
 
 import android.content.Context
+import android.content.Intent
 import android.media.AudioManager
 import android.media.SoundPool
 import androidx.appcompat.app.AppCompatActivity
@@ -8,18 +9,22 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
 import android.widget.FrameLayout
+import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.net.toUri
 import androidx.core.view.isGone
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
+import androidx.fragment.app.FragmentTransaction
 
 class PlayerActivity : AppCompatActivity((R.layout.activity_player)) {
     private lateinit var frPlayer : FrameLayout
     private lateinit var imvAprende : ImageView
     private lateinit var givYahoo : ImageView
+    private lateinit var llBotones : LinearLayout
     private lateinit var txtVideo : TextView
     private lateinit var sp : SoundPool
     private var parametroPalabra = ""
@@ -38,6 +43,7 @@ class PlayerActivity : AppCompatActivity((R.layout.activity_player)) {
         frPlayer=findViewById(R.id.frPlayer)
         imvAprende=findViewById(R.id.imvAprende)
         givYahoo=findViewById(R.id.givYahoo)
+        llBotones=findViewById(R.id.llBotones)
         txtVideo=findViewById(R.id.txtVideo)
 
         cargarVideo(palabra)
@@ -50,12 +56,11 @@ class PlayerActivity : AppCompatActivity((R.layout.activity_player)) {
             val playerInstance = PlayerFragment.newInstance(parametroPalabra,"param")
             val transaction = supportFragmentManager.beginTransaction()
             transaction.add(R.id.frPlayer,playerInstance)
+            transaction.replace(R.id.frPlayer,playerInstance)
             transaction.addToBackStack(null)
             transaction.commit()
             sp.autoPause()
-            if(noPic){imvAprende.isGone = true}
-            else {imvAprende.isVisible=true}
-            givYahoo.isVisible=false
+            llBotones.isGone=true
         }
     }
 
@@ -99,6 +104,13 @@ class PlayerActivity : AppCompatActivity((R.layout.activity_player)) {
         txtVideo.text = cargarPalabra
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        if(noPic){imvAprende.isGone=true}
+        else{imvAprende.isVisible=true}
+        givYahoo.isVisible=false
+        llBotones.isGone=false
+    }
     override fun onStop() {
         super.onStop()
         sp.autoPause()

@@ -30,6 +30,7 @@ class TutorialActivity : AppCompatActivity() {
         val tImInstance = TImagenFragment.newInstance("param","param")
         val tPaInstance = TPalabraFragment.newInstance("param","param")
         val tBInstance = TBibliotecaFragment.newInstance("param","param")
+        val tMInstance = TModificarFragment.newInstance("param","param")
         val tPmInstance = TPlayerMainFragment.newInstance("param","param")
         val tPvInstance = TPlayerVideoFragment.newInstance("param","param")
         val tLInstance = TLateralFragment.newInstance("param","param")
@@ -42,6 +43,7 @@ class TutorialActivity : AppCompatActivity() {
         fAdapter.agregarFragment(tImInstance)
         fAdapter.agregarFragment(tPaInstance)
         fAdapter.agregarFragment(tBInstance)
+        fAdapter.agregarFragment(tMInstance)
         fAdapter.agregarFragment(tPmInstance)
         fAdapter.agregarFragment(tPvInstance)
         fAdapter.agregarFragment(tLInstance)
@@ -61,10 +63,10 @@ class TutorialActivity : AppCompatActivity() {
     }
 
     private fun agregarIndPuntos(pos: Int) {
-        puntosSlide=ArrayList(11)
+        puntosSlide=ArrayList(12)
         llPuntos.removeAllViews()
 
-        for (i in 0..10){
+        for (i in 0..11){
             puntosSlide.add(TextView(this))
             puntosSlide[i].text = Html.fromHtml("&#8226")
             puntosSlide[i].textSize = 35f

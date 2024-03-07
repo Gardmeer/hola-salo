@@ -66,16 +66,28 @@
         android:textColor="@color/indigo"
         android:textSize="24sp" />
 
+    <Spinner
+        android:id="@+id/spCategoria"
+        android:layout_below="@+id/txtBiblioteca"
+        android:layout_width="240dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="16dp"
+        android:textColor="@color/white"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/llBiblioteca"
-        android:layout_below="@+id/txtBiblioteca"
+        android:layout_below="@+id/spCategoria"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="36dp"
         android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
         android:orientation="vertical">
 
         <androidx.recyclerview.widget.RecyclerView

@@ -14,6 +14,7 @@
     <string name="load_video">Upload Video</string>
     <string name="reminder_picture">Upload a picture</string>
     <string name="reminder_video">Upload a video</string>
+    <string name="reminder_category">Type the category</string>
     <string name="reminder_word">Type the word you are learning</string>
     <string name="save">Save</string>
     <string name="modify">Modify</string>
@@ -36,6 +37,11 @@
     <string name="video_capture">Capture video</string>
     <string name="picture_capture">Take a photo</string>
     <string name="download">Search the Web</string>
+    <string name="category_option">Choose category</string>
+    <string name="all_category">All categories</string>
+    <string name="no_category">No category</string>
+    <string name="new_category">New category</string>
+    <string name="create_category">Category</string>
     <string-array name="video_option">
         <item>Capture video</item>
         <item>Search in gallery</item>
@@ -61,24 +67,26 @@
     <string name="main_screen">The main screen consists of:</string>
     <string name="main_option"> 1.	Create a new element to learn\n
                                 2.	Look through created elements\n
-                                3.	Recently added elements\n
-                                4.	A side menu\n
-                                5.	App\'s tutorial</string>
+                                3.	Modify or delete elements\n
+                                4.	Recently added elements\n
+                                5.	A side menu\n
+                                6.	App\'s tutorial</string>
     <string name="tut_create">When creating a new element, you match it with:</string>
     <string name="create_options">A word which can be an object or an action\n\n
-                                A video that represents the word or shows the person who is teaching\n\n
-                                A picture (optional if the video shows the person)</string>
+                                A new category to which the word belongs or you can choose from a list in the drop-down menu</string>
+    <string name="tut_video_item">A video that represents the word or shows the person who is teaching</string>
     <string name="tut_video">When uploading a video, you can capture it from camera or add a previously recorded video from the device</string>
+    <string name="tut_image_item">A picture (optional if the video shows the person)</string>
     <string name="tut_image">The picture can be captured from camera, downloaded from the web or uploaded from the device storage.\n\n
                                 If no picture is added, you can save without one</string>
     <string name="tut_permissions">To be able to capture pictures and videos or accessing them from storage these permissions are necessary, if they are not allowed the App won’t work properly</string>
-    <string name="tut_library">In the Library menu you can find all the elements that have been created so far and in the home screen you will see most recent two</string>
+    <string name="tut_library">In the Library menu you can find all the elements that have been created so far and in the home screen you will see most recent two\n\n
+                                You can see all the words or search by category</string>
+    <string name="tut_modify">In the modify or delete menu you can see every element in library, when you click on any element you can modify it or delete it</string>
     <string name="tut_player">When clicking on any element you\'ll see these items:</string>
     <string name="player_option">1.	An associated picture, if there is one\n
                                     2.	Play the video\n
-                                    3.	Congratulations on learning a word\n
-                                    4.	Change the video or picture\n
-                                    5.	Delete from the library</string>
+                                    3.	Congratulations on learning a word</string>
     <string name="player_face">When playing the video, you will see it like this</string>
     <string name="player_types">As on the left, a person saying the word and a picture that represents it\n\n
                                 Or as on the right, a video that shows the word, without a picture\n\n

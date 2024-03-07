@@ -15,6 +15,7 @@
     <string name="load_video">Cargar Video</string>
     <string name="reminder_picture">Escoge una imagen</string>
     <string name="reminder_video">Escoge un video</string>
+    <string name="reminder_category">Escribe una categoría</string>
     <string name="reminder_word">Escribe la Palabra que aprenderás</string>
     <string name="save">Guardar</string>
     <string name="modify">Modificar</string>
@@ -37,6 +38,11 @@
     <string name="video_capture">Grabar video</string>
     <string name="picture_capture">Tomar foto</string>
     <string name="download">Buscar en Internet</string>
+    <string name="category_option">Elegir categoría</string>
+    <string name="all_category">Todas las categorias</string>
+    <string name="no_category">Sin categoría</string>
+    <string name="new_category">Nueva categoría</string>
+    <string name="create_category">Categoría</string>
     <string-array name="video_option">
         <item>Grabar video</item>
         <item>Buscar en la galería</item>
@@ -62,24 +68,26 @@
     <string name="main_screen">La pantalla principal consta de:</string>
     <string name="main_option">1.	Crear un nuevo elemento de aprendizaje\n
                                 2.	Mirar los elementos que se han creado\n
-                                3.	Elementos agregados recientemente\n
-                                4.	Un menú lateral desplegable\n
-                                5.	Ayuda sobre el manejo de la App</string>
+                                3.	Modificar o eliminar elementos\n
+                                4.	Elementos agregados recientemente\n
+                                5.	Un menú lateral desplegable\n
+                                6.	Ayuda sobre el manejo de la App</string>
     <string name="tut_create">Al crear un nuevo elemento lo asociamos con:</string>
     <string name="create_options">Una palabra que puede ser un objeto o una acción\n\n
-                                Un video que represente la palabra o muestre la persona que la enseña\n\n
-                                Una imagen (opcional, si el video muestra la persona)</string>
+                                 Una categoría nueva a la que pertenezca esta palabra o escoger de una lista de categorías ya creadas</string>
+    <string name="tut_video_item">Un video que represente la palabra o muestre la persona que la enseña</string>
     <string name="tut_video">Al cargar un video podemos grabar desde la cámara o agregar un video previamente grabado que se encuentre en el dispositivo</string>
+    <string name="tut_image_item">Una imagen (opcional, si el video muestra la persona)</string>
     <string name="tut_image">La imagen igualmente puede ser agregada al capturar por cámara, acceder a Internet y descargarla o desde el almacenamiento del dispositivo.\n\n
                                 Si no se agrega ninguna imagen, se puede guardar igualmente</string>
     <string name="tut_permissions">Para poder capturar imágenes y videos o acceder a ellos desde el dispositivo son necesarios estos permisos, si no se conceden la App no funcionara correctamente</string>
-    <string name="tut_library">En el menú de Biblioteca encontraremos todos los elementos que hallamos creado hasta el momento y en la pantalla de inicio veremos los dos más recientes</string>
+    <string name="tut_library">En el menú de Biblioteca encontraremos todos los elementos que hallamos creado hasta el momento y en la pantalla de inicio veremos los dos más recientes\n\n
+                                Podemos ver todas las palabras o buscar por categoría</string>
+    <string name="tut_modify">En la pantalla de modificar o eliminar veremos los elementos de la biblioteca, pero al dar clic en ellos nos mostrará la opción de modificar o eliminar este elemento</string>
     <string name="tut_player">Al acceder a cualquier elemento creado nos mostrara estos elementos:</string>
     <string name="player_option">1.	Imagen asociada, si hay una\n
                                     2.	Reproducir el video\n
-                                    3.	Felicitaciones al aprender una palabra\n
-                                    4.	Cambiar el video o la imagen\n
-                                    5.	Eliminar de la biblioteca</string>
+                                    3.	Felicitaciones al aprender una palabra</string>
     <string name="player_face">Al reproducir el video lo veremos de esta manera</string>
     <string name="player_types">Como en la izquierda, una persona diciendo la palabra y la imagen que la representa\n\n
                                 O como en la derecha, un video que muestre la palabra, sin necesidad de una imagen\n\n

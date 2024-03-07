@@ -50,19 +50,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
         nvNavegacion.itemIconTintList = null
 
-        val adapterDatos = AdapterDatos(listDatos)
-        val rvReciente: RecyclerView = findViewById(R.id.rvReciente)
-        rvReciente.adapter = adapterDatos
-        rvReciente.layoutManager = LinearLayoutManager(this)
-
         llenarReciente()
-
-        adapterDatos.setOnItemClickListener(object:AdapterDatos.OnItemClickListener {
-            override fun onItemClick(view:View) {
-                val palabra = listDatos[rvReciente.getChildAdapterPosition(view)].getPalabra()
-                verVideo(palabra)
-            }
-        })
 
         nvNavegacion.setNavigationItemSelectedListener {
             when(it.itemId){
@@ -148,6 +136,10 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     }
 
     private fun llenarReciente() {
+        val adapterDatos = AdapterDatos(listDatos)
+        val rvReciente: RecyclerView = findViewById(R.id.rvReciente)
+        rvReciente.adapter = adapterDatos
+        rvReciente.layoutManager = LinearLayoutManager(this)
         val prefL = getSharedPreferences("lista", Context.MODE_PRIVATE)
         val lista = prefL.getStringSet("reclista",sortedSetOf<String?>())
         var noPic = false
@@ -170,6 +162,12 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
                 noPic=false
             } else {listDatos.add(NuevaPalabra(it,uriImagen?.toUri()))}
         }
+        adapterDatos.setOnItemClickListener(object:AdapterDatos.OnItemClickListener {
+            override fun onItemClick(view:View) {
+                val palabra = listDatos[rvReciente.getChildAdapterPosition(view)].getPalabra()
+                verVideo(palabra)
+            }
+        })
     }
 
     private fun evaluarPermisos(){
