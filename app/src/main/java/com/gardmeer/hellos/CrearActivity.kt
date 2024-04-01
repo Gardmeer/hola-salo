@@ -13,31 +13,18 @@ import android.provider.MediaStore
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.Spinner
-import android.widget.TextView
 import android.widget.Toast
-import android.widget.VideoView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
-import androidx.core.view.forEach
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
+import com.gardmeer.hellos.databinding.ActivityCrearBinding
 import java.util.TreeSet
 
 class CrearActivity : AppCompatActivity(R.layout.activity_crear) {
-
-    private lateinit var txtNombre : EditText
-    private lateinit var txtCategoria: EditText
-    private lateinit var txtBloqueado : TextView
-    private lateinit var txtPalabra : TextView
-    private lateinit var imvImagen: ImageView
-    private lateinit var imvVideo: ImageView
-    private lateinit var vvwVideo: VideoView
-    private lateinit var spCategoria: Spinner
+    private lateinit var binding: ActivityCrearBinding
     private val listaCategorias = ArrayList<String>()
     private var posCheck = 0
     private var uriImagen: String? = ""
@@ -56,17 +43,10 @@ class CrearActivity : AppCompatActivity(R.layout.activity_crear) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        binding = ActivityCrearBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         val mPalabra = intent.getStringExtra("palabra")
-
-        txtNombre=findViewById(R.id.txtNombre)
-        txtBloqueado=findViewById(R.id.txtBloqueado)
-        txtPalabra=findViewById(R.id.txtPalabra)
-        txtCategoria=findViewById(R.id.txtCategoria)
-        imvImagen=findViewById(R.id.imvImagen)
-        imvVideo=findViewById(R.id.imvVideo)
-        vvwVideo=findViewById(R.id.vvwVideo)
-        spCategoria=findViewById(R.id.spCategoria)
 
         cargarCategorias()
         clickCategorias()
@@ -94,7 +74,7 @@ class CrearActivity : AppCompatActivity(R.layout.activity_crear) {
                     }
                 }
                 1 -> {
-                    val palabra =  (txtNombre.text.toString())
+                    val palabra =  (binding.txtNombre.text.toString())
                     val buscar = Intent(Intent.ACTION_VIEW,Uri.parse("https://www.google.com/search?q=$palabra&tbm=isch"))
                     startActivity(buscar)
                     buscando=true
@@ -149,25 +129,25 @@ class CrearActivity : AppCompatActivity(R.layout.activity_crear) {
                 codigos[2] -> {
                     imageUri = data?.data
                     contentResolver.takePersistableUriPermission(imageUri!!,Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                    imvImagen.setImageURI(imageUri)
-                    imvImagen.isVisible=true
+                    binding.imvImagen.setImageURI(imageUri)
+                    binding.imvImagen.isVisible=true
                     uriImagen = imageUri.toString()
                 }
                 codigos[3] -> {
                     videoUri = data?.data
                     contentResolver.takePersistableUriPermission(videoUri!!,Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                    vvwVideo.setVideoURI(videoUri)
-                    imvVideo.isVisible=true
+                    binding.vvwVideo.setVideoURI(videoUri)
+                    binding.imvVideo.isVisible=true
                     uriVideo = videoUri.toString()
                 }
                 codigos[4] -> {
-                    imvImagen.setImageURI(imageUri)
-                    imvImagen.isVisible=true
+                    binding.imvImagen.setImageURI(imageUri)
+                    binding.imvImagen.isVisible=true
                     uriImagen = imageUri.toString()
                 }
                 codigos[5] -> {
-                    vvwVideo.setVideoURI(videoUri)
-                    imvVideo.isVisible=true
+                    binding.vvwVideo.setVideoURI(videoUri)
+                    binding.imvVideo.isVisible=true
                     uriVideo = videoUri.toString()
                 }
             }
@@ -175,9 +155,9 @@ class CrearActivity : AppCompatActivity(R.layout.activity_crear) {
     }
 
     fun guardarPalabra(view:View){
-        val palabra =  (txtNombre.text.toString().lowercase()).replaceFirstChar {
+        val palabra =  (binding.txtNombre.text.toString().lowercase()).replaceFirstChar {
             if (it.isLowerCase()) it.titlecase() else it.toString() }
-        val categorias =  (txtCategoria.text.toString().lowercase()).replaceFirstChar {
+        val categorias =  (binding.txtCategoria.text.toString().lowercase()).replaceFirstChar {
             if (it.isLowerCase()) it.titlecase() else it.toString() }
 
         if (palabra == ""){
@@ -199,8 +179,8 @@ class CrearActivity : AppCompatActivity(R.layout.activity_crear) {
                 .setNegativeButton(R.string.no
                 ) { _, _ ->
                     uriImagen=R.drawable.nopicmini.toString()
-                    imvImagen.setImageResource(R.drawable.nopicmini)
-                    imvImagen.isVisible=true
+                    binding.imvImagen.setImageResource(R.drawable.nopicmini)
+                    binding.imvImagen.isVisible=true
                 }
             builder.create()
             builder.show()
@@ -289,26 +269,26 @@ class CrearActivity : AppCompatActivity(R.layout.activity_crear) {
         } catch (e:Exception){uriVideo=""}
 
         if(uriImagen!=""){
-            imvImagen.setImageURI(uriImagen!!.toUri())
-            imvImagen.isVisible = true
+            binding.imvImagen.setImageURI(uriImagen!!.toUri())
+            binding.imvImagen.isVisible = true
         }
         if(uriVideo!=""){
-            vvwVideo.setVideoURI(uriVideo!!.toUri())
-            imvVideo.isVisible = true
+            binding.vvwVideo.setVideoURI(uriVideo!!.toUri())
+            binding.imvVideo.isVisible = true
         }
         if(categoria!=""){
-            txtCategoria.setText(categoria)
-            txtCategoria.isVisible = true
+            binding.txtCategoria.setText(categoria)
+            binding.txtCategoria.isVisible = true
         }
-        txtBloqueado.text = cargaPalabra
-        txtNombre.setText(cargaPalabra)
-        txtPalabra.setText(R.string.modify)
-        txtBloqueado.isVisible = true
-        txtNombre.isVisible = false
+        binding.txtBloqueado.text = cargaPalabra
+        binding.txtNombre.setText(cargaPalabra)
+        binding.txtPalabra.setText(R.string.modify)
+        binding.txtBloqueado.isVisible = true
+        binding.txtNombre.isVisible = false
 
         for (i in 0..listaCategorias.size-1){
-            if(spCategoria.getItemAtPosition(i)==categoria){
-                spCategoria.setSelection(i)
+            if(binding.spCategoria.getItemAtPosition(i)==categoria){
+                binding.spCategoria.setSelection(i)
             }
         }
     }
@@ -363,23 +343,23 @@ class CrearActivity : AppCompatActivity(R.layout.activity_crear) {
         }
 
         val adp= ArrayAdapter(this,android.R.layout.simple_spinner_dropdown_item,listaCategorias)
-        spCategoria.adapter=adp
+        binding.spCategoria.adapter=adp
     }
     private fun clickCategorias(){
-        spCategoria.onItemSelectedListener = object : AdapterView.OnItemSelectedListener,
+        binding.spCategoria.onItemSelectedListener = object : AdapterView.OnItemSelectedListener,
             AdapterView.OnItemClickListener {
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
 
                 posCheck=position
                 if (position>2){
-                    txtCategoria.setText(listaCategorias[position])
+                    binding.txtCategoria.setText(listaCategorias[position])
                 }
                 else {
-                    txtCategoria.setText("")
+                    binding.txtCategoria.setText("")
 
                     if (position==2){
-                        txtCategoria.isVisible=true
-                    } else {txtCategoria.isGone=true}
+                        binding.txtCategoria.isVisible=true
+                    } else {binding.txtCategoria.isGone=true}
                 }
             }
 

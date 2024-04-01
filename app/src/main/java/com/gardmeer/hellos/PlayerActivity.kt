@@ -1,31 +1,21 @@
 package com.gardmeer.hellos
 
 import android.content.Context
-import android.content.Intent
 import android.media.AudioManager
 import android.media.SoundPool
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
-import android.widget.FrameLayout
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.net.toUri
 import androidx.core.view.isGone
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
-import androidx.fragment.app.FragmentTransaction
+import com.gardmeer.hellos.databinding.ActivityPlayerBinding
 
 class PlayerActivity : AppCompatActivity((R.layout.activity_player)) {
-    private lateinit var frPlayer : FrameLayout
-    private lateinit var imvAprende : ImageView
-    private lateinit var givYahoo : ImageView
-    private lateinit var llBotones : LinearLayout
-    private lateinit var txtVideo : TextView
+    private lateinit var binding: ActivityPlayerBinding
     private lateinit var sp : SoundPool
     private var parametroPalabra = ""
     private var sonido = 0
@@ -34,17 +24,13 @@ class PlayerActivity : AppCompatActivity((R.layout.activity_player)) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        binding = ActivityPlayerBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         val palabra = intent.getStringExtra("palabra")
         if (palabra != null) {
             parametroPalabra = palabra
         }
-
-        frPlayer=findViewById(R.id.frPlayer)
-        imvAprende=findViewById(R.id.imvAprende)
-        givYahoo=findViewById(R.id.givYahoo)
-        llBotones=findViewById(R.id.llBotones)
-        txtVideo=findViewById(R.id.txtVideo)
 
         cargarVideo(palabra)
         sp = SoundPool(1,AudioManager.STREAM_MUSIC,1)
@@ -60,18 +46,18 @@ class PlayerActivity : AppCompatActivity((R.layout.activity_player)) {
             transaction.addToBackStack(null)
             transaction.commit()
             sp.autoPause()
-            llBotones.isGone=true
+            binding.llBotones.isGone=true
         }
     }
 
     fun yahoo(view:View){
         if(!noVid) {
-            givYahoo.isVisible = !givYahoo.isVisible
-            givYahoo.setImageResource(R.drawable.saloyahoo)
+            binding.givYahoo.isVisible = !binding.givYahoo.isVisible
+            binding.givYahoo.setImageResource(R.drawable.saloyahoo)
 
-            if (noPic) {imvAprende.isVisible = !imvAprende.isVisible}
-            else {imvAprende.isInvisible = !imvAprende.isInvisible}
-            if (givYahoo.isVisible) {sp.play(sonido,1f,1f,1,0,1f)}
+            if (noPic) {binding.imvAprende.isVisible = !binding.imvAprende.isVisible}
+            else {binding.imvAprende.isInvisible = !binding.imvAprende.isInvisible}
+            if (binding.givYahoo.isVisible) {sp.play(sonido,1f,1f,1,0,1f)}
             else {sp.autoPause()}
         }
     }
@@ -87,7 +73,7 @@ class PlayerActivity : AppCompatActivity((R.layout.activity_player)) {
             imagen="".toUri()
         }
         if(imagen.toString()==R.drawable.nopicmini.toString()||noPic){
-            imvAprende.isGone = true
+            binding.imvAprende.isGone = true
         }
 
         try {val bitmap = MediaStore.Images.Media.getBitmap(contentResolver,video)
@@ -100,16 +86,16 @@ class PlayerActivity : AppCompatActivity((R.layout.activity_player)) {
             builder.create()
             builder.show()
         }
-        imvAprende.setImageURI(imagen)
-        txtVideo.text = cargarPalabra
+        binding.imvAprende.setImageURI(imagen)
+        binding.txtVideo.text = cargarPalabra
     }
 
     override fun onBackPressed() {
         super.onBackPressed()
-        if(noPic){imvAprende.isGone=true}
-        else{imvAprende.isVisible=true}
-        givYahoo.isVisible=false
-        llBotones.isGone=false
+        if(noPic){binding.imvAprende.isGone=true}
+        else{binding.imvAprende.isVisible=true}
+        binding.givYahoo.isVisible=false
+        binding.llBotones.isGone=false
     }
     override fun onStop() {
         super.onStop()

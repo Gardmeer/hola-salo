@@ -1,10 +1,8 @@
 package com.gardmeer.hellos
 
-import android.content.ActivityNotFoundException
 import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -12,43 +10,32 @@ import android.provider.MediaStore
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.EditText
-import android.widget.LinearLayout
-import android.widget.RelativeLayout
-import android.widget.Spinner
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.net.toUri
-import androidx.core.view.isGone
-import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import com.gardmeer.hellos.databinding.ActivityBibliotecaBinding
 
 class BibliotecaActivity : AppCompatActivity(R.layout.activity_biblioteca) {
-    private lateinit var dlMenu: RelativeLayout
-    private lateinit var txtBiblioteca: TextView
-    private lateinit var spCategoria: Spinner
+    private lateinit var binding: ActivityBibliotecaBinding
     private val listaCategorias = ArrayList<String>()
     var posCheck = 0
     var modificarBool =  false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        binding = ActivityBibliotecaBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         modificarBool = intent.getBooleanExtra("modificar",false)
-
-        dlMenu=findViewById(R.id.dlMenu)
-        txtBiblioteca=findViewById(R.id.txtBiblioteca)
-        spCategoria=findViewById(R.id.spCategoria)
 
         llenarBiblioteca("Todo")
         cargarCategorias()
         clickCategorias()
 
         if (modificarBool == true){
-            txtBiblioteca.setText(R.string.modify)
-            dlMenu.setBackgroundColor(resources.getColor(R.color.purple))
+            binding.txtBiblioteca.setText(R.string.modify)
+            binding.dlMenu.setBackgroundColor(resources.getColor(R.color.purple))
         }
     }
 
@@ -116,10 +103,10 @@ class BibliotecaActivity : AppCompatActivity(R.layout.activity_biblioteca) {
             listaCategorias.add(it)
         }
         val adp= ArrayAdapter(this,android.R.layout.simple_spinner_dropdown_item,listaCategorias)
-        spCategoria.adapter=adp
+        binding.spCategoria.adapter=adp
     }
     private fun clickCategorias(){
-        spCategoria.onItemSelectedListener = object : AdapterView.OnItemSelectedListener,
+        binding.spCategoria.onItemSelectedListener = object : AdapterView.OnItemSelectedListener,
             AdapterView.OnItemClickListener {
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
                 posCheck=position
@@ -145,9 +132,8 @@ class BibliotecaActivity : AppCompatActivity(R.layout.activity_biblioteca) {
     private fun llenarBiblioteca(categoriaLib:String) {
         val listDatos = ArrayList<NuevaPalabra>()
         val adapterDatos = AdapterDatos(listDatos)
-        val rvBiblioteca: RecyclerView = findViewById(R.id.rvBiblioteca)
-        rvBiblioteca.adapter = adapterDatos
-        rvBiblioteca.layoutManager = LinearLayoutManager(this)
+        binding.rvBiblioteca.adapter = adapterDatos
+        binding.rvBiblioteca.layoutManager = LinearLayoutManager(this)
 
         val prefL = getSharedPreferences("lista", Context.MODE_PRIVATE)
         val lista = prefL.getStringSet("addlista",sortedSetOf<String?>())
@@ -179,7 +165,7 @@ class BibliotecaActivity : AppCompatActivity(R.layout.activity_biblioteca) {
 
         adapterDatos.setOnItemClickListener(object:AdapterDatos.OnItemClickListener {
             override fun onItemClick(view: View) {
-                val palabra = listDatos[rvBiblioteca.getChildAdapterPosition(view)].getPalabra()
+                val palabra = listDatos[binding.rvBiblioteca.getChildAdapterPosition(view)].getPalabra()
 
                 if (modificarBool == true){
                     val lista = resources.getStringArray(R.array.modify_option)

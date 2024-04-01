@@ -18,18 +18,14 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.core.view.GravityCompat
-import androidx.core.view.isInvisible
-import androidx.core.view.isVisible
-import androidx.drawerlayout.widget.DrawerLayout
+import androidx.datastore.preferences.preferencesDataStore
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.navigation.NavigationView
-import kotlin.system.exitProcess
+import com.gardmeer.hellos.databinding.ActivityMainBinding
 
+val Context.dataStore by preferencesDataStore(name = "USER_PREFERENCES_NAME")
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
+    private lateinit var binding: ActivityMainBinding
     val listDatos = ArrayList<NuevaPalabra>()
-    private lateinit var dlMenu : DrawerLayout
-    private lateinit var nvNavegacion : NavigationView
     private val carpetaRaiz = "ArchivosApp/"
     private val rutaAlmacenamiento = carpetaRaiz+"HolaSalo/"
     private var imageUri: Uri? = null
@@ -44,15 +40,14 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         setTheme(R.style.Theme_HelloS)
         Thread.sleep(500)
         super.onCreate(savedInstanceState)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        dlMenu=findViewById(R.id.dlMenu)
-        nvNavegacion=findViewById(R.id.nvNavegacion)
-
-        nvNavegacion.itemIconTintList = null
+        binding.nvNavegacion.itemIconTintList = null
 
         llenarReciente()
 
-        nvNavegacion.setNavigationItemSelectedListener {
+        binding.nvNavegacion.setNavigationItemSelectedListener {
             when(it.itemId){
                 R.id.mnVideo -> {
                     evaluarPermisos()
@@ -85,29 +80,26 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
                     startActivity(buscar)
                 }
                 R.id.mnSalir -> {
-                    dlMenu.closeDrawer(GravityCompat.START)}
+                    binding.dlMenu.closeDrawer(GravityCompat.START)}
             }
             true
         }
     }
 
     fun verMenu(view:View){
-        dlMenu.openDrawer(GravityCompat.START)
+        binding.dlMenu.openDrawer(GravityCompat.START)
     }
 
     fun verTutorial(view: View){
-        val vTu = Intent(this,TutorialActivity::class.java)
-        startActivity(vTu)
+        startActivity(Intent(this,TutorialActivity::class.java))
     }
 
     fun crearPalabra(view:View){
-        val cWr = Intent(this,CrearActivity::class.java)
-        startActivity(cWr)
+        startActivity(Intent(this,CrearActivity::class.java))
     }
 
     fun verBiblioteca(view:View){
-        val sLb = Intent(this,BibliotecaActivity::class.java)
-        startActivity(sLb)
+        startActivity(Intent(this,BibliotecaActivity::class.java))
     }
 
     fun modificarBorrar(view:View){
@@ -137,9 +129,8 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
     private fun llenarReciente() {
         val adapterDatos = AdapterDatos(listDatos)
-        val rvReciente: RecyclerView = findViewById(R.id.rvReciente)
-        rvReciente.adapter = adapterDatos
-        rvReciente.layoutManager = LinearLayoutManager(this)
+        binding.rvReciente.adapter = adapterDatos
+        binding.rvReciente.layoutManager = LinearLayoutManager(this)
         val prefL = getSharedPreferences("lista", Context.MODE_PRIVATE)
         val lista = prefL.getStringSet("reclista",sortedSetOf<String?>())
         var noPic = false
@@ -164,7 +155,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         }
         adapterDatos.setOnItemClickListener(object:AdapterDatos.OnItemClickListener {
             override fun onItemClick(view:View) {
-                val palabra = listDatos[rvReciente.getChildAdapterPosition(view)].getPalabra()
+                val palabra = listDatos[binding.rvReciente.getChildAdapterPosition(view)].getPalabra()
                 verVideo(palabra)
             }
         })
