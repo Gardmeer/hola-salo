@@ -2,7 +2,6 @@ package com.gardmeer.hellos
 
 import android.content.ActivityNotFoundException
 import android.content.ContentValues
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -20,7 +19,13 @@ import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.core.stringSetPreferencesKey
+import androidx.lifecycle.lifecycleScope
 import com.gardmeer.hellos.databinding.ActivityCrearBinding
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import java.util.TreeSet
 
 class CrearActivity : AppCompatActivity(R.layout.activity_crear) {
@@ -29,14 +34,12 @@ class CrearActivity : AppCompatActivity(R.layout.activity_crear) {
     private var posCheck = 0
     private var uriImagen: String? = ""
     private var uriVideo: String? = ""
-    private var categoria :String? = ""
     private var permisosOk = false
     private var permisosRq = false
     private var buscando = false
-    private val carpetaRaiz = "ArchivosApp/"
-    private val rutaAlmacenamiento = carpetaRaiz+"HolaSalo/"
     private var imageUri: Uri? = null
     private var videoUri: Uri? = null
+    private val rutaAlmacenamiento = "ArchivosApp/HolaSalo/"
     private val codigos = arrayOf(10,20,123,321,124,324) // Camara, Escritura, Imagen, Video, CapImagen, CapVideo
     private val permisos = arrayOf("android.permission.CAMERA","android.permission.WRITE_EXTERNAL_STORAGE",
         "android.permission.READ_EXTERNAL_STORAGE","android.permission.READ_MEDIA_VIDEO","android.permission.READ_MEDIA_IMAGES")
@@ -52,9 +55,21 @@ class CrearActivity : AppCompatActivity(R.layout.activity_crear) {
         clickCategorias()
 
         if(mPalabra != null){modificarPalabra(mPalabra)}
+
+        binding.btnVideo.setOnClickListener {
+            cargarVideo()
+        }
+
+        binding.btnImagen.setOnClickListener {
+            cargarImagen()
+        }
+
+        binding.btnGuardar.setOnClickListener {
+            guardarPalabra()
+        }
     }
 
-    fun cargarImagen(view:View){
+    private fun cargarImagen(){
         val lista = resources.getStringArray(R.array.picture_option)
         val builder = AlertDialog.Builder(this)
         builder.setTitle(resources.getString(R.string.load_picture))
@@ -90,7 +105,7 @@ class CrearActivity : AppCompatActivity(R.layout.activity_crear) {
         builder.show()
     }
 
-    fun cargarVideo (view:View){
+    private fun cargarVideo (){
         val lista = resources.getStringArray(R.array.video_option)
         val builder = AlertDialog.Builder(this)
         builder.setTitle(resources.getString(R.string.load_video))
@@ -154,7 +169,7 @@ class CrearActivity : AppCompatActivity(R.layout.activity_crear) {
         }
     }
 
-    fun guardarPalabra(view:View){
+    private fun guardarPalabra(){
         val palabra =  (binding.txtNombre.text.toString().lowercase()).replaceFirstChar {
             if (it.isLowerCase()) it.titlecase() else it.toString() }
         val categorias =  (binding.txtCategoria.text.toString().lowercase()).replaceFirstChar {
@@ -174,11 +189,11 @@ class CrearActivity : AppCompatActivity(R.layout.activity_crear) {
             builder.setMessage(resources.getString(R.string.load))
                 .setPositiveButton(R.string.yes
                 ) { _, _ ->
-                    cargarImagen(view)
+                    cargarImagen()
                 }
                 .setNegativeButton(R.string.no
                 ) { _, _ ->
-                    uriImagen=R.drawable.nopicmini.toString()
+                    uriImagen="R.drawable.nopicmini"
                     binding.imvImagen.setImageResource(R.drawable.nopicmini)
                     binding.imvImagen.isVisible=true
                 }
@@ -186,44 +201,33 @@ class CrearActivity : AppCompatActivity(R.layout.activity_crear) {
             builder.show()
 
         } else{
-            val pref = getSharedPreferences(palabra, Context.MODE_PRIVATE)
-            val editor = pref.edit()
-            editor.putString("urivideo", uriVideo)
-            editor.putString("uriimagen", uriImagen)
-            editor.putString("categorias", categorias)
-            editor.apply()
-
-            val prefL = getSharedPreferences("lista", Context.MODE_PRIVATE)
-            val editarL = prefL.edit()
-            val lista = prefL.getStringSet("addlista",sortedSetOf<String?>())
-            val reciente = prefL.getStringSet("reclista",sortedSetOf<String?>())
-            val buLista = lista
-
-            editarL.remove("addlista")
-            editarL.remove("reclista")
-            editarL.apply()
-
-            buLista!!.add(palabra)
-            editarL.putStringSet("addlista",buLista)
-
-            val buReciente: TreeSet<String> = if (reciente!!.size >0){
-                val buPalabra: String = if(reciente.size == 2){
-                    if(reciente.elementAt(0) == palabra){
-                        reciente.elementAt(1)
+            lifecycleScope.launch {
+                val lista = consultarLista("lista")?.toMutableSet() ?: mutableSetOf()
+                val reciente = consultarLista("reclista")?.toMutableSet() ?: mutableSetOf()
+                lista.add(palabra)
+                val buReciente: TreeSet<String> = if (reciente.size >0){
+                    val buPalabra: String = if(reciente.size == 2){
+                        if(reciente.elementAt(0) == palabra){
+                            reciente.elementAt(1)
+                        } else {
+                            reciente.elementAt(0)
+                        }
                     } else {
                         reciente.elementAt(0)
                     }
+                    sortedSetOf(palabra,buPalabra)
                 } else {
-                    reciente.elementAt(0)
+                    sortedSetOf(palabra)
                 }
-                sortedSetOf(palabra,buPalabra)
-            } else {
-                sortedSetOf(palabra)
+                dataStore.edit { preferences ->
+                    preferences[stringPreferencesKey(palabra)] = palabra
+                    preferences[stringPreferencesKey(palabra+"uriVideo")] = uriVideo!!
+                    preferences[stringPreferencesKey(palabra+"uriImagen")] = uriImagen!!
+                    preferences[stringPreferencesKey(palabra+"categorias")] = categorias
+                    preferences[stringSetPreferencesKey("lista")] = lista
+                    preferences[stringSetPreferencesKey("reclista")] = buReciente
+                }
             }
-
-            editarL.putStringSet("reclista",buReciente)
-            editarL.apply()
-
             Toast.makeText(this, resources.getString(R.string.word_saved,palabra), Toast.LENGTH_LONG).show()
             finish()
         }
@@ -257,10 +261,13 @@ class CrearActivity : AppCompatActivity(R.layout.activity_crear) {
     }
 
     private fun modificarPalabra(cargaPalabra: String){
-        val pref = getSharedPreferences(cargaPalabra, Context.MODE_PRIVATE)
-        uriImagen = pref.getString("uriimagen","")
-        uriVideo = pref.getString("urivideo","")
-        categoria = pref.getString("categorias","")
+        var categoria :String? = null
+        lifecycleScope.launch {
+            uriImagen = consultarDato(cargaPalabra+"uriImagen")
+            uriVideo = consultarDato(cargaPalabra+"uriVideo")
+            categoria = consultarDato(cargaPalabra+"categorias")
+
+        }
 
         try {val bitmap = MediaStore.Images.Media.getBitmap(contentResolver,uriImagen?.toUri())
         } catch (e:Exception){uriImagen=""}
@@ -286,7 +293,7 @@ class CrearActivity : AppCompatActivity(R.layout.activity_crear) {
         binding.txtBloqueado.isVisible = true
         binding.txtNombre.isVisible = false
 
-        for (i in 0..listaCategorias.size-1){
+        for (i in 0..<listaCategorias.size){
             if(binding.spCategoria.getItemAtPosition(i)==categoria){
                 binding.spCategoria.setSelection(i)
             }
@@ -323,21 +330,20 @@ class CrearActivity : AppCompatActivity(R.layout.activity_crear) {
 
     private fun cargarCategorias(){
 
-        val prefL = getSharedPreferences("lista", Context.MODE_PRIVATE)
-        val lista = prefL.getStringSet("addlista",sortedSetOf<String?>())
-        var categoriaTemp = mutableSetOf<String>()
+        val categoriaTemp = mutableSetOf<String>()
+        lifecycleScope.launch {
+                consultarLista("lista").orEmpty().forEach {
+                val categoriaFill = consultarDato(it+"categorias")
 
+                if (categoriaFill!=""){
+                    categoriaTemp.add(categoriaFill.toString())
+                }
+            }
+        }
         listaCategorias.add(resources.getString(R.string.category_option))
         listaCategorias.add(resources.getString(R.string.no_category))
         listaCategorias.add(resources.getString(R.string.new_category))
 
-        lista!!.forEach {
-            val pref = getSharedPreferences(it, Context.MODE_PRIVATE)
-            val categoriaFill = pref.getString("categorias","")
-            if (categoriaFill!=""){
-                categoriaTemp.add(categoriaFill.toString())
-            }
-        }
         categoriaTemp.forEach{
             listaCategorias.add(it)
         }
@@ -371,6 +377,17 @@ class CrearActivity : AppCompatActivity(R.layout.activity_crear) {
 
         }
     }
+
+    private suspend fun consultarLista(nombre:String): Set<String>? {
+        val preferences = dataStore.data.first()
+        return preferences[stringSetPreferencesKey(nombre)]
+    }
+
+    private suspend fun consultarDato(nombre:String): String? {
+        val preferences = dataStore.data.first()
+        return preferences[stringPreferencesKey(nombre)]
+    }
+
     override fun onRestart() {
         super.onRestart()
 

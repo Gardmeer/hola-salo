@@ -1,7 +1,6 @@
 package com.gardmeer.hellos
 
 import android.content.ActivityNotFoundException
-import android.content.ContentResolver
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
@@ -18,20 +17,26 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.core.view.GravityCompat
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.core.stringSetPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gardmeer.hellos.databinding.ActivityMainBinding
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 
 val Context.dataStore by preferencesDataStore(name = "USER_PREFERENCES_NAME")
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
     private lateinit var binding: ActivityMainBinding
-    val listDatos = ArrayList<NuevaPalabra>()
-    private val carpetaRaiz = "ArchivosApp/"
-    private val rutaAlmacenamiento = carpetaRaiz+"HolaSalo/"
+    var listDatos = ArrayList<NuevaPalabra>()
+    private var uriImagen: String? = null
     private var imageUri: Uri? = null
     private var videoUri: Uri? = null
     private var permisosOk = false
     private var permisosRq = false
+    private val rutaAlmacenamiento = "ArchivosApp/HolaSalo/"
     private val codigos = arrayOf(10,20,123,321,124,324) // Camara, Escritura, Imagen, Video, CapImagen, CapVideo
     private val permisos = arrayOf("android.permission.CAMERA","android.permission.WRITE_EXTERNAL_STORAGE",
         "android.permission.READ_EXTERNAL_STORAGE","android.permission.READ_MEDIA_VIDEO","android.permission.READ_MEDIA_IMAGES")
@@ -45,7 +50,12 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
         binding.nvNavegacion.itemIconTintList = null
 
-        llenarReciente()
+        lifecycleScope.launch {
+            consultarLista("reclista")?.forEach {
+                uriImagen = consultarDato(it +"uriImagen")
+                elementoLista(it,uriImagen)
+            }
+        }
 
         binding.nvNavegacion.setNavigationItemSelectedListener {
             when(it.itemId){
@@ -76,36 +86,35 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
                     }
                 }
                 R.id.mnWeb -> {
-                    val buscar = Intent(Intent.ACTION_VIEW,Uri.parse("https://www.google.com/imghp"))
-                    startActivity(buscar)
+                    startActivity(Intent(Intent.ACTION_VIEW,Uri.parse("https://www.google.com/imghp")))
                 }
                 R.id.mnSalir -> {
                     binding.dlMenu.closeDrawer(GravityCompat.START)}
             }
             true
         }
-    }
 
-    fun verMenu(view:View){
-        binding.dlMenu.openDrawer(GravityCompat.START)
-    }
+        binding.btnMenu.setOnClickListener {
+            binding.dlMenu.openDrawer(GravityCompat.START)
+        }
 
-    fun verTutorial(view: View){
-        startActivity(Intent(this,TutorialActivity::class.java))
-    }
+        binding.btnAyuda.setOnClickListener {
+            startActivity(Intent(this,TutorialActivity::class.java))
+        }
 
-    fun crearPalabra(view:View){
-        startActivity(Intent(this,CrearActivity::class.java))
-    }
+        binding.btnPalabra.setOnClickListener {
+            startActivity(Intent(this,CrearActivity::class.java))
+        }
 
-    fun verBiblioteca(view:View){
-        startActivity(Intent(this,BibliotecaActivity::class.java))
-    }
+        binding.btnBiblioteca.setOnClickListener {
+            startActivity(Intent(this,BibliotecaActivity::class.java))
+        }
 
-    fun modificarBorrar(view:View){
-        val mDe = Intent(this,BibliotecaActivity::class.java)
-        mDe.putExtra("modificar",true)
-        startActivity(mDe)
+        binding.btnModificar.setOnClickListener {
+            val mDe = Intent(this,BibliotecaActivity::class.java)
+            mDe.putExtra("modificar",true)
+            startActivity(mDe)
+        }
     }
 
     fun verVideo(palabra:String?){
@@ -115,50 +124,53 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     }
 
     private fun cargarTutorial(){
-        val prefB = getSharedPreferences("bandera", Context.MODE_PRIVATE)
-        val editor = prefB.edit()
-        val valorB = prefB.getString("valorBandera", "0")?.toInt()
-
-        if(valorB == 0){
-            val vTu = Intent(this,TutorialActivity::class.java)
-            startActivity(vTu)
-            editor.putString("valorBandera", "1")
-            editor.apply()
+        lifecycleScope.launch {
+            val valorB = consultarDato("bandera").orEmpty()
+            if(valorB != "1") {
+                startActivity(Intent(this@MainActivity, TutorialActivity::class.java))
+                dataStore.edit { preferences ->
+                    preferences[stringPreferencesKey("bandera")] = "1"
+                }
+            }
         }
     }
 
-    private fun llenarReciente() {
+    private fun elementoLista(item:String?,uriImagen:String?){
+        var noPic = false
         val adapterDatos = AdapterDatos(listDatos)
+        val uriNoPic = Uri.parse("android.resource://com.gardmeer.hellos/"+R.drawable.nopicmini)
+
         binding.rvReciente.adapter = adapterDatos
         binding.rvReciente.layoutManager = LinearLayoutManager(this)
-        val prefL = getSharedPreferences("lista", Context.MODE_PRIVATE)
-        val lista = prefL.getStringSet("reclista",sortedSetOf<String?>())
-        var noPic = false
-        val resourceId = R.drawable.nopicmini
-        val uriNoPic = Uri.Builder().scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
-            .authority(resources.getResourcePackageName(resourceId))
-            .appendPath(resources.getResourceTypeName(resourceId))
-            .appendPath(resources.getResourceEntryName(resourceId))
-            .build()
 
-        lista!!.forEach {
-            val pref = getSharedPreferences(it, Context.MODE_PRIVATE)
-            val uriImagen = pref.getString("uriimagen","")
-
-            try {val bitmap = MediaStore.Images.Media.getBitmap(contentResolver,uriImagen?.toUri())
-            } catch (e:Exception){noPic=true}
-
-            if(uriImagen==R.drawable.nopicmini.toString()||noPic) {
-                listDatos.add(NuevaPalabra(it,uriNoPic))
-                noPic=false
-            } else {listDatos.add(NuevaPalabra(it,uriImagen?.toUri()))}
+        try {
+            val bitmap = MediaStore.Images.Media.getBitmap(contentResolver,uriImagen?.toUri())
+        } catch (e:Exception){
+            noPic=true
         }
+
+        if(uriImagen=="R.drawable.nopicmini"||noPic) {
+            listDatos.add(NuevaPalabra(item,uriNoPic))
+        } else {
+            listDatos.add(NuevaPalabra(item,uriImagen?.toUri()))
+        }
+
         adapterDatos.setOnItemClickListener(object:AdapterDatos.OnItemClickListener {
             override fun onItemClick(view:View) {
                 val palabra = listDatos[binding.rvReciente.getChildAdapterPosition(view)].getPalabra()
                 verVideo(palabra)
             }
         })
+    }
+
+    private suspend fun consultarLista(nombre:String): Set<String>? {
+        val preferences = dataStore.data.first()
+        return preferences[stringSetPreferencesKey(nombre)]
+    }
+
+    private suspend fun consultarDato(nombre:String): String? {
+        val preferences = dataStore.data.first()
+        return preferences[stringPreferencesKey(nombre)]
     }
 
     private fun evaluarPermisos(){
@@ -213,5 +225,16 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         ContentValues().put(MediaStore.Video.Media.DISPLAY_NAME, nombreVideo)
         ContentValues().put(MediaStore.Video.Media.RELATIVE_PATH, rutaAlmacenamiento)
         videoUri = contentResolver.insert(uri, ContentValues())
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+        listDatos.clear()
+        lifecycleScope.launch {
+            consultarLista("reclista")?.forEach {
+                uriImagen = consultarDato(it +"uriImagen")
+                elementoLista(it,uriImagen)
+            }
+        }
     }
 }

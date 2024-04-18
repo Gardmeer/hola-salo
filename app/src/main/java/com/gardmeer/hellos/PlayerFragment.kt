@@ -1,9 +1,8 @@
 package com.gardmeer.hellos
 
-import android.content.Context
 import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -11,16 +10,21 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.MediaController
 import android.widget.VideoView
+import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.core.view.isGone
+import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
 class PlayerFragment : Fragment() {
 
-    private lateinit var vvwAprende : VideoView
-    private lateinit var imvAprendeMini : ImageView
+    private lateinit var vvwAprende: VideoView
+    private lateinit var imvAprendeMini: ImageView
     private var vista: View? = null
     private var param1: String? = null
     private var param2: String? = null
@@ -42,9 +46,12 @@ class PlayerFragment : Fragment() {
         vvwAprende=vista!!.findViewById(R.id.vvwAprende)
         imvAprendeMini=vista!!.findViewById(R.id.imvAprendeMini)
 
-        val pref = this.activity?.getSharedPreferences(param1, Context.MODE_PRIVATE)
-        val imagen = pref?.getString("uriimagen","")!!.toUri()
-        val video = pref.getString("urivideo","")!!.toUri()
+        var imagen : Uri? = null
+        var video : Uri? = null
+        lifecycleScope.launch {
+            imagen = consultarDato(param1+"uriImagen")?.toUri()
+            video = consultarDato(param1+"uriVideo")?.toUri()
+        }
 
         try {imvAprendeMini.setImageURI(imagen)
         } catch (e:Exception){
@@ -54,12 +61,19 @@ class PlayerFragment : Fragment() {
         vvwAprende.setVideoURI(video)
         val mc = MediaController(this.activity)
         vvwAprende.setMediaController(mc)
-        vvwAprende.setBackgroundColor(resources.getColor(R.color.celeste))
+        vvwAprende.setBackgroundColor(ContextCompat.getColor(requireActivity().applicationContext,R.color.celeste))
         vvwAprende.seekTo(0)
         vvwAprende.setOnPreparedListener {it.isLooping=true
             vvwAprende.setBackgroundColor(Color.TRANSPARENT)}
         vvwAprende.start()
+        
         return vista
+
+
+    }
+    private suspend fun consultarDato(nombre:String): String? {
+        val preferences = this.activity?.dataStore?.data?.first()
+        return preferences?.get(stringPreferencesKey(nombre))
     }
 
     companion object {

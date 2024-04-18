@@ -1,8 +1,8 @@
 package com.gardmeer.hellos
 
-import android.content.Context
 import android.media.AudioManager
 import android.media.SoundPool
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
@@ -12,11 +12,15 @@ import androidx.core.net.toUri
 import androidx.core.view.isGone
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
+import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.lifecycle.lifecycleScope
 import com.gardmeer.hellos.databinding.ActivityPlayerBinding
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 
 class PlayerActivity : AppCompatActivity((R.layout.activity_player)) {
     private lateinit var binding: ActivityPlayerBinding
-    private lateinit var sp : SoundPool
+    private lateinit var sp: SoundPool
     private var parametroPalabra = ""
     private var sonido = 0
     private var noPic = false
@@ -35,9 +39,17 @@ class PlayerActivity : AppCompatActivity((R.layout.activity_player)) {
         cargarVideo(palabra)
         sp = SoundPool(1,AudioManager.STREAM_MUSIC,1)
         sonido = sp.load(this,R.raw.yay,1)
+
+        binding.btnReproducir.setOnClickListener {
+            reproducirVideo()
+        }
+
+        binding.btnYahoo.setOnClickListener {
+            yahoo()
+        }
     }
 
-    fun reproducirVideo(view:View){
+    private fun reproducirVideo(){
         if(!noVid) {
             val playerInstance = PlayerFragment.newInstance(parametroPalabra,"param")
             val transaction = supportFragmentManager.beginTransaction()
@@ -50,7 +62,7 @@ class PlayerActivity : AppCompatActivity((R.layout.activity_player)) {
         }
     }
 
-    fun yahoo(view:View){
+    private fun yahoo(){
         if(!noVid) {
             binding.givYahoo.isVisible = !binding.givYahoo.isVisible
             binding.givYahoo.setImageResource(R.drawable.saloyahoo)
@@ -63,9 +75,12 @@ class PlayerActivity : AppCompatActivity((R.layout.activity_player)) {
     }
 
     private fun cargarVideo(cargarPalabra: String?){
-        val pref = getSharedPreferences(cargarPalabra, Context.MODE_PRIVATE)
-        var imagen = pref.getString("uriimagen","")!!.toUri()
-        var video = pref.getString("urivideo","")!!.toUri()
+        var imagen : Uri? = null
+        var video : Uri? = null
+        lifecycleScope.launch {
+            imagen = consultarDato(cargarPalabra+"uriImagen")?.toUri()
+            video = consultarDato(cargarPalabra+"uriVideo")?.toUri()
+        }
 
         try {val bitmap = MediaStore.Images.Media.getBitmap(contentResolver,imagen)
         } catch (e:Exception){
@@ -90,6 +105,10 @@ class PlayerActivity : AppCompatActivity((R.layout.activity_player)) {
         binding.txtVideo.text = cargarPalabra
     }
 
+    private suspend fun consultarDato(nombre:String): String? {
+        val preferences = dataStore.data.first()
+        return preferences[stringPreferencesKey(nombre)]
+    }
     override fun onBackPressed() {
         super.onBackPressed()
         if(noPic){binding.imvAprende.isGone=true}
