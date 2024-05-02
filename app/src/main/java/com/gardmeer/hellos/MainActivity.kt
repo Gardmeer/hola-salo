@@ -12,11 +12,13 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.core.view.GravityCompat
+import androidx.core.view.isVisible
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.core.stringSetPreferencesKey
@@ -26,18 +28,16 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.gardmeer.hellos.databinding.ActivityMainBinding
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import java.io.File
 
 val Context.dataStore by preferencesDataStore(name = "USER_PREFERENCES_NAME")
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
     private lateinit var binding: ActivityMainBinding
     var listDatos = ArrayList<NuevaPalabra>()
     private var uriImagen: String? = null
-    private var imageUri: Uri? = null
-    private var videoUri: Uri? = null
     private var permisosOk = false
     private var permisosRq = false
     private val rutaAlmacenamiento = "ArchivosApp/HolaSalo/"
-    private val codigos = arrayOf(10,20,123,321,124,324) // Camara, Escritura, Imagen, Video, CapImagen, CapVideo
     private val permisos = arrayOf("android.permission.CAMERA","android.permission.WRITE_EXTERNAL_STORAGE",
         "android.permission.READ_EXTERNAL_STORAGE","android.permission.READ_MEDIA_VIDEO","android.permission.READ_MEDIA_IMAGES")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,31 +56,26 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
                 elementoLista(it,uriImagen)
             }
         }
-
         binding.nvNavegacion.setNavigationItemSelectedListener {
             when(it.itemId){
                 R.id.mnVideo -> {
                     evaluarPermisos()
-
                     if(permisosOk){
-                        val intent = Intent(MediaStore.ACTION_VIDEO_CAPTURE)
-                        crearVideo()
-                        intent.putExtra(MediaStore.EXTRA_OUTPUT,videoUri)
-                        try{startActivityForResult(intent,codigos[5])}
-                        catch (ex:ActivityNotFoundException){
+                        val videoUri = crearVideo()
+                        try{
+                            capturarVideo.launch(videoUri)
+                        } catch (ex:ActivityNotFoundException){
                             Toast.makeText(this,"Not Found",Toast.LENGTH_SHORT).show()
                         }
                     }
                 }
                 R.id.mnImagen -> {
                     evaluarPermisos()
-
                     if(permisosOk){
-                        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-                        crearImagen()
-                        intent.putExtra(MediaStore.EXTRA_OUTPUT,imageUri)
-                        try{startActivityForResult(intent,codigos[4])}
-                        catch (ex: ActivityNotFoundException){
+                        val imagenUri = crearImagen()
+                        try{
+                            capturarImagen.launch(imagenUri)
+                        } catch (ex:ActivityNotFoundException){
                             Toast.makeText(this,"Not Found",Toast.LENGTH_SHORT).show()
                         }
                     }
@@ -93,23 +88,18 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
             }
             true
         }
-
         binding.btnMenu.setOnClickListener {
             binding.dlMenu.openDrawer(GravityCompat.START)
         }
-
         binding.btnAyuda.setOnClickListener {
             startActivity(Intent(this,TutorialActivity::class.java))
         }
-
         binding.btnPalabra.setOnClickListener {
             startActivity(Intent(this,CrearActivity::class.java))
         }
-
         binding.btnBiblioteca.setOnClickListener {
             startActivity(Intent(this,BibliotecaActivity::class.java))
         }
-
         binding.btnModificar.setOnClickListener {
             val mDe = Intent(this,BibliotecaActivity::class.java)
             mDe.putExtra("modificar",true)
@@ -139,22 +129,18 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         var noPic = false
         val adapterDatos = AdapterDatos(listDatos)
         val uriNoPic = Uri.parse("android.resource://com.gardmeer.hellos/"+R.drawable.nopicmini)
-
         binding.rvReciente.adapter = adapterDatos
         binding.rvReciente.layoutManager = LinearLayoutManager(this)
 
-        try {
-            val bitmap = MediaStore.Images.Media.getBitmap(contentResolver,uriImagen?.toUri())
-        } catch (e:Exception){
+        val imgFile = File(uriImagen!!)
+        if(!imgFile.exists()){
             noPic=true
         }
-
         if(uriImagen=="R.drawable.nopicmini"||noPic) {
             listDatos.add(NuevaPalabra(item,uriNoPic))
         } else {
-            listDatos.add(NuevaPalabra(item,uriImagen?.toUri()))
+            listDatos.add(NuevaPalabra(item, uriImagen.toUri()))
         }
-
         adapterDatos.setOnItemClickListener(object:AdapterDatos.OnItemClickListener {
             override fun onItemClick(view:View) {
                 val palabra = listDatos[binding.rvReciente.getChildAdapterPosition(view)].getPalabra()
@@ -181,7 +167,6 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
             (ContextCompat.checkSelfPermission(this, permisos[4]) == PackageManager.PERMISSION_GRANTED)))){
             permisosOk = true
         }
-
         for (i in permisos.indices) {
             if (ContextCompat.checkSelfPermission(this, permisos[i]) == PackageManager.PERMISSION_DENIED){
                 if(!permisosRq&&!permisosOk){
@@ -190,7 +175,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
                     builder.setMessage(resources.getString(R.string.suggestion))
                         .setPositiveButton(R.string.accept
                         ) { _, _ ->
-                            ActivityCompat.requestPermissions(this, permisos ,codigos[0])
+                            ActivityCompat.requestPermissions(this, permisos ,123)
                         }
                     builder.create()
                     builder.show()
@@ -201,39 +186,49 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         permisosRq=false
     }
 
-    private fun crearImagen() {
+    private fun crearVideo(): Uri? {
+        val uri: Uri = if (Build.VERSION.SDK_INT >= 29) {
+            MediaStore.Video.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
+        } else {
+            MediaStore.Video.Media.EXTERNAL_CONTENT_URI
+        }
+        val nombreVideo = (System.currentTimeMillis() / 1000).toString() + ".mp4"
+        ContentValues().put(MediaStore.Video.Media.DISPLAY_NAME, nombreVideo)
+        ContentValues().put(MediaStore.Video.Media.RELATIVE_PATH, rutaAlmacenamiento)
+        return contentResolver.insert(uri, ContentValues())
+    }
+
+    private fun crearImagen(): Uri? {
         val uri: Uri = if (Build.VERSION.SDK_INT >= 29){
             MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
         } else {
             MediaStore.Images.Media.EXTERNAL_CONTENT_URI
         }
-
         val nombreImagen = (System.currentTimeMillis()/1000).toString()+".jpg"
         ContentValues().put(MediaStore.MediaColumns.DISPLAY_NAME, nombreImagen)
         ContentValues().put(MediaStore.MediaColumns.RELATIVE_PATH,rutaAlmacenamiento)
-        imageUri = contentResolver.insert(uri, ContentValues())
+        return contentResolver.insert(uri, ContentValues())
     }
 
-    private fun crearVideo(){
-        val uri: Uri = if (Build.VERSION.SDK_INT >= 29){
-            MediaStore.Video.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
-        } else {
-            MediaStore.Video.Media.EXTERNAL_CONTENT_URI
-        }
+    private val capturarVideo = registerForActivityResult(ActivityResultContracts.CaptureVideo()){
+    }
 
-        val nombreVideo = (System.currentTimeMillis()/1000).toString()+".mp4"
-        ContentValues().put(MediaStore.Video.Media.DISPLAY_NAME, nombreVideo)
-        ContentValues().put(MediaStore.Video.Media.RELATIVE_PATH, rutaAlmacenamiento)
-        videoUri = contentResolver.insert(uri, ContentValues())
+    private val capturarImagen = registerForActivityResult(ActivityResultContracts.TakePicture()){
     }
 
     override fun onRestart() {
         super.onRestart()
         listDatos.clear()
         lifecycleScope.launch {
-            consultarLista("reclista")?.forEach {
-                uriImagen = consultarDato(it +"uriImagen")
-                elementoLista(it,uriImagen)
+            val reciente = consultarLista("reclista").orEmpty()
+            if (reciente.isEmpty()){
+                binding.rvReciente.isVisible=false
+            } else {
+                reciente.forEach {
+                    uriImagen = consultarDato(it + "uriImagen")
+                    elementoLista(it, uriImagen)
+                }
+                binding.rvReciente.isVisible=true
             }
         }
     }

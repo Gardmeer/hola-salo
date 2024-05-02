@@ -15,7 +15,8 @@
                 android:layout_height="64dp"
                 android:layout_margin="20dp"
                 android:src="@drawable/salohola"
-                android:layout_marginEnd="16dp"/>
+                android:layout_marginEnd="16dp"
+                android:contentDescription="@string/app_logo"/>
 
             <TextView
                 android:id="@+id/txtAppName"

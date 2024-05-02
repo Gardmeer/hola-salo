@@ -11,7 +11,8 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:layout_marginStart="24dp"
-        android:layout_marginEnd="24dp">
+        android:layout_marginEnd="24dp"
+        android:background="@color/some_blue">
 
         <TextView
             android:id="@+id/txtPlayerOptions"
@@ -35,7 +36,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="250dp"
                 android:layout_weight="1"
-                android:src="@drawable/imagenvideo" />
+                android:src="@drawable/imagenvideo"
+                android:contentDescription="@string/load_picture"/>
 
             <Space
                 android:layout_width="16dp"
@@ -46,7 +48,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="250dp"
                 android:layout_weight="1"
-                android:src="@drawable/noimagenvid" />
+                android:src="@drawable/noimagenvid"
+                android:contentDescription="@string/player_types"/>
         </LinearLayout>
 
         <TextView

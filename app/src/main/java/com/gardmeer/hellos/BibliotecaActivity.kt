@@ -4,7 +4,6 @@ import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.provider.MediaStore
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -12,6 +11,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.core.stringSetPreferencesKey
@@ -20,26 +21,30 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.gardmeer.hellos.databinding.ActivityBibliotecaBinding
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import java.io.File
 
 class BibliotecaActivity : AppCompatActivity(R.layout.activity_biblioteca) {
     private lateinit var binding: ActivityBibliotecaBinding
-    private val listaCategorias = ArrayList<String>()
-    var modificarBool =  false
+    private var listaCategorias = ArrayList<String>()
+    var modificarB =  false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityBibliotecaBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        modificarBool = intent.getBooleanExtra("modificar",false)
+        modificarB = intent.getBooleanExtra("modificar",false)
 
         cargarCategorias()
         clickCategorias()
-        llenarBiblioteca("Todo")
 
-        if (modificarBool){
+        if (modificarB){
             binding.txtBiblioteca.setText(R.string.modify)
             binding.dlMenu.setBackgroundColor(ContextCompat.getColor(applicationContext,R.color.purple))
+        }
+        binding.btnCrear.setOnClickListener {
+            startActivity(Intent(this,CrearActivity::class.java))
+            finish()
         }
     }
 
@@ -64,9 +69,9 @@ class BibliotecaActivity : AppCompatActivity(R.layout.activity_biblioteca) {
                         preferences[stringSetPreferencesKey("lista")] = modLista
                         preferences[stringSetPreferencesKey("reclista")] = modReciente
                     }
+                    Toast.makeText(applicationContext, resources.getString(R.string.word_deleted,palabra), Toast.LENGTH_LONG).show()
+                    finish()
                 }
-                Toast.makeText(applicationContext, resources.getString(R.string.word_deleted,palabra), Toast.LENGTH_LONG).show()
-                finish()
             }
             .setNegativeButton(R.string.cancel
             ) { _, _ ->
@@ -82,32 +87,32 @@ class BibliotecaActivity : AppCompatActivity(R.layout.activity_biblioteca) {
     }
 
     private fun cargarCategorias(){
-        val categoriaTemp = mutableSetOf<String>()
         lifecycleScope.launch {
+            val categoriaTemp = mutableSetOf<String>()
             consultarLista("lista").orEmpty().forEach {
                 val categoriaFill = consultarDato(it+"categorias")
-
                 if (categoriaFill!=""){
                     categoriaTemp.add(categoriaFill.toString())
                 }
             }
+            listaCategorias.add(resources.getString(R.string.all_category))
+            listaCategorias.add(resources.getString(R.string.no_category))
+            categoriaTemp.forEach{
+                listaCategorias.add(it)
+                println(listaCategorias)
+            }
+            val adp= ArrayAdapter(this@BibliotecaActivity,android.R.layout.simple_spinner_dropdown_item,listaCategorias)
+            binding.spCategoria.adapter=adp
         }
-        listaCategorias.add(resources.getString(R.string.all_category))
-        listaCategorias.add(resources.getString(R.string.no_category))
-
-        categoriaTemp.forEach{
-            listaCategorias.add(it)
-        }
-        val adp= ArrayAdapter(this,android.R.layout.simple_spinner_dropdown_item,listaCategorias)
-        binding.spCategoria.adapter=adp
     }
+
     private fun clickCategorias(){
         binding.spCategoria.onItemSelectedListener = object : AdapterView.OnItemSelectedListener,
             AdapterView.OnItemClickListener {
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
                 when (position) {
                     0 -> {
-                        llenarBiblioteca("Todo")
+                        llenarBiblioteca("Todos")
                     }
                     1 -> {
                         llenarBiblioteca("")
@@ -129,13 +134,16 @@ class BibliotecaActivity : AppCompatActivity(R.layout.activity_biblioteca) {
             var uriImagen:String?
             var categoria:String?
             val listDatos = ArrayList<NuevaPalabra>()
-
-            consultarLista("lista").orEmpty().forEach {
-                lifecycleScope.launch {
+            val listaRecycler = consultarLista("lista").orEmpty()
+            if (listaRecycler.isEmpty()){
+                binding.btnCrear.isVisible=true
+            } else {
+                listaRecycler.forEach {
                     uriImagen = consultarDato(it +"uriImagen")
                     categoria = consultarDato(it +"categorias")
                     elementoLista(it,uriImagen,categoria,categoriaLib,listDatos)
                 }
+                binding.btnCrear.isGone=true
             }
         }
     }
@@ -144,29 +152,25 @@ class BibliotecaActivity : AppCompatActivity(R.layout.activity_biblioteca) {
         var noPic = false
         val adapterDatos = AdapterDatos(listaDatos)
         val uriNoPic = Uri.parse("android.resource://com.gardmeer.hellos/"+R.drawable.nopicmini)
-
         binding.rvBiblioteca.adapter = adapterDatos
         binding.rvBiblioteca.layoutManager = LinearLayoutManager(this)
 
-        try {
-            val bitmap = MediaStore.Images.Media.getBitmap(contentResolver,uriImagen?.toUri())
-        } catch (e:Exception){
+        val imgFile = File(uriImagen!!)
+        if(!imgFile.exists()){
             noPic=true
         }
-
-        if (categoriaLib=="Todo"||categoriaLib==categoria){
+        if (categoriaLib=="Todos"||categoriaLib==categoria){
             if(uriImagen=="R.drawable.nopicmini"||noPic) {
                 listaDatos.add(NuevaPalabra(item, uriNoPic))
             } else {
-                listaDatos.add(NuevaPalabra(item, uriImagen?.toUri()))
+                listaDatos.add(NuevaPalabra(item, uriImagen.toUri()))
             }
         }
         adapterDatos.setOnItemClickListener(object:AdapterDatos.OnItemClickListener {
             override fun onItemClick(view:View) {
                 val palabra =
                     listaDatos[binding.rvBiblioteca.getChildAdapterPosition(view)].getPalabra()
-
-                if (modificarBool){
+                if (modificarB){
                     val lista = resources.getStringArray(R.array.modify_option)
                     val builder = AlertDialog.Builder(this@BibliotecaActivity)
                     builder.setTitle(resources.getString(R.string.modify_word))
@@ -181,8 +185,9 @@ class BibliotecaActivity : AppCompatActivity(R.layout.activity_biblioteca) {
                         }}
                     builder.create()
                     builder.show()
+                } else {
+                    verVideo(palabra)
                 }
-                else {verVideo(palabra)}
             }
         })
     }

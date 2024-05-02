@@ -12,7 +12,8 @@
         android:layout_centerInParent="true"
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
-        android:layout_marginBottom="48dp">
+        android:layout_marginBottom="48dp"
+        android:background="@color/cyan">
 
         <TextView
             android:id="@+id/txtPantalla"
@@ -30,7 +31,8 @@
             android:layout_marginTop="16dp"
             android:layout_below="@+id/txtPantalla"
             android:layout_centerHorizontal="true"
-            android:src="@drawable/tmainnum" />
+            android:src="@drawable/tmainnum"
+            android:contentDescription="@string/main_screen"/>
 
         <TextView
             android:id="@+id/txtInicio"

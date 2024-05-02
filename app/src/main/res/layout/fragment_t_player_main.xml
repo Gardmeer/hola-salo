@@ -12,7 +12,8 @@
         android:layout_centerInParent="true"
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
-        android:layout_marginBottom="48dp">
+        android:layout_marginBottom="48dp"
+        android:background="@color/grass">
 
         <TextView
             android:id="@+id/txtPlayerMain"
@@ -30,7 +31,8 @@
             android:layout_marginTop="16dp"
             android:layout_below="@+id/txtPlayerMain"
             android:layout_centerHorizontal="true"
-            android:src="@drawable/tplaynum" />
+            android:src="@drawable/tplaynum"
+            android:contentDescription="@string/player_face"/>
 
         <TextView
             android:id="@+id/txtPlayerMenu"

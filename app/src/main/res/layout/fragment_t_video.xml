@@ -11,7 +11,8 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:layout_marginStart="24dp"
-        android:layout_marginEnd="24dp">
+        android:layout_marginEnd="24dp"
+        android:background="@color/strong_blue">
 
         <TextView
             android:id="@+id/txtVideo"
@@ -31,7 +32,8 @@
             android:layout_below="@+id/txtVideo"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="24dp"
-            android:src="@drawable/tvideo" />
+            android:src="@drawable/tvideo"
+            android:contentDescription="@string/load_video"/>
 
         <TextView
             android:id="@+id/txtCargar"

@@ -8,21 +8,15 @@
     android:background="@color/celeste"
     tools:context=".CrearActivity">
 
-    <RelativeLayout
-        android:id="@+id/rlNavegacion"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginStart="24dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginTop="16dp">
-
         <LinearLayout
             android:id="@+id/llNombreApp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginTop="16dp"
             android:orientation="horizontal">
 
             <ImageView
@@ -50,11 +44,9 @@
                 android:textStyle="bold" />
         </LinearLayout>
 
-    </RelativeLayout>
-
     <TextView
         android:id="@+id/txtPalabra"
-        android:layout_below="@+id/rlNavegacion"
+        android:layout_below="@+id/llNombreApp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/shortstack_regular"
@@ -91,13 +83,14 @@
                 android:ems="10"
                 android:fontFamily="@font/shortstack_regular"
                 android:hint="@string/word"
+                android:autofillHints=""
                 android:inputType="text"
                 android:textAlignment="center"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
                 android:textColorHint="@color/white"
                 android:background="@color/some_blue"
-                android:paddingVertical="8dp"
+                android:paddingVertical="12dp"
                 android:textSize="24sp"
                 android:textStyle="bold" />
 
@@ -131,16 +124,18 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="16dp"
                 android:visibility="gone"
-                app:srcCompat="@drawable/videomini" />
+                app:srcCompat="@drawable/videomini"
+                android:contentDescription="@string/load_video"/>
 
             <Button
                 android:id="@+id/btnVideo"
-                android:layout_width="200dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:background="@drawable/rect_blanco"
                 android:fontFamily="@font/shortstack_regular"
                 android:layout_marginTop="16dp"
+                android:paddingHorizontal="16dp"
                 android:text="@string/load_video"
                 android:textAllCaps="false"
                 android:textColor="@color/celeste"
@@ -159,13 +154,14 @@
 
             <Button
                 android:id="@+id/btnImagen"
-                android:layout_width="200dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:background="@drawable/rect_blanco"
                 android:fontFamily="@font/shortstack_regular"
                 android:padding="8dp"
                 android:layout_marginTop="16dp"
+                android:paddingHorizontal="16dp"
                 android:text="@string/load_picture"
                 android:textAllCaps="false"
                 android:textColor="@color/celeste"
@@ -174,11 +170,11 @@
 
             <Spinner
                 android:id="@+id/spCategoria"
-                android:layout_width="200dp"
-                android:layout_gravity="center_horizontal"
+                android:layout_width="240dp"
+                android:layout_gravity="center"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:background="@color/white"/>
+                android:paddingVertical="16dp"
+                android:textColor="@color/white"/>
 
             <EditText
                 android:id="@+id/txtCategoria"
@@ -188,6 +184,7 @@
                 android:ems="10"
                 android:fontFamily="@font/shortstack_regular"
                 android:hint="@string/create_category"
+                android:autofillHints=""
                 android:inputType="text"
                 android:textAlignment="center"
                 android:textAllCaps="false"

@@ -82,7 +82,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="250dp"
                 android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true" />
+                android:layout_centerHorizontal="true"
+                android:contentDescription="@string/load_picture"/>
 
             <pl.droidsonroids.gif.GifImageView
                 android:id="@+id/givYahoo"
@@ -122,7 +123,8 @@
                     android:layout_height="100dp"
                     android:layout_weight="1"
                     android:background="@drawable/rect_blue"
-                    android:src="@drawable/miniplay" />
+                    android:src="@drawable/miniplay"
+                    android:contentDescription="@string/load_video"/>
 
                 <Space
                     android:layout_width="64dp"
@@ -134,7 +136,8 @@
                     android:layout_height="100dp"
                     android:layout_weight="1"
                     android:background="@drawable/rect_blue"
-                    android:src="@drawable/yahoo" />
+                    android:src="@drawable/yahoo"
+                    android:contentDescription="@string/new_word"/>
             </LinearLayout>
         </RelativeLayout>
     </ScrollView>
@@ -149,6 +152,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginTop="16dp"
-        android:layout_marginBottom="8dp"></FrameLayout>
+        android:layout_marginBottom="8dp"
+        android:visibility="gone"/>
 
 </RelativeLayout>

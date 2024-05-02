@@ -28,6 +28,8 @@ class PlayerFragment : Fragment() {
     private var vista: View? = null
     private var param1: String? = null
     private var param2: String? = null
+    private var imagen : Uri? = null
+    private var video : Uri? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,32 +45,29 @@ class PlayerFragment : Fragment() {
     ): View? {
         vista = inflater.inflate(R.layout.fragment_player, container, false)
 
+        val mc = MediaController(this.activity)
         vvwAprende=vista!!.findViewById(R.id.vvwAprende)
         imvAprendeMini=vista!!.findViewById(R.id.imvAprendeMini)
 
-        var imagen : Uri? = null
-        var video : Uri? = null
         lifecycleScope.launch {
             imagen = consultarDato(param1+"uriImagen")?.toUri()
             video = consultarDato(param1+"uriVideo")?.toUri()
+            try {
+                imvAprendeMini.setImageURI(imagen)
+            } catch (e:Exception){
+                imvAprendeMini.setImageResource(R.drawable.nopicmini)
+                imvAprendeMini.isGone=true
+            }
+            vvwAprende.setVideoURI(video)
+            vvwAprende.setMediaController(mc)
+            vvwAprende.setBackgroundColor(ContextCompat.getColor(requireActivity().applicationContext,R.color.celeste))
+            vvwAprende.seekTo(0)
+            vvwAprende.setOnPreparedListener {it.isLooping=true
+                vvwAprende.setBackgroundColor(Color.TRANSPARENT)}
+            vvwAprende.start()
         }
 
-        try {imvAprendeMini.setImageURI(imagen)
-        } catch (e:Exception){
-            imvAprendeMini.setImageResource(R.drawable.nopicmini)
-            imvAprendeMini.isGone=true
-        }
-        vvwAprende.setVideoURI(video)
-        val mc = MediaController(this.activity)
-        vvwAprende.setMediaController(mc)
-        vvwAprende.setBackgroundColor(ContextCompat.getColor(requireActivity().applicationContext,R.color.celeste))
-        vvwAprende.seekTo(0)
-        vvwAprende.setOnPreparedListener {it.isLooping=true
-            vvwAprende.setBackgroundColor(Color.TRANSPARENT)}
-        vvwAprende.start()
-        
         return vista
-
 
     }
     private suspend fun consultarDato(nombre:String): String? {

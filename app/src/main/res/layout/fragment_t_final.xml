@@ -18,7 +18,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:src="@drawable/letsgo" />
+            android:src="@drawable/letsgo"
+            android:contentDescription="@string/app_name"/>
 
         <TextView
             android:id="@+id/txtLetsGo"
@@ -44,6 +45,7 @@
         android:clickable="true"
         android:focusable="true"
         android:src="@drawable/salir"
-        android:backgroundTint="@color/white" />
+        android:backgroundTint="@color/white"
+        android:contentDescription="@string/exit"/>
 
 </RelativeLayout>

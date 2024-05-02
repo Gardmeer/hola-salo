@@ -11,14 +11,16 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:layout_marginStart="24dp"
-        android:layout_marginEnd="24dp">
+        android:layout_marginEnd="24dp"
+        android:background="@color/cyan">
 
         <ImageView
             android:id="@+id/imvBiblioteca"
             android:layout_width="wrap_content"
             android:layout_height="300dp"
             android:layout_centerHorizontal="true"
-            android:src="@drawable/tlibrary" />
+            android:src="@drawable/tlibrary"
+            android:contentDescription="@string/library"/>
 
         <TextView
             android:id="@+id/txtBiblio"

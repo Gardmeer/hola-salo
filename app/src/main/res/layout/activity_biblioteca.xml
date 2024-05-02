@@ -8,52 +8,45 @@
     android:background="@color/celeste"
     tools:context=".BibliotecaActivity">
 
-    <RelativeLayout
-        android:id="@+id/rlNavegacion"
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:id="@+id/llNombreApp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
+        android:layout_alignParentTop="true"
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
-        android:layout_marginTop="16dp">
+        android:layout_marginTop="16dp"
+        android:layout_centerHorizontal="true"
+        android:orientation="horizontal">
 
-        <LinearLayout
-            android:id="@+id/llNombreApp"
+        <ImageView
+            android:id="@+id/imvIcono"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_weight="1"
+            android:contentDescription="@string/app_logo"
+            app:srcCompat="@drawable/saloblanco" />
+
+        <Space
+            android:layout_width="16dp"
+            android:layout_height="match_parent" />
+
+        <TextView
+            android:id="@+id/txtApp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:id="@+id/imvIcono"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_weight="1"
-                android:contentDescription="@string/app_logo"
-                app:srcCompat="@drawable/saloblanco" />
-
-            <Space
-                android:layout_width="16dp"
-                android:layout_height="match_parent" />
-
-            <TextView
-                android:id="@+id/txtApp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:fontFamily="@font/shortstack_regular"
-                android:text="@string/app_name"
-                android:textAlignment="center"
-                android:textColor="@color/white"
-                android:textSize="24sp"
-                android:textStyle="bold" />
-        </LinearLayout>
-    </RelativeLayout>
+            android:layout_weight="1"
+            android:fontFamily="@font/shortstack_regular"
+            android:text="@string/app_name"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+    </LinearLayout>
 
     <TextView
         android:id="@+id/txtBiblioteca"
-        android:layout_below="@+id/rlNavegacion"
+        android:layout_below="@+id/llNombreApp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/shortstack_regular"
@@ -73,8 +66,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_alignParentEnd="true"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="16dp"
+        android:paddingVertical="16dp"
         android:textColor="@color/white"/>
 
     <LinearLayout
@@ -95,5 +87,22 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </LinearLayout>
+
+    <Button
+        android:id="@+id/btnCrear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rect_blanco"
+        android:drawableStart="@drawable/pencil"
+        android:fontFamily="@font/shortstack_regular"
+        android:layout_centerInParent="true"
+        android:paddingHorizontal="20dp"
+        android:drawablePadding="10dp"
+        android:text="@string/new_word"
+        android:textAllCaps="false"
+        android:textColor="@color/violet"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:visibility="gone"/>
 
 </RelativeLayout>

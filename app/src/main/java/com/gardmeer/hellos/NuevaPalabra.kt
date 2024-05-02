@@ -2,9 +2,9 @@ package com.gardmeer.hellos
 
 import android.net.Uri
 
-class NuevaPalabra(_palabra: String?,_imagen: Uri?){
-    private var palabra:String?=_palabra
-    private var imagen:Uri?=_imagen
+class NuevaPalabra(tpalabra: String?,timagen: Uri?){
+    private var palabra:String?=tpalabra
+    private var imagen:Uri?=timagen
 
     fun getPalabra(): String?{
         return palabra

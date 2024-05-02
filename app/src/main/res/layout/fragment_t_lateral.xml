@@ -11,14 +11,16 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:layout_marginStart="24dp"
-        android:layout_marginEnd="24dp">
+        android:layout_marginEnd="24dp"
+        android:background="@color/light_yellow">
 
         <ImageView
             android:id="@+id/imvLateral"
             android:layout_width="wrap_content"
             android:layout_height="240dp"
             android:layout_centerHorizontal="true"
-            android:src="@drawable/tmenu" />
+            android:src="@drawable/tmenu"
+            android:contentDescription="@string/side_menu"/>
 
         <TextView
             android:id="@+id/txtLateral"
@@ -39,7 +41,8 @@
             android:layout_marginTop="24dp"
             android:layout_below="@+id/txtLateral"
             android:layout_centerHorizontal="true"
-            android:src="@drawable/ayudablue" />
+            android:src="@drawable/ayudablue"
+            android:contentDescription="@string/help_menu"/>
 
         <TextView
             android:id="@+id/txtAyuda"

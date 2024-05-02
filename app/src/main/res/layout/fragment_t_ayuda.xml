@@ -6,5 +6,4 @@
     tools:context=".TAyudaFragment"
     android:background="@color/mid_blue">
 
-
 </RelativeLayout>

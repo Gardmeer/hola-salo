@@ -1,12 +1,9 @@
 package com.gardmeer.hellos
 
-import android.media.AudioManager
 import android.media.SoundPool
-import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.provider.MediaStore
-import android.view.View
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.core.net.toUri
 import androidx.core.view.isGone
@@ -17,11 +14,12 @@ import androidx.lifecycle.lifecycleScope
 import com.gardmeer.hellos.databinding.ActivityPlayerBinding
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import java.io.File
 
 class PlayerActivity : AppCompatActivity((R.layout.activity_player)) {
     private lateinit var binding: ActivityPlayerBinding
-    private lateinit var sp: SoundPool
-    private var parametroPalabra = ""
+    private lateinit var soundPlayer: SoundPool
+    private lateinit var palabra: String
     private var sonido = 0
     private var noPic = false
     private var noVid = false
@@ -31,33 +29,50 @@ class PlayerActivity : AppCompatActivity((R.layout.activity_player)) {
         binding = ActivityPlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val palabra = intent.getStringExtra("palabra")
-        if (palabra != null) {
-            parametroPalabra = palabra
-        }
+        palabra = intent.getStringExtra("palabra").orEmpty()
 
-        cargarVideo(palabra)
-        sp = SoundPool(1,AudioManager.STREAM_MUSIC,1)
-        sonido = sp.load(this,R.raw.yay,1)
+        lifecycleScope.launch {
+            val imagen = consultarDato(palabra+"uriImagen")
+            val video = consultarDato(palabra+"uriVideo")
+            cargarVideo(palabra,video,imagen)
+        }
+        soundPlayer = SoundPool.Builder().build()
+        sonido = soundPlayer.load(this,R.raw.yay,1)
 
         binding.btnReproducir.setOnClickListener {
             reproducirVideo()
         }
-
         binding.btnYahoo.setOnClickListener {
             yahoo()
         }
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true){
+            override fun handleOnBackPressed() {
+                if (!binding.frPlayer.isGone){
+                    if (noPic){
+                        binding.imvAprende.isGone=true
+                    } else{
+                        binding.imvAprende.isVisible=true
+                    }
+                    binding.givYahoo.isVisible=false
+                    binding.llBotones.isGone=false
+                    binding.frPlayer.isGone=true
+                } else {
+                    finish()
+                }
+            }
+        })
     }
 
     private fun reproducirVideo(){
         if(!noVid) {
-            val playerInstance = PlayerFragment.newInstance(parametroPalabra,"param")
+            val playerInstance = PlayerFragment.newInstance(palabra,"param")
             val transaction = supportFragmentManager.beginTransaction()
             transaction.add(R.id.frPlayer,playerInstance)
             transaction.replace(R.id.frPlayer,playerInstance)
             transaction.addToBackStack(null)
             transaction.commit()
-            sp.autoPause()
+            soundPlayer.autoPause()
+            binding.frPlayer.isGone=false
             binding.llBotones.isGone=true
         }
     }
@@ -66,42 +81,37 @@ class PlayerActivity : AppCompatActivity((R.layout.activity_player)) {
         if(!noVid) {
             binding.givYahoo.isVisible = !binding.givYahoo.isVisible
             binding.givYahoo.setImageResource(R.drawable.saloyahoo)
-
-            if (noPic) {binding.imvAprende.isVisible = !binding.imvAprende.isVisible}
-            else {binding.imvAprende.isInvisible = !binding.imvAprende.isInvisible}
-            if (binding.givYahoo.isVisible) {sp.play(sonido,1f,1f,1,0,1f)}
-            else {sp.autoPause()}
+            if (noPic) {
+                binding.imvAprende.isVisible = !binding.imvAprende.isVisible
+            } else {
+                binding.imvAprende.isInvisible = !binding.imvAprende.isInvisible
+            }
+            if (binding.givYahoo.isVisible) {
+                soundPlayer.play(sonido,1f,1f,1,0,1f)
+            } else {
+                soundPlayer.autoPause()
+            }
         }
     }
 
-    private fun cargarVideo(cargarPalabra: String?){
-        var imagen : Uri? = null
-        var video : Uri? = null
-        lifecycleScope.launch {
-            imagen = consultarDato(cargarPalabra+"uriImagen")?.toUri()
-            video = consultarDato(cargarPalabra+"uriVideo")?.toUri()
-        }
-
-        try {val bitmap = MediaStore.Images.Media.getBitmap(contentResolver,imagen)
-        } catch (e:Exception){
+    private fun cargarVideo(cargarPalabra: String?, cargarVideo: String?, cargarImagen: String?){
+        val imgFile = File(cargarImagen!!)
+        if(!imgFile.exists()){
             noPic=true
-            imagen="".toUri()
         }
-        if(imagen.toString()==R.drawable.nopicmini.toString()||noPic){
+        if(cargarImagen==R.drawable.nopicmini.toString()||noPic){
             binding.imvAprende.isGone = true
         }
-
-        try {val bitmap = MediaStore.Images.Media.getBitmap(contentResolver,video)
-        } catch (e:Exception){
+        val vidFile = File(cargarVideo!!)
+        if(!vidFile.exists()){
             noVid=true
-            video="".toUri()
             val builder = AlertDialog.Builder(this)
             builder.setTitle(resources.getString(R.string.not_found))
             builder.setMessage(resources.getString(R.string.change_video))
             builder.create()
             builder.show()
         }
-        binding.imvAprende.setImageURI(imagen)
+        binding.imvAprende.setImageURI(cargarImagen.toUri())
         binding.txtVideo.text = cargarPalabra
     }
 
@@ -109,15 +119,9 @@ class PlayerActivity : AppCompatActivity((R.layout.activity_player)) {
         val preferences = dataStore.data.first()
         return preferences[stringPreferencesKey(nombre)]
     }
-    override fun onBackPressed() {
-        super.onBackPressed()
-        if(noPic){binding.imvAprende.isGone=true}
-        else{binding.imvAprende.isVisible=true}
-        binding.givYahoo.isVisible=false
-        binding.llBotones.isGone=false
-    }
+
     override fun onStop() {
         super.onStop()
-        sp.autoPause()
+        soundPlayer.autoPause()
     }
 }
