@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".TPalabraFragment"
-    android:background="@color/dark_blue">
+    android:background="@color/cyan">
 
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -12,7 +12,7 @@
         android:layout_centerInParent="true"
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
-        android:background="@color/dark_blue">
+        android:background="@color/cyan">
 
         <LinearLayout
             android:id="@+id/llPermisos"
@@ -48,7 +48,7 @@
             android:layout_centerHorizontal="true"
             android:gravity="center"
             android:text="@string/tut_permissions"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
             android:textSize="16sp" />
     </RelativeLayout>
 

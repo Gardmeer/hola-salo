@@ -12,27 +12,31 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <RelativeLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/rlNavegacion"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:layout_marginStart="24dp"
-            android:layout_marginEnd="24dp"
-            android:layout_marginTop="8dp">
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="24dp">
 
             <ImageButton
                 android:id="@+id/btnMenu"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:layout_centerVertical="true"
                 android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
                 android:background="@null"
-                android:scaleType="fitXY"
-                android:paddingVertical="12dp"
+                android:contentDescription="@string/side_menu"
                 android:paddingHorizontal="12dp"
-                app:srcCompat="@drawable/menu"
-                android:contentDescription="@string/side_menu" />
+                android:paddingVertical="12dp"
+                android:scaleType="fitXY"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/menu" />
 
             <LinearLayout
                 android:id="@+id/llNombreApp"
@@ -40,14 +44,18 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_centerInParent="true"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/btnAyuda"
+                app:layout_constraintStart_toEndOf="@+id/btnMenu"
+                app:layout_constraintTop_toTopOf="parent">
 
                 <ImageView
                     android:id="@+id/imvIcono"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
-                    app:srcCompat="@drawable/saloblanco"
-                    android:contentDescription="@string/app_logo" />
+                    android:contentDescription="@string/app_logo"
+                    app:srcCompat="@drawable/saloblanco" />
 
                 <Space
                     android:layout_width="16dp"
@@ -69,15 +77,18 @@
                 android:id="@+id/btnAyuda"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:layout_centerVertical="true"
                 android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
                 android:background="@null"
-                android:scaleType="fitXY"
-                android:paddingVertical="12dp"
+                android:contentDescription="@string/help_menu"
                 android:paddingHorizontal="16dp"
-                app:srcCompat="@drawable/ayuda"
-                android:contentDescription="@string/help_menu"/>
-        </RelativeLayout>
+                android:paddingVertical="12dp"
+                android:scaleType="fitXY"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ayuda" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <ScrollView
             android:id="@+id/scrMenu"
@@ -186,14 +197,16 @@
                 </LinearLayout>
             </RelativeLayout>
         </ScrollView>
-    </RelativeLayout>
 
+
+
+    </RelativeLayout>
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nvNavegacion"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         app:headerLayout="@layout/nav_header"
         app:menu="@menu/navegation_menu"
+        android:visibility="gone"
         android:layout_gravity="start"/>
-
 </androidx.drawerlayout.widget.DrawerLayout>

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".TFinalFragment"
-    android:background="@color/violet">
+    android:background="@color/yellow">
 
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -30,7 +30,7 @@
             android:layout_centerHorizontal="true"
             android:gravity="center"
             android:text="@string/letsgo"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
             android:textSize="16sp" />
     </RelativeLayout>
 

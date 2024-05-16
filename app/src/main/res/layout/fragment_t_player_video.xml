@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".TPlayerVideoFragment"
-    android:background="@color/some_blue">
+    android:background="@color/dark_pink">
 
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -12,7 +12,7 @@
         android:layout_centerInParent="true"
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
-        android:background="@color/some_blue">
+        android:background="@color/dark_pink">
 
         <TextView
             android:id="@+id/txtPlayerOptions"
@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:text="@string/player_face"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:textSize="16sp" />
 
         <LinearLayout
@@ -61,7 +61,7 @@
             android:layout_centerHorizontal="true"
             android:gravity="center"
             android:text="@string/player_types"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:textSize="16sp" />
     </RelativeLayout>
 

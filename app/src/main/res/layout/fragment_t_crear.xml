@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".TCrearFragment"
-    android:background="@color/yellow">
+    android:background="@color/dark_shadow">
 
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -12,7 +12,7 @@
         android:layout_centerInParent="true"
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
-        android:background="@color/yellow">
+        android:background="@color/dark_shadow">
 
         <TextView
             android:id="@+id/txtCrear"
@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:text="@string/tut_create"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:textSize="16sp" />
 
         <ImageView
@@ -42,7 +42,7 @@
             android:layout_centerHorizontal="true"
             android:gravity="center"
             android:text="@string/create_options"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:textSize="16sp" />
     </RelativeLayout>
 

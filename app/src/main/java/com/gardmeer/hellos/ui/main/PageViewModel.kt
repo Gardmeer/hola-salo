@@ -3,7 +3,6 @@ package com.gardmeer.hellos.ui.main
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.map
 
 class PageViewModel : ViewModel() {

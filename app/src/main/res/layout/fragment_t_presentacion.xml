@@ -33,6 +33,18 @@
                 android:text="@string/intro"
                 android:textColor="@color/white"
                 android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/txtInicio2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/txtInicio"
+                android:layout_marginTop="8dp"
+                android:layout_centerHorizontal="true"
+                android:gravity="center"
+                android:text="@string/intro2"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
         </RelativeLayout>
 
 </RelativeLayout>

@@ -122,7 +122,7 @@
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:layout_weight="1"
-                    android:background="@drawable/rect_blue"
+                    android:background="@drawable/rect_shadow"
                     android:src="@drawable/miniplay"
                     android:contentDescription="@string/load_video"/>
 
@@ -135,7 +135,7 @@
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:layout_weight="1"
-                    android:background="@drawable/rect_blue"
+                    android:background="@drawable/rect_shadow"
                     android:src="@drawable/yahoo"
                     android:contentDescription="@string/new_word"/>
             </LinearLayout>

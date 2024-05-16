@@ -2,22 +2,23 @@ package com.gardmeer.hellos
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentPagerAdapter
+import androidx.lifecycle.Lifecycle
+import androidx.viewpager2.adapter.FragmentStateAdapter
 
-class AdapterFragment(fm: FragmentManager, behavior: Int) :
-    FragmentPagerAdapter(fm, behavior) {
+class AdapterFragment(fm: FragmentManager, lifecycle:  Lifecycle) :
+    FragmentStateAdapter(fm, lifecycle) {
 
     private var listaFragment = ArrayList<Fragment>()
 
-    override fun getCount(): Int {
+    fun agregarFragment(fragment:Fragment){
+        listaFragment.add(fragment)
+    }
+
+    override fun getItemCount(): Int {
         return listaFragment.size
     }
 
-    override fun getItem(position: Int): Fragment {
+    override fun createFragment(position: Int): Fragment {
         return listaFragment[position]
-    }
-
-    fun agregarFragment(fragment:Fragment){
-        listaFragment.add(fragment)
     }
 }

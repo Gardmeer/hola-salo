@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".TBibliotecaFragment"
-    android:background="@color/cyan">
+    android:background="@color/midnight">
 
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -12,7 +12,7 @@
         android:layout_centerInParent="true"
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
-        android:background="@color/cyan">
+        android:background="@color/midnight">
 
         <ImageView
             android:id="@+id/imvBiblioteca"
@@ -31,7 +31,7 @@
             android:layout_centerHorizontal="true"
             android:gravity="center"
             android:text="@string/tut_library"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:textSize="16sp" />
     </RelativeLayout>
 

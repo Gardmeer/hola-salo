@@ -1,12 +1,12 @@
 package com.gardmeer.hellos
 
 import android.os.Bundle
-import android.text.Html
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.viewpager.widget.ViewPager
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.FragmentPagerAdapter
+import androidx.core.content.ContextCompat
+import androidx.core.text.HtmlCompat
+import androidx.viewpager2.widget.ViewPager2
 import com.gardmeer.hellos.databinding.ActivityTutorialBinding
 
 class TutorialActivity : AppCompatActivity() {
@@ -23,42 +23,34 @@ class TutorialActivity : AppCompatActivity() {
 
         llPuntos=findViewById(R.id.llPuntos)
 
-        val tPInstance = TPresentacionFragment.newInstance("param","param")
-        val tIInstance = TInicioFragment.newInstance("param","param")
-        val tCInstance = TCrearFragment.newInstance("param","param")
-        val tVInstance = TVideoFragment.newInstance("param","param")
-        val tImInstance = TImagenFragment.newInstance("param","param")
-        val tPaInstance = TPalabraFragment.newInstance("param","param")
-        val tBInstance = TBibliotecaFragment.newInstance("param","param")
-        val tMInstance = TModificarFragment.newInstance("param","param")
-        val tPmInstance = TPlayerMainFragment.newInstance("param","param")
-        val tPvInstance = TPlayerVideoFragment.newInstance("param","param")
-        val tLInstance = TLateralFragment.newInstance("param","param")
-        val tFInstance = TFinalFragment.newInstance("param","param")
-        val fAdapter = AdapterFragment(supportFragmentManager,FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT)
-        fAdapter.agregarFragment(tPInstance)
-        fAdapter.agregarFragment(tIInstance)
-        fAdapter.agregarFragment(tCInstance)
-        fAdapter.agregarFragment(tVInstance)
-        fAdapter.agregarFragment(tImInstance)
-        fAdapter.agregarFragment(tPaInstance)
-        fAdapter.agregarFragment(tBInstance)
-        fAdapter.agregarFragment(tMInstance)
-        fAdapter.agregarFragment(tPmInstance)
-        fAdapter.agregarFragment(tPvInstance)
-        fAdapter.agregarFragment(tLInstance)
-        fAdapter.agregarFragment(tFInstance)
+        val fAdapter = AdapterFragment(supportFragmentManager,lifecycle)
+        fAdapter.agregarFragment(TPresentacionFragment.newInstance("param","param"))
+        fAdapter.agregarFragment(TInicioFragment.newInstance("param","param"))
+        fAdapter.agregarFragment(TCrearFragment.newInstance("param","param"))
+        fAdapter.agregarFragment(TVideoFragment.newInstance("param","param"))
+        fAdapter.agregarFragment(TImagenFragment.newInstance("param","param"))
+        fAdapter.agregarFragment(TPalabraFragment.newInstance("param","param"))
+        fAdapter.agregarFragment(TBibliotecaFragment.newInstance("param","param"))
+        fAdapter.agregarFragment(TModificarFragment.newInstance("param","param"))
+        fAdapter.agregarFragment(TPlayerMainFragment.newInstance("param","param"))
+        fAdapter.agregarFragment(TPlayerVideoFragment.newInstance("param","param"))
+        fAdapter.agregarFragment(TLateralFragment.newInstance("param","param"))
+        fAdapter.agregarFragment(TFinalFragment.newInstance("param","param"))
 
-        val viewPager: ViewPager = binding.viewPager
+        val viewPager: ViewPager2 = binding.viewPager
         viewPager.adapter = fAdapter
         agregarIndPuntos(0)
 
-        viewPager.addOnPageChangeListener(object: ViewPager.OnPageChangeListener{
-            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
+        viewPager.registerOnPageChangeCallback(object: ViewPager2.OnPageChangeCallback(){
+            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+            }
 
-            override fun onPageSelected(position: Int) {agregarIndPuntos(position)}
+            override fun onPageSelected(position: Int) {
+                agregarIndPuntos(position)
+            }
 
-            override fun onPageScrollStateChanged(state: Int) {}
+            override fun onPageScrollStateChanged(state: Int) {
+            }
         })
     }
 
@@ -68,11 +60,13 @@ class TutorialActivity : AppCompatActivity() {
 
         for (i in 0..11){
             puntosSlide.add(TextView(this))
-            puntosSlide[i].text = Html.fromHtml("&#8226")
+            puntosSlide[i].text = HtmlCompat.fromHtml("&#8226", HtmlCompat.FROM_HTML_MODE_LEGACY)
             puntosSlide[i].textSize = 35f
-            puntosSlide[i].setTextColor(resources.getColor(R.color.transparente))
+            puntosSlide[i].setTextColor(ContextCompat.getColor(this, R.color.transparente))
             llPuntos.addView(puntosSlide[i])
         }
-        if (puntosSlide.size>0){puntosSlide[pos].setTextColor(resources.getColor(R.color.white))}
+        if (puntosSlide.size>0){
+            puntosSlide[pos].setTextColor(ContextCompat.getColor(this, R.color.white))
+        }
     }
 }

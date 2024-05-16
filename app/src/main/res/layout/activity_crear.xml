@@ -89,10 +89,10 @@
                 android:textAllCaps="false"
                 android:textColor="@color/white"
                 android:textColorHint="@color/white"
-                android:background="@color/some_blue"
+                android:background="@color/shadow"
                 android:paddingVertical="12dp"
                 android:textSize="24sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"/>
 
             <TextView
                 android:id="@+id/txtBloqueado"
@@ -190,7 +190,7 @@
                 android:textAllCaps="false"
                 android:textColor="@color/white"
                 android:textColorHint="@color/white"
-                android:background="@color/some_blue"
+                android:background="@color/shadow"
                 android:layout_marginTop="8dp"
                 android:paddingVertical="8dp"
                 android:textSize="24sp"
